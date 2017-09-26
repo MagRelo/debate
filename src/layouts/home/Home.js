@@ -1,9 +1,8 @@
 import React, {Component} from 'react'
 import { Link } from 'react-router'
 
-import hiveLogo from '../../img/hive-logo.png'
 
-import HiveList from '../hives/HiveList'
+// <Link to="hives/new" className="pure-button">Add new Hive</Link>
 
 class Home extends Component {
   render() {
@@ -12,15 +11,10 @@ class Home extends Component {
         <div className="pure-g">
           <div className="pure-u-1-1">
 
-            <img className="logo" src={hiveLogo}></img>
-            <h1 hidden>Hive Commons</h1>
-            <h2>Tokenize Public Interest</h2>
-
-            <Link to="hives/new" className="pure-button">Add new Hive</Link>
+            <h1>Servésa</h1>
+            <h2>Network of Trust</h2>
 
             <hr></hr>
-
-            <HiveList/>
 
           </div>
         </div>

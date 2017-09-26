@@ -34,17 +34,8 @@ class App extends Component {
     return (
       <div className="App">
         <nav className="navbar pure-menu pure-menu-horizontal">
-          <Link to="/" className="pure-menu-heading pure-menu-link">HiveCommons</Link>
+          <Link to="/" className="pure-menu-heading pure-menu-link">Servésa</Link>
           <ul className="pure-menu-list navbar-right">
-            <li className="pure-menu-item">
-              <Link className="pure-menu-link" to="/hives">Hives</Link>
-            </li>
-            <li className="pure-menu-item">
-              <Link className="pure-menu-link" to="/faucet/bee">BEE Faucet</Link>
-            </li>
-            <li className="pure-menu-item">
-              <Link className="pure-menu-link" to="/faucet/hny">HNY Faucet</Link>
-            </li>
             <OnlyGuestLinks />
             <OnlyAuthLinks />
           </ul>

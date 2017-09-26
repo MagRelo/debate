@@ -2,23 +2,30 @@
 
 /*colour pallate: http://www.colourlovers.com/palette/1321158/milk_toast_honey
 
-light yellow: FFFDE0
-medium yellow: FCD036
+light yellow: FFFFFF
+medium yellow: F7BF5C
 light orange: FAB22C
 medium orange: E88523
-dark orange: D9791A
+dark orange: 01A0CA
+
+grey - 4C4C4C
+green - 00AA99
+yellow - F7BF5C
+blue - 01A0CA
+white - FFFFFF
+
 */
 
 
 body,
 .pure-g [class*=pure-u] {
   font-family: 'Open Sans', sans-serif;
-  background: #FFFDE0;
+  background: #FFFFFF;
 }
 
 h1, h2, h3 {
   font-family: 'Oswald', 'Arial Narrow', sans-serif;
-  color: #D9791A;
+  color: #01A0CA;
 }
 
 pre {
@@ -52,7 +59,7 @@ pre {
 .navbar {
   position: fixed;
   padding: 5px;
-  background: #FCD036;
+  background: #01A0CA;
   font-family: 'Oswald', 'Arial Narrow', sans-serif;
 }
 
@@ -63,7 +70,7 @@ pre {
 .navbar a:active,
 .navbar a:focus,
 .navbar a:hover {
-  background: #FAB22C;
+  background: #F7BF5C;
 }
 
 .navbar .pure-menu-heading {
@@ -89,7 +96,7 @@ pre {
 .profile-logo{
   max-height: 160px;
   border-radius: 80px;
-  border: 2px solid #E88523;
+  border: 2px solid #00AA99;
 }
 
 /*Faucet*/
