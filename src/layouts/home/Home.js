@@ -1,8 +1,9 @@
 import React, {Component} from 'react'
 import { Link } from 'react-router'
 
+import Logo from '../../img/circle.svg'
 
-// <Link to="hives/new" className="pure-button">Add new Hive</Link>
+import LoginButtonContainer from '../../user/ui/loginbutton/LoginButtonContainer'
 
 class Home extends Component {
   render() {
@@ -12,9 +13,17 @@ class Home extends Component {
           <div className="pure-u-1-1">
 
             <h1>Servésa</h1>
-            <h2>Network of Trust</h2>
+            <h3> Trust Networks</h3>
+             <img className="logo" src={Logo}></img>
 
             <hr></hr>
+
+            <h3>Make your existing networks legible and actionable</h3>
+            <h3>Explore new opportunies with people that you trust</h3>
+            <h3>Prevent spam and advertising</h3>
+
+            <LoginButtonContainer />
+
 
           </div>
         </div>

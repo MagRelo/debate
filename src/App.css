@@ -1,12 +1,6 @@
 /* PAGE */
 
-/*colour pallate: http://www.colourlovers.com/palette/1321158/milk_toast_honey
-
-light yellow: FFFFFF
-medium yellow: F7BF5C
-light orange: FAB22C
-medium orange: E88523
-dark orange: 01A0CA
+/*colour pallate: http://www.colourlovers.com/palette/4529624/Endeavor
 
 grey - 4C4C4C
 green - 00AA99
@@ -21,11 +15,12 @@ body,
 .pure-g [class*=pure-u] {
   font-family: 'Open Sans', sans-serif;
   background: #FFFFFF;
+  color: #4C4C4C;
 }
 
 h1, h2, h3 {
   font-family: 'Oswald', 'Arial Narrow', sans-serif;
-  color: #01A0CA;
+  color: #4C4C4C;
 }
 
 pre {
