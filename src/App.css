@@ -46,12 +46,21 @@ pre {
 }
 
 .pure-button-danger {
-  color: white;
-  background-color: #01A0CA;
+  /*color: white;*/
+  /*background-color: #01A0CA;*/
 }
 .pure-button-danger:hover {
-  background-color: pink;
+  background-color: #f3d6db;
 }
+.pure-button-success {
+  color: white;
+  background-color: #01ca4c;
+}
+.pure-button-success:hover {
+  background-color: #36d270;
+}
+
+/*#01ca4c*/
 
 
 .pure-form input[type="text"]:focus {

@@ -1,6 +1,10 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router'
 
+import ProfileInfo from './ProfileInfo'
+import ReplyButton from './ReplyButton'
+import DiscardButton from './DiscardButton'
+
 class Message extends Component {
   constructor(props, { authData }) {
     super(props)
@@ -9,19 +13,24 @@ class Message extends Component {
 
   render() {
     return(
-      <main className="container">
-        <div className="pure-g">
-          <div className="pure-u-1-1">
+      <div className='feedItem'>
 
-            <h1>View Message</h1>
+        <span className="profile-container">
+          <ProfileInfo profileObject={this.props.itemObject.user} />
+        </span>
 
-            <p>If you're seeing this page, you've logged in with UPort successfully. Check out your{' '}
-              <Link to="/profile"> Profile</Link>.
-            </p>
 
-          </div>
+        <div className='content-container'>
+          <h3>{this.props.itemObject.user.name}</h3>
+          <p>{this.props.itemObject.item.content}</p>
         </div>
-      </main>
+
+        <div className='button-container' role='group' aria-label='message actions'>
+          <ReplyButton/>
+          <DiscardButton/>
+        </div>
+
+      </div>
     )
   }
 }
