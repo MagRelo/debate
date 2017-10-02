@@ -139,9 +139,8 @@ pre {
 .feedItem .content-container{
   margin-top: -50px;
   margin-left: 70px;
-
   padding-left: 1em;
-  padding-right: 1em;
+  padding-right: 4em;
   padding-bottom: 1em;
 }
 
@@ -155,4 +154,10 @@ pre {
 
 .feedItem .button-container {
   text-align: right;
+  margin-bottom: 0.5em;
+  margin-right: 0.5em;
+}
+
+.feedItem .button-container button{
+  margin-left: 0.5em;
 }

@@ -9,13 +9,15 @@ import { UserIsAuthenticated } from './util/wrappers.js'
 import App from './App'
 import Home from './layouts/home/Home'
 
-import Dashboard from './layouts/dashboard/Dashboard'
-
 import Profile from './user/layouts/profile/Profile'
+
 import Inbox from './layouts/messages/Inbox'
 import ComposeMessage from './layouts/messages/Compose'
 import Message from './layouts/messages/Message'
+
 import Feed from './layouts/feed/Feed'
+
+import Transactions from './layouts/transactions/TransactionList'
 
 import Page404 from  './layouts/errors/404'
 
@@ -32,6 +34,9 @@ ReactDOM.render((
           <Route path="profile" component={UserIsAuthenticated(Profile)} />
 
           <Route path="feed" component={Feed} />
+
+          <Route path="transactions" component={Transactions} />
+
           <Route path="messages/new" component={ComposeMessage} />
           <Route path="messages/:id" component={Message} />
           <Route path="messages" component={Inbox} />
