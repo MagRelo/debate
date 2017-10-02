@@ -8,13 +8,14 @@ import { UserIsAuthenticated } from './util/wrappers.js'
 // Layouts
 import App from './App'
 import Home from './layouts/home/Home'
+
 import Dashboard from './layouts/dashboard/Dashboard'
+
 import Profile from './user/layouts/profile/Profile'
-import Hives from './layouts/hives/Hives'
-import Hive from './layouts/hives/Hive'
-import AddHive from './layouts/hives/AddHive'
-import HoneyFaucet from  './layouts/faucet/HoneyFaucet'
-import BeeFaucet from  './layouts/faucet/BeeFaucet'
+import Inbox from './layouts/messages/Inbox'
+import ComposeMessage from './layouts/messages/Compose'
+import Message from './layouts/messages/Message'
+import Feed from './layouts/feed/Feed'
 
 import Page404 from  './layouts/errors/404'
 
@@ -30,12 +31,10 @@ ReactDOM.render((
           <IndexRoute component={Home} />
           <Route path="profile" component={UserIsAuthenticated(Profile)} />
 
-          <Route path="hives" component={Hives} />
-          <Route path="hives/new" component={AddHive} />
-          <Route path="hives/:name" component={Hive} />
-
-          <Route path="faucet/bee" component={BeeFaucet} />
-          <Route path="faucet/hny" component={HoneyFaucet} />
+          <Route path="feed" component={Feed} />
+          <Route path="messages/new" component={ComposeMessage} />
+          <Route path="messages/:id" component={Message} />
+          <Route path="messages" component={Inbox} />
           <Route path='*' exact={true} component={Page404} />
         </Route>
       </Router>

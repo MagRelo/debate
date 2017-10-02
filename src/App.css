@@ -37,13 +37,22 @@ pre {
   text-align: center;
 }
 
+/*Buttons*/
 .pure-button-primary {
-  background-color: #0c1a2b;
+  background-color: #01A0CA;
 }
-
 .pure-button-primary:hover {
   background-color: #233e5e;
 }
+
+.pure-button-danger {
+  color: white;
+  background-color: #01A0CA;
+}
+.pure-button-danger:hover {
+  background-color: pink;
+}
+
 
 .pure-form input[type="text"]:focus {
   border-color: #0c1a2b;
@@ -85,7 +94,7 @@ pre {
 /* HOME */
 .logo{
   max-width: 100%;
-  margin-top: 1em;
+  max-height: 10em;
 }
 
 .profile-logo{
@@ -94,9 +103,47 @@ pre {
   border: 2px solid #00AA99;
 }
 
-/*Faucet*/
 
+
+/**/
 .pure-button .uport-logo {
   height: 16px;
-  margin-right: 10px;
+
+}
+
+.feedItem {
+  margin-bottom: 1em;
+  border: solid 1px gray;
+
+  text-align: left;
+}
+
+.feedItem .profile-logo{
+  max-height: 60px;
+  border-radius: 0 0 30px 0;
+  border-bottom: 1px solid gray;
+  border-right: 1px solid gray;
+  border-top: none;
+  border-left: none;
+}
+
+.feedItem .content-container{
+  margin-top: -50px;
+  margin-left: 70px;
+
+  padding-left: 1em;
+  padding-right: 1em;
+  padding-bottom: 1em;
+}
+
+.feedItem .content-container h3{
+  margin-top: 0;
+}
+
+.feedItem .profile-container {
+
+}
+
+.feedItem .button-container {
+  text-align: right;
 }

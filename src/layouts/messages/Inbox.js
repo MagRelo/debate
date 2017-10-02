@@ -1,8 +1,7 @@
 import React, { Component } from 'react'
+import { Link } from 'react-router'
 
-import ProfileInfo from './ProfileInfo'
-
-class Profile extends Component {
+class Inbox extends Component {
   constructor(props, { authData }) {
     super(props)
     authData = this.props
@@ -13,10 +12,13 @@ class Profile extends Component {
       <main className="container">
         <div className="pure-g">
           <div className="pure-u-1-1">
-            <h1>Profile</h1>
-            <ProfileInfo profileObject={authData} />
-            <hr></hr>
-            <p>Change these details in UPort to see them reflected here.</p>
+
+            <h1>Inbox</h1>
+            
+            <p>If you're seeing this page, you've logged in with UPort successfully. Check out your{' '}
+              <Link to="/profile"> Profile</Link>.
+            </p>
+
           </div>
         </div>
       </main>
@@ -24,4 +26,4 @@ class Profile extends Component {
   }
 }
 
-export default Profile
+export default Inbox
