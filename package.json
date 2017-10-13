@@ -56,6 +56,7 @@
     "express": "^4.15.5",
     "helmet": "^3.8.1",
     "method-override": "^2.3.9",
+    "mongoose": "^4.12.1",
     "react": "^15.4.2",
     "react-dom": "^15.4.2",
     "react-redux": "^5.0.2",

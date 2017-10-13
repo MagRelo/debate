@@ -13,11 +13,7 @@ class ComposeMessage extends Component {
         <div className="pure-g">
           <div className="pure-u-1-1">
 
-            <h1>Compose Message</h1>
-
-            <p>If you're seeing this page, you've logged in with UPort successfully. Check out your{' '}
-              <Link to="/profile"> Profile</Link>.
-            </p>
+            <h1>Compose Message</h1>            
 
           </div>
         </div>
