@@ -14,7 +14,7 @@ class Profile extends Component {
         <div className="pure-g">
           <div className="pure-u-1-1">
             <h1>Profile</h1>
-            <ProfileInfo profileObject={authData} />
+            <ProfileInfo profileObject={this.props.testData} />
             <hr></hr>
             <p>Change these details in UPort to see them reflected here.</p>
           </div>

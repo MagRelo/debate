@@ -11,9 +11,9 @@ import Home from './layouts/home/Home'
 
 import Profile from './user/layouts/profile/Profile'
 
-import Inbox from './layouts/messages/Inbox'
-import ComposeMessage from './layouts/messages/Compose'
-import Message from './layouts/messages/Message'
+import Inbox from './layouts/messages/inbox/Inbox'
+import ComposeMessage from './layouts/messages/compose/ComposeContainer'
+import Message from './layouts/messages/inbox/Message'
 
 import Feed from './layouts/feed/Feed'
 

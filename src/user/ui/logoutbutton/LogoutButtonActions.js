@@ -11,7 +11,7 @@ function userLoggedOut(user) {
 export function logoutUser() {
   return function(dispatch) {
     // Logout user.
-    firebase.auth().signOut();
+    // firebase.auth().signOut();
 
     dispatch(userLoggedOut())
 
