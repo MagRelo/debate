@@ -1,6 +1,6 @@
 const initialState = {
   loading: null,
-  messages: null
+  messages: []
 }
 
 const messageReducer = (state = initialState, action) => {
@@ -8,16 +8,17 @@ const messageReducer = (state = initialState, action) => {
   if (action.type === 'MESSAGE_SUBMITTED')
   {
     return Object.assign({}, state, {
-      data: action.payload
+      loading: true
     })
   }
 
-  // if (action.type === 'USER_LOGGED_OUT')
-  // {
-  //   return Object.assign({}, state, {
-  //     data: null
-  //   })
-  // }
+  if (action.type === 'MESSAGE_LIST_UPDATE')
+  {
+    return Object.assign({}, state, {
+      loading: false,
+      messages: action.payload
+    })
+  }
 
   return state
 }

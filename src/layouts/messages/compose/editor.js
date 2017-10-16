@@ -1,17 +1,13 @@
 import React, { Component } from 'react'
 import Editor from 'react-medium-editor';
 
-import request from 'request-promise'
-
 
 class MessageEditor extends Component {
-  constructor(props) {
+  constructor(props, {onMessageSubmit}) {
     super(props)
     this.state = {
-      text: 'Lorem Ipsum MGL',
-      result: '',
-      sending: false,
-      sendSuccess: false
+      text: '',
+      displayResponse: false
     }
   }
 
@@ -21,72 +17,43 @@ class MessageEditor extends Component {
 
   handleSubmit(event) {
     event.preventDefault()
-    this.setState({sending: true})
-
-    console.log('submitting')
-
-    request('http://ip.jsontest.com/')
-      .then(response => {
-        this.setState({
-          result: response,
-          sending: false,
-          sendSuccess: true
-        })
-
-        setTimeout(()=>{
-          this.setState({
-            text: 'Lorem Ipsum MGL',
-            result: '',
-            sending: false,
-            sendSuccess: false
-          })
-        }, 3000)
-
-      })
-      .catch(error => {
-        alert(error)
-      })
-  }
-
-  reset(event) {
-    event.preventDefault()
-    this.setState({
-      'result': '',
-      'sendSuccess': false
-    })
+    this.props.submitFunction(this.state.text)
   }
 
   render(){
     return (
-      <form className="pure-form pure-form-stacked" onSubmit={this.handleSubmit.bind(this)}>
+      <div>
 
-        {this.state.sending ?
-        <div className="loader"></div>
-        :
+        {this.props.loading ?
 
         <div>
-          {this.state.sendSuccess ?
-          <div>
-            <p>success:{this.state.result}</p>
-          </div>
-          :
+          <div className="loader"></div>
 
-          <div>
-            <Editor
-              tag="pre"
-              text=""
-              onChange={this.handleChange.bind(this)}
-              options={{toolbar: {buttons: ['bold', 'italic', 'underline']}}}
-            />
-            <button type="submit"
-              className="pure-button pure-button-primary" > Submit </button>
-          </div>
+          {this.state.displayResponse ?
+
+            <p>result: {this.state.result}</p>
+            :
+            null
           }
 
         </div>
-        }
 
-      </form>
+        :
+
+        <form className="pure-form pure-form-stacked " onSubmit={this.handleSubmit.bind(this)}>
+          <Editor
+            className="editor-input"
+            text=""
+            onChange={this.handleChange.bind(this)}
+            options={{toolbar: {buttons: ['bold', 'italic', 'underline']}}} />
+          <button
+            type="submit"
+            className="pure-button pure-button-primary" > Submit </button>
+        </form>
+
+      }
+      </div>
+
     )
   }
 

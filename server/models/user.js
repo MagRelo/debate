@@ -5,7 +5,9 @@ var mongoose = require('mongoose'),
 
 var UserSchema = new Schema({
   id: Number,
-  name: String
+  name: String,
+  timestamp: Date,
+  messages: Array
 });
 
 module.exports = mongoose.model('User', UserSchema);

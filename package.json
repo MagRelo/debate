@@ -2,6 +2,7 @@
   "name": "hiveCommons",
   "version": "0.1.0",
   "private": true,
+  "proxy": "http://localhost:8080",
   "devDependencies": {
     "autoprefixer": "6.5.1",
     "babel-core": "6.17.0",
@@ -47,7 +48,7 @@
     "webpack": "1.14.0",
     "webpack-dev-server": "1.16.2",
     "webpack-manifest-plugin": "1.1.0",
-    "whatwg-fetch": "1.0.0"
+    "whatwg-fetch": "^1.0.0"
   },
   "dependencies": {
     "body-parser": "^1.18.2",
@@ -66,9 +67,8 @@
     "redux": "^3.6.0",
     "redux-auth-wrapper": "^1.0.0",
     "redux-thunk": "^2.2.0",
-    "request": "^2.83.0",
-    "request-promise": "^4.2.2",
-    "uport-connect": "^0.6.1"
+    "uport-connect": "^0.6.1",
+    "uuid": "^3.1.0"
   },
   "scripts": {
     "start": "node scripts/start.js",

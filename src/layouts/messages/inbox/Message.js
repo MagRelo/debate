@@ -15,14 +15,9 @@ class Message extends Component {
     return(
       <div className='feedItem'>
 
-        <span className="profile-container">
-          <ProfileInfo profileObject={this.props.itemObject.user} />
-        </span>
-
-
         <div className='content-container'>
-          <h3>{this.props.itemObject.user.name}</h3>
-          <p>{this.props.itemObject.item.content}</p>
+
+          <p>{this.props.itemObject.message.value}</p>
         </div>
 
         <div className='button-container' role='group' aria-label='message actions'>

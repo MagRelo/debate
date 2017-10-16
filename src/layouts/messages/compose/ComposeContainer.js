@@ -1,16 +1,17 @@
 import { connect } from 'react-redux'
-import Compose from './Compose'
+import Compose from './ComposeLayout'
 import { messageSubmit } from './ComposeActions'
 
 const mapStateToProps = (state, ownProps) => {
-  return {}
+  return {
+    messages: state.messages
+  }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    onMessageSubmit: (event) => {
-      event.preventDefault();
-      dispatch(messageSubmit())
+    onMessageSubmit: (messageText) => {
+      dispatch(messageSubmit(messageText))
     }
   }
 }

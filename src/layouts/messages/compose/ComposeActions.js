@@ -1,20 +1,50 @@
 
 
 
-export const MESSAGE_SUBMIT = 'MESSAGE_SUBMITTED'
-function submitMessage(message) {
+export const MESSAGE_LIST_UPDATE = 'MESSAGE_LIST_UPDATE'
+function messageListUpdate(messageList) {
   return {
-    type: MESSAGE_SUBMIT,
-    payload: message
+    type: MESSAGE_LIST_UPDATE,
+    payload: messageList
   }
 }
 
-//
+export const MESSAGE_SUBMITTED = 'MESSAGE_SUBMITTED'
+function messageSubmitted() {
+  return {
+    type: MESSAGE_SUBMITTED,
+    payload: {}
+  }
+}
+
 export function messageSubmit(message) {
   return function(dispatch) {
-    console.log(message)
-    alert(message)
-    dispatch(submitMessage(message))
-    return
+
+    // set 'loading' to true
+    dispatch(messageSubmitted())
+
+    return fetch('/api/messages',
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({value: message})
+      }
+    ).then(rawResponse => {
+
+        if(rawResponse.status !== 200){
+          throw new Error(rawResponse.text)
+        }
+
+        return rawResponse.json()
+      }
+    ).then(userObject => {
+
+        return dispatch(messageListUpdate(userObject.messages))
+      }
+    ).catch(error => {
+      console.error('action error', error)
+      return
+    })
+
   }
 }

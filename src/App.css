@@ -30,6 +30,13 @@ pre {
   background: #eee;
 }
 
+.editor-input{
+  margin-bottom: 1em;
+  background-color: aliceblue;
+  border: solid 1px skyblue;
+  border-radius: 0.5em;
+}
+
 .container {
   box-sizing: border-box;
   width: 100%;
@@ -178,8 +185,8 @@ pre {
 }
 
 .feedItem .content-container{
-  margin-top: -50px;
-  margin-left: 70px;
+  /*margin-top: -50px;
+  margin-left: 70px;*/
   padding-left: 1em;
   padding-right: 4em;
   padding-bottom: 1em;
