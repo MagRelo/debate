@@ -17,12 +17,10 @@ class InboxLayout extends Component {
       <main className="container">
         <div className="pure-g">
           <div className="pure-u-1-1">
-            <h1>Inbox</h1>
-
             <Compose/>
-
             <hr></hr>
 
+            <h1>Inbox</h1>
             <FeedContainer/>
 
           </div>

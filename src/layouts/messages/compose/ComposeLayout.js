@@ -11,15 +11,13 @@ class ComposeMessage extends Component {
 
   render() {
     return(
-      <main className="container">
+      <main className="compose-container">
         <div className="pure-g">
           <div className="pure-u-1-1">
-            <h1>Compose Message</h1>
-
+            <p>Compose Message</p>
             <Editor
               loading={this.props.messages.loading}
               submitFunction={this.props.onMessageSubmit} />
-
           </div>
         </div>
       </main>

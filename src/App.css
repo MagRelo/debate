@@ -30,11 +30,24 @@ pre {
   background: #eee;
 }
 
+
+.compose-container {
+  text-align: left
+}
+
+.time-block{
+  text-align: right;
+  padding-right: 0.6em;
+  padding-top: 0.5em;
+  color: darkgray;
+}
+
+
 .editor-input{
   margin-bottom: 1em;
   background-color: aliceblue;
   border: solid 1px skyblue;
-  border-radius: 0.5em;
+  min-height: 80px;
 }
 
 .container {
