@@ -17,6 +17,15 @@ function messageSubmitted() {
   }
 }
 
+
+export const USER_LOGGED_IN = 'USER_LOGGED_IN'
+function userLoggedIn(user) {
+  return {
+    type: USER_LOGGED_IN,
+    payload: user
+  }
+}
+
 export function messageSubmit(message, user) {
   return function(dispatch) {
 
@@ -27,7 +36,13 @@ export function messageSubmit(message, user) {
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({value: message, user: user})
+        body: JSON.stringify({
+          value: message,
+          user: {
+            id: user.data._id,
+            name: user.data.name,            
+            avatarUrl: user.data.avatarUrl,
+          }})
       }
     ).then(rawResponse => {
 
@@ -39,7 +54,7 @@ export function messageSubmit(message, user) {
       }
     ).then(userObject => {
 
-        return dispatch(messageListUpdate(userObject.messages))
+        return dispatch(userLoggedIn(userObject))
       }
     ).catch(error => {
       console.error('action error', error)

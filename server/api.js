@@ -13,7 +13,9 @@ var path = require('path');
 
 module.exports = function(app) {
 
-  app.get('/api/user', userController.getUser);
+  app.get('/api/user/list', userController.listUsers);
+  app.get('/api/user/:name', userController.getUser);
+
   app.post('/api/user', userController.saveUser);
 
   app.post('/api/messages', userController.saveMessage);

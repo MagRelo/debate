@@ -35,13 +35,13 @@ ReactDOM.render((
           <IndexRoute component={Home} />
           <Route path="profile" component={UserIsAuthenticated(Profile)} />
 
-          <Route path="feed" component={Feed} />
+          <Route path="feed" component={UserIsAuthenticated(Feed)} />
 
           <Route path="transactions" component={Transactions} />
 
-          <Route path="messages/new" component={ComposeMessage} />
+          <Route path="messages/new" component={UserIsAuthenticated(ComposeMessage)} />
+          <Route path="messages" component={UserIsAuthenticated(Inbox)} />
 
-          <Route path="messages" component={Inbox} />
           <Route path='*' exact={true} component={Page404} />
         </Route>
       </Router>

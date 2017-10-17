@@ -4,7 +4,7 @@ class Profile extends Component {
   render() {
     return(
       <span>
-        <img className="profile-logo" src={this.props.profileObject.image.contentUrl}></img>
+        <img className="profile-logo" src={this.props.profileObject.avatarUrl}></img>
         <p><strong>Name: </strong>{this.props.profileObject.name}</p>
         <p><strong>Phone: </strong>{this.props.profileObject.phone}</p>
         <p><strong>Country: </strong>{this.props.profileObject.country}</p>

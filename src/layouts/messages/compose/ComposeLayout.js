@@ -18,6 +18,11 @@ class ComposeMessage extends Component {
     this.props.onMessageSubmit(this.state.text, this.props.user)
   }
 
+
+  userList(){
+    return this.props.user.userList.map(user => {return user.name})
+  }
+
   render() {
     return(
       <main className="compose-container">
@@ -30,7 +35,7 @@ class ComposeMessage extends Component {
 
             <div className="compose-editor-container">
 
-            {this.props.messages.loading ?
+            {this.props.user.loading ?
 
               <div>
                 <div className="loader"></div>
@@ -42,7 +47,7 @@ class ComposeMessage extends Component {
 
 
                 <Tokenizer
-                  options={['John', 'Paul', 'George', 'Ringo']}
+                  options={this.userList()}
                   placeholder="Type to add names..."
                   onTokenAdd={function(token) {}}
                 />

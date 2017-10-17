@@ -4,7 +4,8 @@ import { getMessages } from './FeedActions'
 
 const mapStateToProps = (state, ownProps) => {
   return {
-    messages: state.messages
+    messages: state.user.messages,
+    user: state.user
   }
 }
 

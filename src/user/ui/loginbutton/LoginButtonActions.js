@@ -2,13 +2,12 @@ import { uport } from './../../../util/connectors.js'
 import { browserHistory } from 'react-router'
 
 // import * as firebase from 'firebase'
-
-var config = {
-  apiKey: 'AIzaSyBhtqySO4WXHH9I9q5iAWWo5VirefFrx4w',
-  authDomain: 'notlinkedin-5913d.firebaseapp.com',
-  databaseURL: 'https://notlinkedin-5913d.firebaseio.com/',
-  storageBucket: 'notlinkedin-5913d.appspot.com',
-};
+// var config = {
+//   apiKey: 'AIzaSyBhtqySO4WXHH9I9q5iAWWo5VirefFrx4w',
+//   authDomain: 'notlinkedin-5913d.firebaseapp.com',
+//   databaseURL: 'https://notlinkedin-5913d.firebaseio.com/',
+//   storageBucket: 'notlinkedin-5913d.appspot.com',
+// };
 // firebase.initializeApp(config);
 
 
@@ -21,15 +20,31 @@ function userLoggedIn(user) {
 }
 
 //
-export function loginUser() {
+export function loginUser(name) {
   return function(dispatch) {
 
-    const credentials = {
-      name: 'matt',
-      id: 0
-    }
+    return fetch('/api/login',
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: name
+        })
+      }
+    ).then(rawResponse => {
+        if(rawResponse.status !== 200){ throw new Error(rawResponse.text)}
+        return rawResponse.json()
+      }
+    ).then(userObject => {
 
-    dispatch(userLoggedIn(credentials))
+        return dispatch(userLoggedIn(credentials))
+      }
+    ).catch(error => {
+      console.error('action error', error)
+      return
+    })
+
+
 
     var currentLocation = browserHistory.getCurrentLocation()
 

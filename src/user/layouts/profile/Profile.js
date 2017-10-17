@@ -16,7 +16,7 @@ class Profile extends Component {
         <div className="pure-g">
           <div className="pure-u-1-1">
             <h1>Profile</h1>
-            <ProfileInfo profileObject={this.props.testData} />
+            <ProfileInfo profileObject={{name: this.props.authData.name, avatarUrl: this.props.authData.avatarUrl }} />
             <hr></hr>
             <LogoutButtonContainer/>
           </div>

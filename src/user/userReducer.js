@@ -1,17 +1,23 @@
 const initialState = {
-  data: {
-    name: 'Bill',
-    image: {
-      contentUrl: 'https://x1.xingassets.com/assets/frontend_minified/img/users/nobody_m.original.jpg'
-    }
-  }
+  data: {},
+  userList: [],
+  loading: false
 }
 
 const userReducer = (state = initialState, action) => {
   if (action.type === 'USER_LOGGED_IN')
   {
     return Object.assign({}, state, {
-      data: action.payload
+      data: action.payload,
+      loading: false
+    })
+  }
+
+
+  if (action.type === 'MESSAGE_SUBMITTED')
+  {
+    return Object.assign({}, state, {
+      loading: true
     })
   }
 
@@ -19,6 +25,20 @@ const userReducer = (state = initialState, action) => {
   {
     return Object.assign({}, state, {
       data: null
+    })
+  }
+
+  if (action.type === 'USER_LIST_UPDATE')
+  {
+    return Object.assign({}, state, {
+      userList: action.payload
+    })
+  }
+
+  if (action.type === 'USER_SIGNUP')
+  {
+    return Object.assign({}, state, {
+      data: action.payload
     })
   }
 

@@ -1,5 +1,6 @@
 
 import React, { Component } from 'react'
+import {Typeahead}  from 'react-typeahead';
 
 class SignUpForm extends Component {
   constructor(props, { authData }) {
@@ -29,8 +30,8 @@ class SignUpForm extends Component {
   render() {
     return(
       <main className="signup">
+        <h2>Create User</h2>
         <form className="pure-form pure-form-stacked " onSubmit={this.handleSubmit.bind(this)}>
-
           <label>Name</label>
           <input
             name="name"

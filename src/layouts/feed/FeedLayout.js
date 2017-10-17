@@ -12,17 +12,13 @@ class Feed extends Component {
     authData = this.props
   }
 
-
-  componentDidMount(){
-    this.props.getMessages()
-  }
-
-
   render() {
     return(
       <main>
-        {this.props.messages.messages.reverse().map((message) =>
-          <FeedItem key={message.id} itemObject={message}/>
+        {this.props.user.data.messages.slice(0).reverse().map((message) =>
+          <FeedItem
+            key={message.id}
+            itemObject={message.message}/>
         )}
       </main>
     )

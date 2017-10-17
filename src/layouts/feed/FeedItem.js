@@ -24,14 +24,19 @@ class FeedItem extends Component {
     return(
       <div className='feedItem'>
 
-        <img className="profile-logo" src={this.props.avatarUrl}></img>
+        <div>
+            <img className="profile-logo" src={this.props.itemObject.user.avatarUrl}></img>
+            <span>{this.props.itemObject.user.name}</span>
+            <div className="time-block">
+                <time>{this.formatTimestamp(this.props.itemObject.timestamp)}</time>
+            </div>
 
-        <div className="time-block">
-            <time>{this.formatTimestamp(this.props.itemObject.timestamp)}</time>
         </div>
 
+
+
         <div className='content-container'>
-          <p dangerouslySetInnerHTML={this.createMarkup(this.props.itemObject.message.value)} />
+          <p dangerouslySetInnerHTML={this.createMarkup(this.props.itemObject.value)} />
         </div>
 
         <div className='button-container' role='group' aria-label='message actions'>

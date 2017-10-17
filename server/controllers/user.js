@@ -1,6 +1,17 @@
 var UserModel = require('../models/user')
 const uuidv1 = require('uuid/v1');
 
+exports.listUsers = (request, response) => {
+
+  return UserModel.find({}).lean()
+    .then((userData)=>{
+      return response.json(userData)
+    }).catch((error)=>{
+      return response.json(error)
+    })
+
+
+}
 
 exports.saveUser = (request, response) => {
 
@@ -24,7 +35,9 @@ exports.saveUser = (request, response) => {
 
 exports.getUser = (request, response) => {
 
-  return UserModel.findOne({id: 1}).lean()
+  const userName = request.params.name || 'default name'
+
+  return UserModel.findOne({name: userName}).lean()
     .then((userData)=>{
       return response.json(userData)
     }).catch((error)=>{
@@ -35,8 +48,10 @@ exports.getUser = (request, response) => {
 
 exports.saveMessage = (request, response) => {
 
+  const userId = request.body.user.id || '0'
+
   return UserModel.update(
-    {id: 1},
+    {_id: userId},
     {$push: {'messages': {
       id: uuidv1(),
       timestamp: new Date(),
@@ -44,7 +59,7 @@ exports.saveMessage = (request, response) => {
     }}},
     {upsert: true, new: true}
   ).then((mongoSaveResponse)=>{
-    return UserModel.findOne({id: 1}).lean()
+    return UserModel.findOne({_id: userId}).lean()
   }).then((userData)=>{
     return response.json(userData)
   }).catch((error)=>{

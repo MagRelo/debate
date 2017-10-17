@@ -30,16 +30,13 @@ export function submitUser(name, avatarUrl) {
       }
     ).then(userObject => {
 
-        return dispatch(userSignUp(userObject))
+        dispatch(userSignUp(userObject))
+        return browserHistory.push('/feed')
       }
     ).catch(error => {
       console.error('action error', error)
       return
     })
 
-
-
-    // Redirect home.
-    return browserHistory.push('/')
   }
 }

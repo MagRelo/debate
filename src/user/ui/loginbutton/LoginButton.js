@@ -7,8 +7,7 @@ const LoginButton = ({ onLoginUserClick }) => {
   return(
     <a href="#"
       className="pure-button"
-      onClick={(event) => onLoginUserClick(event)}>
-      <img className="uport-logo" src={uPortLogo} alt="UPort Logo" />Login with UPort
+      onClick={(event) => onLoginUserClick(event)}>Login
     </a>
   )
 }
