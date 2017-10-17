@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router'
 import Editor from 'react-medium-editor';
+import {Tokenizer}  from 'react-typeahead';
 
 class ComposeMessage extends Component {
   constructor(props, { authData }) {
@@ -38,6 +39,14 @@ class ComposeMessage extends Component {
             :
 
               <form className="pure-form pure-form-stacked " onSubmit={this.handleSubmit.bind(this)}>
+
+
+                <Tokenizer
+                  options={['John', 'Paul', 'George', 'Ringo']}
+                  placeholder="Type to add names..."
+                  onTokenAdd={function(token) {}}
+                />
+
                 <Editor
                   className="editor-input"
                   text=""

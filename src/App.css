@@ -59,6 +59,7 @@ pre {
 
 .time-block{
   text-align: right;
+  float: right;
   padding-right: 0.6em;
   padding-top: 0.5em;
 

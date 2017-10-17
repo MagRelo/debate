@@ -25,6 +25,8 @@ class Message extends Component {
     return(
       <div className='feedItem'>
 
+        <ProfileInfo/>
+
         <div className="time-block">
             <time>{this.formatTimestamp(this.props.itemObject.timestamp)}</time>
         </div>
