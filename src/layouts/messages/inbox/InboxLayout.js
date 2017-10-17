@@ -18,8 +18,6 @@ class InboxLayout extends Component {
         <div className="pure-g">
           <div className="pure-u-1-1">
             <Compose/>
-            <hr></hr>
-
             <h1>Inbox</h1>
             <FeedContainer/>
 

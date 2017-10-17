@@ -17,6 +17,10 @@ class Message extends Component {
     return moment(timestamp).fromNow()
   }
 
+  createMarkup(value) {
+    return {__html: value};
+  }
+
   render() {
     return(
       <div className='feedItem'>
@@ -26,7 +30,7 @@ class Message extends Component {
         </div>
 
         <div className='content-container'>
-          <p>{this.props.itemObject.message.value}</p>
+          <p dangerouslySetInnerHTML={this.createMarkup(this.props.itemObject.message.value)} />
         </div>
 
         <div className='button-container' role='group' aria-label='message actions'>

@@ -14,10 +14,17 @@ class ComposeMessage extends Component {
       <main className="compose-container">
         <div className="pure-g">
           <div className="pure-u-1-1">
-            <p>Compose Message</p>
-            <Editor
-              loading={this.props.messages.loading}
-              submitFunction={this.props.onMessageSubmit} />
+
+            <div className="compose-title-container">
+              <span className="title">Compose Message</span>
+            </div>
+
+            <div className="compose-editor-container">
+              <Editor
+                loading={this.props.messages.loading}
+                submitFunction={this.props.onMessageSubmit} />
+            </div>
+
           </div>
         </div>
       </main>

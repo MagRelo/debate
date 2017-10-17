@@ -44,8 +44,7 @@ class MessageEditor extends Component {
           <Editor
             className="editor-input"
             text=""
-            onChange={this.handleChange.bind(this)}
-            options={{toolbar: {buttons: ['bold', 'italic', 'underline']}}} />
+            onChange={this.handleChange.bind(this)}/>
           <button
             type="submit"
             className="pure-button pure-button-primary" > Submit </button>

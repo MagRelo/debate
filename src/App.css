@@ -32,7 +32,25 @@ pre {
 
 
 .compose-container {
-  text-align: left
+  text-align: left;
+
+  margin-top: 2em;
+
+  border: solid 1px #c3c3c3;
+  box-shadow: 2px 2px 2px #d2d2d2;
+}
+
+.compose-title-container{
+  padding: 1em;
+  background-color: #03a0ca;
+  margin-bottom: 1em;
+}
+.compose-title-container .title{
+  color: white;
+}
+
+.compose-editor-container{
+  padding: 0 1em 1em 1em;
 }
 
 .time-block{
@@ -85,12 +103,6 @@ pre {
 
 .pure-form input[type="text"]:focus {
   border-color: #0c1a2b;
-}
-
-.pure-form{
-  border: solid 1px gray;
-  border-radius: 1em;
-  padding: 1em;
 }
 
 .pure-form input{
