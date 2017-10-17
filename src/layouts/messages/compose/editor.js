@@ -7,7 +7,6 @@ class MessageEditor extends Component {
     super(props)
     this.state = {
       text: '',
-      displayResponse: false
     }
   }
 
@@ -28,14 +27,6 @@ class MessageEditor extends Component {
 
         <div>
           <div className="loader"></div>
-
-          {this.state.displayResponse ?
-
-            <p>result: {this.state.result}</p>
-            :
-            null
-          }
-
         </div>
 
         :

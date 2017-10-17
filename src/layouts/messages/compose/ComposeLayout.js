@@ -1,12 +1,20 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router'
-import Editor from './editor'
-
+import Editor from 'react-medium-editor';
 
 class ComposeMessage extends Component {
   constructor(props, { authData }) {
     super(props)
     authData = this.props
+  }
+
+  handleChange(text) {
+    this.setState({text: text})
+  }
+
+  handleSubmit(event) {
+    event.preventDefault()
+    this.props.onMessageSubmit(this.state.text, this.props.user)
   }
 
   render() {
@@ -20,9 +28,27 @@ class ComposeMessage extends Component {
             </div>
 
             <div className="compose-editor-container">
-              <Editor
-                loading={this.props.messages.loading}
-                submitFunction={this.props.onMessageSubmit} />
+
+            {this.props.messages.loading ?
+
+              <div>
+                <div className="loader"></div>
+              </div>
+
+            :
+
+              <form className="pure-form pure-form-stacked " onSubmit={this.handleSubmit.bind(this)}>
+                <Editor
+                  className="editor-input"
+                  text=""
+                  onChange={this.handleChange.bind(this)}/>
+                <button
+                  type="submit"
+                  className="pure-button pure-button-primary" > Submit </button>
+              </form>
+
+            }
+
             </div>
 
           </div>

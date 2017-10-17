@@ -17,7 +17,7 @@ function messageSubmitted() {
   }
 }
 
-export function messageSubmit(message) {
+export function messageSubmit(message, user) {
   return function(dispatch) {
 
     // set 'loading' to true
@@ -27,7 +27,7 @@ export function messageSubmit(message) {
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({value: message})
+        body: JSON.stringify({value: message, user: user})
       }
     ).then(rawResponse => {
 

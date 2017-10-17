@@ -43,7 +43,7 @@ pre {
 .compose-title-container{
   padding: 1em;
   background-color: #03a0ca;
-  margin-bottom: 1em;
+  margin-bottom: 1.2em;
 }
 .compose-title-container .title{
   color: white;
@@ -57,12 +57,14 @@ pre {
   text-align: right;
   padding-right: 0.6em;
   padding-top: 0.5em;
+
   color: darkgray;
+  font-size: smaller;
 }
 
 
 .editor-input{
-  margin-bottom: 1em;
+  margin-bottom: 0.4em;
   background-color: aliceblue;
   border: solid 1px skyblue;
   min-height: 80px;

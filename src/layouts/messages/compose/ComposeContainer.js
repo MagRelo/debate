@@ -4,14 +4,15 @@ import { messageSubmit } from './ComposeActions'
 
 const mapStateToProps = (state, ownProps) => {
   return {
-    messages: state.messages
+    messages: state.messages,
+    user: state.user
   }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    onMessageSubmit: (messageText) => {
-      dispatch(messageSubmit(messageText))
+    onMessageSubmit: (messageText, user) => {
+      dispatch(messageSubmit(messageText, user))
     }
   }
 }
