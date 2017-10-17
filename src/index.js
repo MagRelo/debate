@@ -13,9 +13,11 @@ import Profile from './user/layouts/profile/Profile'
 
 import Inbox from './layouts/messages/inbox/InboxLayout'
 import ComposeMessage from './layouts/messages/compose/ComposeContainer'
-import Message from './layouts/messages/inbox/Message'
 
-import Feed from './layouts/feed/Feed'
+// import Message from './layouts/messages/inbox/Message'
+// <Route path="messages/:id" component={Message} />
+
+import Feed from './layouts/feed/FeedPage'
 
 import Transactions from './layouts/transactions/TransactionList'
 
@@ -38,7 +40,7 @@ ReactDOM.render((
           <Route path="transactions" component={Transactions} />
 
           <Route path="messages/new" component={ComposeMessage} />
-          <Route path="messages/:id" component={Message} />
+
           <Route path="messages" component={Inbox} />
           <Route path='*' exact={true} component={Page404} />
         </Route>

@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router'
 
-import Message from './Message'
+import FeedItem from './FeedItem'
 
-// Seversa foundation creates identities by minting and buying the first 1000 tokens(?)
+// Servesa foundation creates identities by minting and buying the first 1000 tokens(?)
 
 
 class Feed extends Component {
@@ -22,7 +22,7 @@ class Feed extends Component {
     return(
       <main>
         {this.props.messages.messages.reverse().map((message) =>
-          <Message key={message.id} itemObject={message}/>
+          <FeedItem key={message.id} itemObject={message}/>
         )}
       </main>
     )

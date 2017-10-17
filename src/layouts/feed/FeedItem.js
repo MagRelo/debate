@@ -1,33 +1,52 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router'
 
-import FeedSlashButton from './FeedSlashButton'
+import moment from 'moment'
 
-import ProfileInfo from './ProfileInfo'
+import ReplyButton from './itemButtons/ReplyButton'
+import DiscardButton from './itemButtons/DiscardButton'
 
 class FeedItem extends Component {
+  constructor(props, { authData }) {
+    super(props)
+    authData = this.props
+  }
+
+  formatTimestamp(timestamp){
+    return moment(timestamp).fromNow()
+  }
+
+  createMarkup(value) {
+    return {__html: value};
+  }
+
   render() {
     return(
       <div className='feedItem'>
 
-        <span className="profile-container">
-          <ProfileInfo profileObject={this.props.itemObject.user} />
-        </span>
+        <img className="profile-logo" src={this.props.avatarUrl}></img>
 
+        <div className="time-block">
+            <time>{this.formatTimestamp(this.props.itemObject.timestamp)}</time>
+        </div>
 
         <div className='content-container'>
-          <h3>{this.props.itemObject.user.name}</h3>
-          <p>{this.props.itemObject.item.content}</p>
+          <p dangerouslySetInnerHTML={this.createMarkup(this.props.itemObject.message.value)} />
         </div>
 
-        <div className='button-container'>
-          <FeedSlashButton/>
+        <div className='button-container' role='group' aria-label='message actions'>
+          <ReplyButton/>
+          <DiscardButton/>
         </div>
-
 
       </div>
     )
   }
+}
+
+
+FeedItem.defaultProps = {
+  avatarUrl: 'https://x1.xingassets.com/assets/frontend_minified/img/users/nobody_m.original.jpg'
 }
 
 export default FeedItem

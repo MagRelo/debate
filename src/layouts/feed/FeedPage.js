@@ -1,12 +1,10 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router'
 
-
-import Compose from '../compose/ComposeContainer'
-import FeedContainer from '../../feed/FeedContainer'
+import FeedContainer from './FeedContainer'
 
 
-class InboxLayout extends Component {
+class Feed extends Component {
   constructor(props, { authData }) {
     super(props)
     authData = this.props
@@ -17,9 +15,10 @@ class InboxLayout extends Component {
       <main className="container">
         <div className="pure-g">
           <div className="pure-u-1-1">
-            <Compose/>
-            <h1>Inbox</h1>
+
+            <h1>Feed</h1>
             <FeedContainer/>
+
 
           </div>
         </div>
@@ -28,4 +27,4 @@ class InboxLayout extends Component {
   }
 }
 
-export default InboxLayout
+export default Feed
