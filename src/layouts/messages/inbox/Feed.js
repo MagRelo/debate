@@ -3,6 +3,8 @@ import { Link } from 'react-router'
 
 import Message from './Message'
 
+// Seversa foundation creates identities by minting and buying the first 1000 tokens(?)
+
 
 class Feed extends Component {
   constructor(props, { authData }) {

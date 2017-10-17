@@ -1,5 +1,10 @@
 const initialState = {
-  data: null
+  data: {
+    name: 'Bill',
+    image: {
+      contentUrl: 'https://x1.xingassets.com/assets/frontend_minified/img/users/nobody_m.original.jpg'
+    }
+  }
 }
 
 const userReducer = (state = initialState, action) => {

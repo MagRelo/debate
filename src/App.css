@@ -18,9 +18,13 @@ body,
   color: #4C4C4C;
 }
 
+h1, h2 {
+  border-bottom: solid;
+}
+
 h1, h2, h3 {
   font-family: 'Oswald', 'Arial Narrow', sans-serif;
-  color: #4C4C4C;
+  color: #949494;
 }
 
 pre {
@@ -65,8 +69,8 @@ pre {
 
 .editor-input{
   margin-bottom: 0.4em;
-  background-color: aliceblue;
-  border: solid 1px skyblue;
+  background-color: #ebf8fb;
+  border: dashed 1px #03a0ca;
   min-height: 80px;
 }
 
@@ -74,7 +78,6 @@ pre {
   box-sizing: border-box;
   width: 100%;
   padding: 45px 20px;
-  text-align: center;
 }
 
 /*Buttons*/
