@@ -15,7 +15,12 @@ module.exports = function(app) {
 
   app.get('/api/user', userController.getUser);
   app.post('/api/user', userController.saveUser);
+
   app.post('/api/messages', userController.saveMessage);
+
+
+
+
 
   // All undefined asset or api routes should return a 404
   app.route('/:url(api|auth|components|app|bower_components|assets)/*')

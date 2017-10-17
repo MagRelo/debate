@@ -4,6 +4,7 @@ import { Link } from 'react-router'
 import Logo from '../../img/circle.svg'
 
 import LoginButtonContainer from '../../user/ui/loginbutton/LoginButtonContainer'
+import SignUpFormContainer from '../../user/ui/signup/SignUpFormContainer'
 
 class Home extends Component {
   render() {
@@ -23,6 +24,10 @@ class Home extends Component {
             <h3>Prevent spam and advertising</h3>
 
             <LoginButtonContainer />
+
+            <hr></hr>
+
+            <SignUpFormContainer/>
 
 
           </div>

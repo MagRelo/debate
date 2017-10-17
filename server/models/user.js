@@ -7,7 +7,8 @@ var UserSchema = new Schema({
   id: Number,
   name: String,
   timestamp: Date,
-  messages: Array
+  messages: Array,
+  avatarUrl: String
 });
 
 module.exports = mongoose.model('User', UserSchema);
