@@ -50,7 +50,7 @@ pre {
 .compose-title-container{
   padding: 1em;
   background-color: #03a0ca;
-  margin-bottom: 1.2em;
+  margin-bottom: 0.5em;
 }
 .compose-title-container .title{
   color: white;
@@ -76,6 +76,7 @@ pre {
   background-color: #ebf8fb;
   border: dashed 1px #03a0ca;
   min-height: 80px;
+  border-radius: 5px;
 }
 
 .container {

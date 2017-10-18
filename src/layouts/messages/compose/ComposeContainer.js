@@ -1,6 +1,6 @@
 import { connect } from 'react-redux'
 import Compose from './ComposeLayout'
-import { messageSubmit } from './ComposeActions'
+import { messageSubmit } from '../MessageActions'
 
 const mapStateToProps = (state, ownProps) => {
   return {

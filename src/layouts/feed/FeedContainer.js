@@ -1,6 +1,6 @@
 import { connect } from 'react-redux'
 import Feed from './FeedLayout'
-import { getMessages } from './FeedActions'
+import { getMessages } from '../messages/MessageActions'
 
 const mapStateToProps = (state, ownProps) => {
   return {

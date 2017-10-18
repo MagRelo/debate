@@ -60,7 +60,6 @@ exports.getMessagesByUser = (request, response) => {
   userFeed.get({})
    .then(function (body) {
      var activities = body.results;
-
      return StreamBackend.enrichActivities(activities)
    })
    .then(function (enrichedActivities) {

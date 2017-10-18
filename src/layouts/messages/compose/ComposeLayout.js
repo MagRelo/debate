@@ -45,19 +45,29 @@ class ComposeMessage extends Component {
 
               <form className="pure-form pure-form-stacked " onSubmit={this.handleSubmit.bind(this)}>
 
-                <Tokenizer
-                  options={this.userList()}
-                  placeholder="Type to add names..."
-                  onTokenAdd={function(token) {}}
-                />
+                <fieldset>
+                  <label>To:</label>
+                  <Tokenizer
+                    options={this.userList()}
+                    placeholder="Type to add names..."
+                    onTokenAdd={function(token) {}}
+                  />
+                </fieldset>
 
-                <Editor
-                  className="editor-input"
-                  text=""
-                  onChange={this.handleChange.bind(this)}/>
+                <fieldset>
+                  <label>Message:</label>
+                  <Editor
+                    className="editor-input"
+                    text=""
+                    onChange={this.handleChange.bind(this)}
+                  />
+                </fieldset>
+
                 <button
                   type="submit"
-                  className="pure-button pure-button-primary" > Submit </button>
+                  className="pure-button pure-button-primary"> Submit
+                </button>
+                
               </form>
 
             }

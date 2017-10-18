@@ -20,7 +20,6 @@ class InboxLayout extends Component {
             <Compose/>
             <h1>Inbox</h1>
             <FeedContainer/>
-
           </div>
         </div>
       </main>
