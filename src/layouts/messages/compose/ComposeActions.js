@@ -40,21 +40,18 @@ export function messageSubmit(message, user) {
           value: message,
           user: {
             id: user.data._id,
-            name: user.data.name,            
+            name: user.data.name,
             avatarUrl: user.data.avatarUrl,
           }})
       }
     ).then(rawResponse => {
-
-        if(rawResponse.status !== 200){
-          throw new Error(rawResponse.text)
-        }
+        if(rawResponse.status !== 200){ throw new Error(rawResponse.text) }
 
         return rawResponse.json()
       }
-    ).then(userObject => {
+    ).then(messageList => {
 
-        return dispatch(userLoggedIn(userObject))
+        return dispatch(messageListUpdate(messageList.activities))
       }
     ).catch(error => {
       console.error('action error', error)

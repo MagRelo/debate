@@ -57,7 +57,6 @@ exports.getMessagesByUser = (request, response) => {
 
   // GetStream feed
   var userFeed = FeedManager.getUserFeed(userId);
-
   userFeed.get({})
    .then(function (body) {
      var activities = body.results;
@@ -84,16 +83,24 @@ exports.saveMessage = (request, response) => {
   const userId = request.body.user.id || '0'
   const message = request.body.value || 'default'
 
-  return MessageModel.create(
-    {
+  return MessageModel.create({
       user: userId,
       text: message,
       created_at: new Date()
-    }
-  ).then((mongoSaveResponse)=>{
-    return UserModel.findOne({_id: userId}).lean()
-  }).then((userData)=>{
-    return response.json(userData)
+  })
+  .then((mongoSaveResponse)=>{
+    var userFeed = FeedManager.getUserFeed(userId);
+    return userFeed.get({})
+  .then(function (body) {
+    var activities = body.results;
+    return StreamBackend.enrichActivities(activities)})
+  .then(function (enrichedActivities) {
+    return response.json({
+       location: 'feed',
+       user: userId,
+       activities: enrichedActivities
+      })
+    })
   }).catch((error)=>{
     return response.json(error)
   })

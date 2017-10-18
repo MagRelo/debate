@@ -35,7 +35,7 @@ class ComposeMessage extends Component {
 
             <div className="compose-editor-container">
 
-            {this.props.user.loading ?
+            {this.props.messages.loading ?
 
               <div>
                 <div className="loader"></div>
@@ -44,7 +44,6 @@ class ComposeMessage extends Component {
             :
 
               <form className="pure-form pure-form-stacked " onSubmit={this.handleSubmit.bind(this)}>
-
 
                 <Tokenizer
                   options={this.userList()}

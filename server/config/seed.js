@@ -7,11 +7,6 @@
 const mongoose = require('mongoose');
 const User = require('../models/user') ;
 
-const BenId = mongoose.Types.ObjectId("56a3e4661f46c422ef8bac61")
-const ToddId = mongoose.Types.ObjectId("56a3e4661f46c422ef8bad42")
-const GrodeId = mongoose.Types.ObjectId("56a3e4661f46c422ef8bae32")
-const MattId = mongoose.Types.ObjectId("56a3fc84898cf1bbf055cd5a")
-
 User.find({}).remove()
   .then(() => {
 
@@ -19,37 +14,37 @@ User.find({}).remove()
 
     User.create(
       {
-        _id: BenId,
+        _id: mongoose.Types.ObjectId("56a3e4661f46c422ef8bac61"),
         provider: 'local',
         name: 'ben',
         email: 'ben',
         password: 'ben',
-        avatarUrl: ''
+        avatarUrl: 'https://goo.gl/images/6yhQ4T'
       },
       {
-        _id: ToddId,
+        _id: mongoose.Types.ObjectId("56a3e4661f46c422ef8bad42"),
         provider: 'local',
         name: 'todd',
         email: 'todd',
         password: 'todd',
-        avatarUrl: ''
+        avatarUrl: 'https://goo.gl/images/oSX8pk'
       },
       {
-        _id: GrodeId,
+        _id: mongoose.Types.ObjectId("56a3e4661f46c422ef8bae32"),
         provider: 'local',
         name: 'grode',
         email: 'grode',
         password: 'grode',
-        avatarUrl: ''
+        avatarUrl: 'https://goo.gl/images/as2KN9'
       },
       {
-        _id: MattId,
+        _id: mongoose.Types.ObjectId("56a3fc84898cf1bbf055cd5a"),
         provider: 'local',
         role: 'admin',
         name: 'matt',
         email: 'matt',
         password: 'matt',
-        avatarUrl: ''
+        avatarUrl: 'https://c1.staticflickr.com/2/1252/1484545713_a6477d339e_b.jpg'
       }
     )
     .then(() => {
