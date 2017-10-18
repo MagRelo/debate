@@ -25,8 +25,8 @@ class FeedItem extends Component {
       <div className='feedItem'>
 
         <div>
-            <img className="profile-logo" src={this.props.itemObject.user.avatarUrl}></img>
-            <span>{this.props.itemObject.user.name}</span>
+            <img className="profile-logo" src={this.props.actor.avatarUrl}></img>
+            <span>{this.props.itemObject.create_at}</span>
             <div className="time-block">
                 <time>{this.formatTimestamp(this.props.itemObject.timestamp)}</time>
             </div>
@@ -36,7 +36,7 @@ class FeedItem extends Component {
 
 
         <div className='content-container'>
-          <p dangerouslySetInnerHTML={this.createMarkup(this.props.itemObject.value)} />
+          <p dangerouslySetInnerHTML={this.createMarkup(this.props.itemObject.text)} />
         </div>
 
         <div className='button-container' role='group' aria-label='message actions'>

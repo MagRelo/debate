@@ -1,6 +1,7 @@
 const express = require('express')
 const app = express()
 
+
 // Express middleware
 var compression = require('compression');
 var bodyParser = require('body-parser');
@@ -25,8 +26,14 @@ mongoose.connection.on('error', function(err) {
 	}
 );
 
+// seed database
+if(process.env.SEED_DB === 'true'){
+  require('./config/seed')
+} else {
+  console.log('not seeding database')
+}
 
-// config
+// routing config
 app.use(compression());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json({limit: '1mb'}));

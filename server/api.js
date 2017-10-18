@@ -19,9 +19,7 @@ module.exports = function(app) {
   app.post('/api/user', userController.saveUser);
 
   app.post('/api/messages', userController.saveMessage);
-
-
-
+  app.get('/api/messages/:userId', userController.getMessagesByUser);
 
 
   // All undefined asset or api routes should return a 404

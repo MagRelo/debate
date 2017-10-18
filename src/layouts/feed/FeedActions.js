@@ -9,9 +9,9 @@ function messageListUpdate(messageList) {
   }
 }
 
-export function getMessages(user, message) {
+export function getMessages(userId, message) {
   return function(dispatch) {
-    return fetch('/api/user',
+    return fetch('/api/messages/' + userId,
       {
         method: "GET"
       }
@@ -25,7 +25,7 @@ export function getMessages(user, message) {
       }
     ).then(userObject => {
 
-        return dispatch(messageListUpdate(userObject.messages))
+        return dispatch(messageListUpdate(userObject.activities))
       }
     ).catch(error => {
       console.error('action error', error)

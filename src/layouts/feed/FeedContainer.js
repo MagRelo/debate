@@ -4,15 +4,15 @@ import { getMessages } from './FeedActions'
 
 const mapStateToProps = (state, ownProps) => {
   return {
-    messages: state.user.messages,
+    messages: state.messages,
     user: state.user
   }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    getMessages: () => {
-      dispatch(getMessages())
+    getMessages: (userId) => {
+      dispatch(getMessages(userId))
     }
   }
 }
