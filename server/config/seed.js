@@ -19,7 +19,7 @@ User.find({}).remove()
         name: 'ben',
         email: 'ben',
         password: 'ben',
-        avatarUrl: 'https://goo.gl/images/6yhQ4T'
+        avatarUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/99/Location_of_%22We_Thank_Thee_O_God%22_inscription_-_panoramio.jpg/320px-Location_of_%22We_Thank_Thee_O_God%22_inscription_-_panoramio.jpg'
       },
       {
         _id: mongoose.Types.ObjectId("56a3e4661f46c422ef8bad42"),
@@ -27,7 +27,7 @@ User.find({}).remove()
         name: 'todd',
         email: 'todd',
         password: 'todd',
-        avatarUrl: 'https://goo.gl/images/oSX8pk'
+        avatarUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f1/ABS-8752.0-BuildingActivityAustralia-ValueBuildingWorkBySectorAustralianCapitalTerritory-Original-ValueWorkCommenced-AustralianCapitalTerritory-TotalSectors-TotalResidential-AlterationsAdditionsIncludingConversions-A83798021J.svg/320px-thumbnail.svg.png'
       },
       {
         _id: mongoose.Types.ObjectId("56a3e4661f46c422ef8bae32"),
@@ -35,7 +35,7 @@ User.find({}).remove()
         name: 'grode',
         email: 'grode',
         password: 'grode',
-        avatarUrl: 'https://goo.gl/images/as2KN9'
+        avatarUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Gull_portrait_ca_usa.jpg/320px-Gull_portrait_ca_usa.jpg'
       },
       {
         _id: mongoose.Types.ObjectId("56a3fc84898cf1bbf055cd5a"),

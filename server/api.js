@@ -2,24 +2,22 @@
  * Main application routes
  */
 
-
 const userController = require('./controllers/user')
-
+const messageController = require('./controllers/message')
 
 'use strict';
-
-// var errors = require('./components/errors');
 var path = require('path');
 
 module.exports = function(app) {
 
+  // * USERS*
   app.get('/api/user/list', userController.listUsers);
   app.get('/api/user/:name', userController.getUser);
-
   app.post('/api/user', userController.saveUser);
 
-  app.post('/api/messages', userController.saveMessage);
-  app.get('/api/messages/:userId', userController.getMessagesByUser);
+  // * MESSAGES*
+  app.post('/api/messages', messageController.saveMessage);
+  app.get('/api/messages/:userId', messageController.getMessagesByUser);
 
 
   // All undefined asset or api routes should return a 404
