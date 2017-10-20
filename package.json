@@ -1,5 +1,5 @@
 {
-  "name": "hiveCommons",
+  "name": "notLinkedIn",
   "version": "0.1.0",
   "private": true,
   "proxy": "http://localhost:8080",
@@ -60,6 +60,7 @@
     "method-override": "^2.3.9",
     "moment": "^2.19.1",
     "mongoose": "^4.12.1",
+    "morgan": "^1.9.0",
     "react": "^15.4.2",
     "react-dom": "^15.4.2",
     "react-medium-editor": "^1.8.1",

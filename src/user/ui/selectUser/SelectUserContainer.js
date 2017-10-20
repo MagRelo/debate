@@ -1,6 +1,6 @@
 import { connect } from 'react-redux'
 import SelectUserForm from './SelectUserForm'
-import { selectUser, getUsers } from './SelectUserActions'
+import { selectUser, getUsers } from '../../userActions'
 
 const mapStateToProps = (state, ownProps) => {
   return {

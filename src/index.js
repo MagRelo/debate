@@ -9,7 +9,7 @@ import { UserIsAuthenticated } from './util/wrappers.js'
 import App from './App'
 import Home from './layouts/home/Home'
 
-import Profile from './user/layouts/profile/Profile'
+import Profile from './user/layouts/profile/ProfileContainer'
 
 import Inbox from './layouts/messages/inbox/InboxLayout'
 import ComposeMessage from './layouts/messages/compose/ComposeContainer'

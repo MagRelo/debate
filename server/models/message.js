@@ -14,7 +14,4 @@ var MessageSchema = new Schema({
 // GetStream integration
 MessageSchema.plugin(stream.mongoose.activity);
 
-// critical for
-StreamMongoose.setupMongoose(mongoose);
-
 module.exports = mongoose.model('Message', MessageSchema);

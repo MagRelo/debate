@@ -1,20 +1,51 @@
 var UserModel = require('../models/user')
 var MessageModel = require('../models/message')
+var FollowModel = require('../models/follow')
 
 var stream_node = require('getstream-node');
 var FeedManager = stream_node.FeedManager;
 var StreamMongoose = stream_node.mongoose;
 var StreamBackend = new StreamMongoose.Backend();
 
-exports.listUsers = (request, response) => {
+
+
+function markFollowers (users, followers) {
+
+  var followerIds = followers.map(function(item) {
+		return item.target.toHexString();
+	});
+
+  users.forEach((user) => {
+    if (followerIds.indexOf(user._id.toHexString()) !== -1){
+      user.followed = true;
+    }
+  })
+
+  return users
+};
+
+function getMarkedUserList (userId){
+  let userList = []
 
   return UserModel.find({}).lean()
-    .then((userData)=>{
-      return response.json(userData)
-    }).catch((error)=>{
-      return response.json(error)
+    .then((userListArray)=>{
+      userList = userListArray
+      return FollowModel.find({user: userId}).lean()
+    }).then((FollowArray)=>{
+      return markFollowers(userList, FollowArray)
     })
+}
 
+
+exports.listUsers = (request, response) => {
+
+  return getMarkedUserList(request.body.userId)
+    .then((enrichedUserList)=>{
+      return response.json(enrichedUserList)
+    }).catch((error)=>{
+      console.error(error.message)
+      return response.status(500).json({error: error.message});
+    })
 
 }
 
@@ -51,57 +82,60 @@ exports.getUser = (request, response) => {
 
 }
 
-exports.getMessagesByUser = (request, response) => {
+exports.followUser = (request, response) => {
 
-  const userId = request.params.userId || '0'
+  UserModel.findOne({ _id: request.body.target })
+    .then(target => {
 
-  // GetStream feed
-  var userFeed = FeedManager.getUserFeed(userId);
-  userFeed.get({})
-   .then(function (body) {
-     var activities = body.results;
-     return StreamBackend.enrichActivities(activities)
-   })
-   .then(function (enrichedActivities) {
+      if (target){
+        const follow = new FollowModel({
+          user: request.body.user,
+          target: request.body.target
+        });
 
-     return response.json({
-       location: 'feed',
-       user: userId,
-       activities: enrichedActivities
-     });
+        let userList = []
 
-   })
-   .catch((error)=>{
-     return response.json(error)
-   })
+        return follow.save()
+          .then(follow => {
+            return getMarkedUserList(request.body.user)
+          }).then((enrichedUserList)=>{
+            return response.json(enrichedUserList)
+          })
+        }
+
+        // target user not found
+        return response.status(404).send('Not found');
+    })
+    .catch(error => {
+      console.error(error.message)
+      return response.status(500).json({error: error.message});
+    })
 
 }
 
-exports.saveMessage = (request, response) => {
+exports.unFollowUser = (request, response) => {
 
-  const userId = request.body.user.id || '0'
-  const message = request.body.value || 'default'
+  FollowModel.findOne({
+    user: request.body.user,
+    target: request.body.target
+  }).then(follow => {
 
-  return MessageModel.create({
-      user: userId,
-      text: message,
-      created_at: new Date()
-  })
-  .then((mongoSaveResponse)=>{
-    var userFeed = FeedManager.getUserFeed(userId);
-    return userFeed.get({})
-  .then(function (body) {
-    var activities = body.results;
-    return StreamBackend.enrichActivities(activities)})
-  .then(function (enrichedActivities) {
-    return response.json({
-       location: 'feed',
-       user: userId,
-       activities: enrichedActivities
-      })
+      if(follow){
+        console.log('found, removing...')
+        return follow.remove()
+        .then(follow => {
+          return getMarkedUserList(request.body.user)
+        }).then((enrichedUserList)=>{
+          return response.json(enrichedUserList)
+        })
+      }
+
+      console.log('follow not found')
+      return response.status(404).send('Not found');
     })
-  }).catch((error)=>{
-    return response.json(error)
-  })
+    .catch(error => {
+      console.error(error.message)
+      return response.status(500).json({error: error.message});
+    })
 
 }

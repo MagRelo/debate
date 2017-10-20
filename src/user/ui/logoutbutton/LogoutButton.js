@@ -1,6 +1,6 @@
 import React from 'react'
 
-const LogoutButton = ({ onLogoutUserClick }) => {
+const LogoutButton = ({ onLogoutUserClick}) => {
   return(
     <a href="#"
       className="pure-button"

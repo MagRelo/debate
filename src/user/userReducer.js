@@ -13,14 +13,6 @@ const userReducer = (state = initialState, action) => {
     })
   }
 
-
-  if (action.type === 'MESSAGE_SUBMITTED')
-  {
-    return Object.assign({}, state, {
-      loading: true
-    })
-  }
-
   if (action.type === 'USER_LOGGED_OUT')
   {
     return Object.assign({}, state, {
@@ -32,13 +24,6 @@ const userReducer = (state = initialState, action) => {
   {
     return Object.assign({}, state, {
       userList: action.payload
-    })
-  }
-
-  if (action.type === 'USER_SIGNUP')
-  {
-    return Object.assign({}, state, {
-      data: action.payload
     })
   }
 

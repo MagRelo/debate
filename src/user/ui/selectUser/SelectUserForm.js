@@ -25,10 +25,20 @@ class SelectForm extends Component {
     this.props.selectUser(name)
   }
 
-  handleSubmit(event) {
+  handleSubmit(event, name) {
     event.preventDefault()
-    this.props.selectUser(this.state.name)
+    this.props.selectUser(name)
   }
+  //
+  // <Typeahead
+  //   name="name"
+  //   options={this.userList()}
+  //   onOptionSelected={this.handleInputChange.bind(this)}/>
+  //
+  // <button
+  //   type="submit"
+  //   className="pure-button pure-button-primary"> Select
+  // </button>
 
   render() {
     return(
@@ -37,15 +47,16 @@ class SelectForm extends Component {
         <form className="pure-form pure-form-stacked " onSubmit={this.handleSubmit.bind(this)}>
 
           <label>Select User</label>
-          <Typeahead
-            name="name"
-            options={this.userList()}
-            onOptionSelected={this.handleInputChange.bind(this)}/>
 
-          <button
-            type="submit"
-            className="pure-button pure-button-primary"> Select
-          </button>
+          <ul>
+          {this.userList().map(user => {
+            return <li key={user}>
+              <button
+                className="pure-button pure-button-primary"
+                onClick={(event) => this.handleSubmit(event, user)}>{user}</button>
+            </li>
+          })}
+          </ul>
 
         </form>
       </main>

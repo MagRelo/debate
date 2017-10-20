@@ -10,14 +10,18 @@ var path = require('path');
 
 module.exports = function(app) {
 
-  // * USERS*
+  // *USERS*
   app.get('/api/user/list', userController.listUsers);
   app.get('/api/user/:name', userController.getUser);
   app.post('/api/user', userController.saveUser);
 
+  // *FOLLOW*
+  app.post('/api/follow', userController.followUser);
+  app.delete('/api/follow', userController.unFollowUser);
+
   // * MESSAGES*
-  app.post('/api/messages', messageController.saveMessage);
   app.get('/api/messages/:userId', messageController.getMessagesByUser);
+  app.post('/api/messages', messageController.saveMessage);
 
 
   // All undefined asset or api routes should return a 404

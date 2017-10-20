@@ -8,6 +8,7 @@ var bodyParser = require('body-parser');
 var methodOverride = require('method-override');
 var helmet = require('helmet');
 var cookieParser = require('cookie-parser');
+var morgan = require('morgan');
 
 
 // Connect to database
@@ -26,6 +27,11 @@ mongoose.connection.on('error', function(err) {
 	}
 );
 
+// register GetStream with mongoose
+var stream = require('getstream-node');
+var StreamMongoose = stream.mongoose;
+StreamMongoose.setupMongoose(mongoose);
+
 // seed database
 if(process.env.SEED_DB === 'true'){
   require('./config/seed')
@@ -40,6 +46,13 @@ app.use(bodyParser.json({limit: '1mb'}));
 app.use(methodOverride());
 app.use(helmet());
 app.use(cookieParser());
+app.use(morgan('dev', {
+  skip: function (req, res) {
+    // console.log(req)
+    // return true
+    return req.originalUrl.indexOf('json') > 0
+  }
+}));
 
 app.use(express.static('build_webpack'))
 
