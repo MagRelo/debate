@@ -8,22 +8,21 @@ import FeedItem from './FeedItem'
 
 class Feed extends Component {
   constructor(props, { authData }) {
-    super(props)
-    authData = this.props
-  }
-
-  componentDidMount(){
-    this.props.getMessages(this.props.user.data._id)
+    super()
   }
 
   render() {
     return(
       <main>
-        {this.props.messages.messages.map((message) =>
+        {this.props.messages.map((message) =>
           <FeedItem
             key={message.id}
+            itemType={message.verb}
+            actor={message.actor}
             itemObject={message.object}
-            actor={message.actor}/>
+            timestamp={message.time}
+            currentUser={this.props.currentUser}
+            />
         )}
       </main>
     )
@@ -32,6 +31,6 @@ class Feed extends Component {
 
 Feed.defaultProps = {
   messages: []
-};
+}
 
 export default Feed

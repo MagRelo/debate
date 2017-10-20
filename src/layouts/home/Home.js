@@ -31,7 +31,6 @@ class Home extends Component {
             <SelectUserContainer/>
             <SignUpFormContainer/>
 
-
           </div>
         </div>
       </main>

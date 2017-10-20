@@ -1,11 +1,10 @@
 import { connect } from 'react-redux'
 import Feed from './FeedLayout'
-import { getMessages } from '../messages/MessageActions'
+import { getMessages, getTimeline } from '../MessageActions'
 
 const mapStateToProps = (state, ownProps) => {
   return {
-    messages: state.messages,
-    user: state.user
+    currentUser: state.user.data
   }
 }
 
@@ -13,7 +12,10 @@ const mapDispatchToProps = (dispatch) => {
   return {
     getMessages: (userId) => {
       dispatch(getMessages(userId))
-    }
+    },
+    getTimeline: (userId) => {
+      dispatch(getTimeline(userId))
+    },
   }
 }
 

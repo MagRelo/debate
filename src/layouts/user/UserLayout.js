@@ -2,8 +2,8 @@ import React, { Component } from 'react'
 import { Link } from 'react-router'
 
 
-import Compose from '../compose/ComposeContainer'
-import FeedContainer from '../../feed/FeedContainer'
+import Compose from '../../messages/compose/ComposeContainer'
+import FeedContainer from '../../messages/feed/FeedContainer'
 
 
 class InboxLayout extends Component {
@@ -18,8 +18,8 @@ class InboxLayout extends Component {
         <div className="pure-g">
           <div className="pure-u-1-1">
             <Compose/>
-            <h1>Inbox</h1>
-            <FeedContainer/>
+            <h1>My Feed</h1>
+            <FeedContainer messages={this.props.feedList}/>
           </div>
         </div>
       </main>

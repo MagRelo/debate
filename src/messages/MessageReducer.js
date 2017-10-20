@@ -1,6 +1,7 @@
 const initialState = {
   loading: null,
-  messages: []
+  networkFeed: [],
+  userFeed: []
 }
 
 const messageReducer = (state = initialState, action) => {
@@ -16,7 +17,14 @@ const messageReducer = (state = initialState, action) => {
   {
     return Object.assign({}, state, {
       loading: false,
-      messages: action.payload
+      userFeed: action.payload
+    })
+  }
+  if (action.type === 'TIMELINE_LIST_UPDATE')
+  {
+    return Object.assign({}, state, {
+      loading: false,
+      networkFeed: action.payload
     })
   }
 

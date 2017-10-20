@@ -11,7 +11,7 @@ var path = require('path');
 module.exports = function(app) {
 
   // *USERS*
-  app.get('/api/user/list', userController.listUsers);
+  app.post('/api/user/list', userController.listUsers);
   app.get('/api/user/:name', userController.getUser);
   app.post('/api/user', userController.saveUser);
 
@@ -21,6 +21,7 @@ module.exports = function(app) {
 
   // * MESSAGES*
   app.get('/api/messages/:userId', messageController.getMessagesByUser);
+  app.get('/api/timeline/:userId', messageController.getTimelineByUser);
   app.post('/api/messages', messageController.saveMessage);
 
 

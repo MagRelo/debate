@@ -1,13 +1,13 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router'
 
-import FeedContainer from './FeedContainer'
+import FeedContainer from '../../messages/feed/FeedContainer'
 
 
 class Feed extends Component {
-  constructor(props, { authData }) {
-    super(props)
-    authData = this.props
+  constructor(props) {
+    super()
+    // authData = this.props
   }
 
   render() {
@@ -16,9 +16,8 @@ class Feed extends Component {
         <div className="pure-g">
           <div className="pure-u-1-1">
 
-            <h1>Feed</h1>
-            <FeedContainer/>
-
+            <h1>Network Feed</h1>
+            <FeedContainer messages={this.props.feedList}/>
 
           </div>
         </div>

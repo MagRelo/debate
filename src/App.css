@@ -37,6 +37,12 @@ pre {
   background: #eee;
 }
 
+.follow-name{
+  font-family: 'Oswald', 'Arial Narrow', sans-serif;
+}
+.follow-container{
+  padding: 0 1em 1em 1em;
+}
 
 .compose-container {
   text-align: left;

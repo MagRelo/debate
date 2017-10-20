@@ -17,6 +17,15 @@ function messageListUpdate(messageList) {
   }
 }
 
+export const TIMELINE_LIST_UPDATE = 'TIMELINE_LIST_UPDATE'
+function timelineListUpdate(timelineList) {
+  return {
+    type: TIMELINE_LIST_UPDATE,
+    payload: timelineList
+  }
+}
+
+
 export function messageSubmit(message, user) {
   return function(dispatch) {
 
@@ -39,8 +48,9 @@ export function messageSubmit(message, user) {
       }
     ).then(messageList => {
 
-        // update messages list
-        return dispatch(messageListUpdate(messageList.activities))
+        dispatch(getTimelineByUser(user.data._id))
+        dispatch(getMessagesByUser(user.data._id))
+        
       }
     ).catch(error => {
       console.error('action error', error)
@@ -51,7 +61,7 @@ export function messageSubmit(message, user) {
 }
 
 
-export function getMessages(userId, message) {
+export function getMessagesByUser(userId) {
   return function(dispatch) {
     return fetch('/api/messages/' + userId,
       {
@@ -68,6 +78,32 @@ export function getMessages(userId, message) {
     ).then(userObject => {
 
         return dispatch(messageListUpdate(userObject.activities))
+      }
+    ).catch(error => {
+      console.error('action error', error)
+      return
+    })
+
+  }
+}
+
+export function getTimelineByUser(userId) {
+  return function(dispatch) {
+    return fetch('/api/timeline/' + userId,
+      {
+        method: "GET"
+      }
+    ).then(rawResponse => {
+
+        if(rawResponse.status !== 200){
+          throw new Error(rawResponse.text)
+        }
+
+        return rawResponse.json()
+      }
+    ).then(userObject => {
+
+        return dispatch(timelineListUpdate(userObject.activities))
       }
     ).catch(error => {
       console.error('action error', error)

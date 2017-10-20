@@ -7,18 +7,11 @@ import { UserIsAuthenticated } from './util/wrappers.js'
 
 // Layouts
 import App from './App'
+
 import Home from './layouts/home/Home'
-
-import Profile from './user/layouts/profile/ProfileContainer'
-
-import Inbox from './layouts/messages/inbox/InboxLayout'
-import ComposeMessage from './layouts/messages/compose/ComposeContainer'
-
-// import Message from './layouts/messages/inbox/Message'
-// <Route path="messages/:id" component={Message} />
-
-import Feed from './layouts/feed/FeedPage'
-
+import Feed from './layouts/network/NetworkContainer'
+import User from './layouts/user/UserContainer'
+import Profile from './layouts/profile/ProfileContainer'
 import Transactions from './layouts/transactions/TransactionList'
 
 import Page404 from  './layouts/errors/404'
@@ -33,14 +26,11 @@ ReactDOM.render((
       <Router history={history}>
         <Route path="/" component={App}>
           <IndexRoute component={Home} />
-          <Route path="profile" component={UserIsAuthenticated(Profile)} />
 
           <Route path="feed" component={UserIsAuthenticated(Feed)} />
-
+          <Route path="messages" component={UserIsAuthenticated(User)} />
+          <Route path="profile" component={UserIsAuthenticated(Profile)} />
           <Route path="transactions" component={Transactions} />
-
-          <Route path="messages/new" component={UserIsAuthenticated(ComposeMessage)} />
-          <Route path="messages" component={UserIsAuthenticated(Inbox)} />
 
           <Route path='*' exact={true} component={Page404} />
         </Route>

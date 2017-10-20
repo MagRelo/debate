@@ -1,5 +1,7 @@
 import { browserHistory } from 'react-router'
 
+import { getTimelineByUser, getMessagesByUser } from '../messages/MessageActions'
+
 export const USER_LIST_UPDATE = 'USER_LIST_UPDATE'
 function userListUpdate(userListArray) {
   return {
@@ -39,6 +41,8 @@ export function loginUser(name) {
       return rawResponse.json()
     })
     .then(userObject => {
+      dispatch(getTimelineByUser(userObject._id))
+      dispatch(getMessagesByUser(userObject._id))
       return dispatch(userLoggedIn(userObject))
     })
     .catch(error => {
@@ -94,20 +98,15 @@ export function submitUser(name, avatarUrl) {
 export function selectUser(name) {
   return function(dispatch) {
 
-    return fetch('/api/user/' + name,
-      {
+    return fetch('/api/user/' + name,{
         method: "GET",
-      }
-    ).then(rawResponse => {
-
-        if(rawResponse.status !== 200){
-          throw new Error(rawResponse.text)
-        }
-
+    }).then(rawResponse => {
+        if(rawResponse.status !== 200){ throw new Error(rawResponse.text) }
         return rawResponse.json()
-      }
-    ).then(userObject => {
-
+    }).then(userObject => {
+        dispatch(getTimelineByUser(userObject._id))
+        dispatch(getMessagesByUser(userObject._id))
+        dispatch(getUsers(userObject._id))
         dispatch(userLoggedIn(userObject))
         return browserHistory.push('/feed')
       }
@@ -134,6 +133,8 @@ export function followUser(userId, targetId) {
         return rawResponse.json()
       }
     ).then(userList => {
+        dispatch(getTimelineByUser(userId))
+        dispatch(getMessagesByUser(userId))
         return dispatch(userListUpdate(userList))
       }
     ).catch(error => {
@@ -159,6 +160,8 @@ export function unFollowUser(userId, targetId) {
         return rawResponse.json()
       }
     ).then(userList => {
+        dispatch(getTimelineByUser(userId))
+        dispatch(getMessagesByUser(userId))
         return dispatch(userListUpdate(userList))
       }
     ).catch(error => {
@@ -169,12 +172,16 @@ export function unFollowUser(userId, targetId) {
   }
 }
 
-export function getUsers() {
+export function getUsers(userId) {
   return function(dispatch) {
 
     return fetch('/api/user/list',
       {
-        method: "GET",
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          userId: userId
+        })
       }
     ).then(rawResponse => {
         if(rawResponse.status !== 200){ throw new Error(rawResponse.text) }

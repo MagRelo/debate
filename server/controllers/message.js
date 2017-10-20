@@ -32,6 +32,57 @@ exports.getMessagesByUser = (request, response) => {
 
 }
 
+exports.getTimelineByUser = (request, response) => {
+
+  const userId = request.params.userId || '0'
+
+  // GetStream feed
+  var flatFeed = FeedManager.getNewsFeeds(userId)['timeline_flat'];
+  flatFeed.get({})
+   .then(function (body) {
+     var activities = body.results;
+     return StreamBackend.enrichActivities(activities)
+   })
+   .then(function (enrichedActivities) {
+
+     return response.json({
+       location: 'feed',
+       user: userId,
+       activities: enrichedActivities
+     });
+
+   })
+   .catch((error)=>{
+     return response.json(error)
+   })
+
+}
+exports.getAggregatedTimelineByUser = (request, response) => {
+
+  const userId = request.params.userId || '0'
+
+  // GetStream feed
+  var flatFeed = FeedManager.getNewsFeeds(userId)['timeline_aggregated'];
+  flatFeed.get({})
+   .then(function (body) {
+     var activities = body.results;
+     return StreamBackend.enrichAggregatedActivities(activities)
+   })
+   .then(function (enrichedActivities) {
+
+     return response.json({
+       location: 'feed',
+       user: userId,
+       activities: enrichedActivities
+     });
+
+   })
+   .catch((error)=>{
+     return response.json(error)
+   })
+
+}
+
 exports.saveMessage = (request, response) => {
 
   const userId = request.body.user.id || '0'

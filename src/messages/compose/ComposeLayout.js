@@ -18,10 +18,19 @@ class ComposeMessage extends Component {
     this.props.onMessageSubmit(this.state.text, this.props.user)
   }
 
-
   userList(){
     return this.props.user.userList.map(user => {return user.name})
   }
+
+  //
+  // <fieldset>
+  //   <label>To:</label>
+  //   <Tokenizer
+  //     options={this.userList()}
+  //     placeholder="Type to add names..."
+  //     onTokenAdd={function(token) {}}
+  //   />
+  // </fieldset>
 
   render() {
     return(
@@ -46,15 +55,6 @@ class ComposeMessage extends Component {
               <form className="pure-form pure-form-stacked " onSubmit={this.handleSubmit.bind(this)}>
 
                 <fieldset>
-                  <label>To:</label>
-                  <Tokenizer
-                    options={this.userList()}
-                    placeholder="Type to add names..."
-                    onTokenAdd={function(token) {}}
-                  />
-                </fieldset>
-
-                <fieldset>
                   <label>Message:</label>
                   <Editor
                     className="editor-input"
@@ -67,7 +67,7 @@ class ComposeMessage extends Component {
                   type="submit"
                   className="pure-button pure-button-primary"> Submit
                 </button>
-                
+
               </form>
 
             }

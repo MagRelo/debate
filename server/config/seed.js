@@ -30,14 +30,6 @@ User.find({}).remove()
         avatarUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f1/ABS-8752.0-BuildingActivityAustralia-ValueBuildingWorkBySectorAustralianCapitalTerritory-Original-ValueWorkCommenced-AustralianCapitalTerritory-TotalSectors-TotalResidential-AlterationsAdditionsIncludingConversions-A83798021J.svg/320px-thumbnail.svg.png'
       },
       {
-        _id: mongoose.Types.ObjectId("56a3e4661f46c422ef8bae32"),
-        provider: 'local',
-        name: 'grode',
-        email: 'grode',
-        password: 'grode',
-        avatarUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Gull_portrait_ca_usa.jpg/320px-Gull_portrait_ca_usa.jpg'
-      },
-      {
         _id: mongoose.Types.ObjectId("56a3fc84898cf1bbf055cd5a"),
         provider: 'local',
         role: 'admin',
