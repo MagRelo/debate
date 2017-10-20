@@ -1,25 +1,31 @@
-var UserModel = require('../models/user')
-var MessageModel = require('../models/message')
-var FollowModel = require('../models/follow')
-
 var stream_node = require('getstream-node');
 var FeedManager = stream_node.FeedManager;
 var StreamMongoose = stream_node.mongoose;
 var StreamBackend = new StreamMongoose.Backend();
 
+var bluebird = require('bluebird')
+
+// Models
+var UserModel = require('../models/user')
+var FollowModel = require('../models/follow')
 
 
-function markFollowers (users, followers) {
+function markFollowers (users, followers, userId) {
 
   var followerIds = followers.map(function(item) {
 		return item.target.toHexString();
 	});
 
-  users.forEach((user) => {
-    if (followerIds.indexOf(user._id.toHexString()) !== -1){
-      user.followed = true;
-    }
-  })
+  let markedUsers = users
+    .filter(user => {
+      return userId !== user._id.toHexString()
+    })
+    .map((user) => {
+      if (followerIds.indexOf(user._id.toHexString()) !== -1){
+        user.followed = true;
+      }
+      return user
+    })
 
   return users
 };
@@ -32,8 +38,36 @@ function getMarkedUserList (userId){
       userList = userListArray
       return FollowModel.find({user: userId}).lean()
     }).then((FollowArray)=>{
-      return markFollowers(userList, FollowArray)
+      return markFollowers(userList, FollowArray, userId)
     })
+}
+
+function getUserWithBalances(userId){
+
+  return bluebird.all([
+    UserModel.findOne({_id: userId}).lean(),
+    FollowModel.find({user: userId}).lean(),
+    FollowModel.find({target: userId}).lean()
+  ])
+  .then((responseArray)=>{
+
+    let userObject = responseArray[0]
+    let followingArray = responseArray[1]
+    let followedArray = responseArray[2]
+
+    userObject.amountStaked = followingArray.reduce((sum, follow) => {
+      return sum + follow.valueStaked
+    }, 0)
+
+    userObject.amountStakedonYou = followedArray.reduce((sum, follow) => {
+      return sum + follow.valueStaked
+    }, 0)
+
+    userObject.totalBalance = userObject.balance + userObject.amountStaked + userObject.amountStakedonYou
+
+    return userObject
+  })
+
 }
 
 
@@ -71,12 +105,13 @@ exports.saveUser = (request, response) => {
 
 exports.getUser = (request, response) => {
 
-  const userName = request.params.name || 'default name'
+  const userId = request.params.userId || 'default name'
 
-  return UserModel.findOne({name: userName}).lean()
-    .then((userData)=>{
-      return response.json(userData)
-    }).catch((error)=>{
+  getUserWithBalances(userId)
+    .then(user => {
+      return response.json(user)
+    })
+    .catch((error)=>{
       return response.json(error)
     })
 
@@ -90,17 +125,23 @@ exports.followUser = (request, response) => {
       if (target){
         const follow = new FollowModel({
           user: request.body.user,
-          target: request.body.target
+          target: request.body.target,
+          valueStaked: 10
         });
-
-        let userList = []
 
         return follow.save()
           .then(follow => {
-            return getMarkedUserList(request.body.user)
-          }).then((enrichedUserList)=>{
-            return response.json(enrichedUserList)
+            return UserModel.findOne({ _id: request.body.user })
+          }).then((user)=>{
+            // decrement balance
+            user.balance = user.balance - 10
+            return user.save()
+          }).then((user)=>{
+            return getUserWithBalances(request.body.user)
+          }).then((user)=>{
+            return response.json(user)
           })
+
         }
 
         // target user not found
@@ -124,10 +165,17 @@ exports.unFollowUser = (request, response) => {
         console.log('found, removing...')
         return follow.remove()
         .then(follow => {
-          return getMarkedUserList(request.body.user)
-        }).then((enrichedUserList)=>{
-          return response.json(enrichedUserList)
+          return UserModel.findOne({ _id: request.body.user })
+        }).then((user)=>{
+          // increment balance
+          user.balance = user.balance + 10
+          return user.save()
+        }).then((user)=>{
+          return getUserWithBalances(request.body.user)
+        }).then((user)=>{
+          return response.json(user)
         })
+
       }
 
       console.log('follow not found')

@@ -10,11 +10,11 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    selectUser: (name) => {
-      dispatch(selectUser(name))
+    selectUser: (userId) => {
+      dispatch(selectUser(userId))
     },
-    getUsers: (name) => {
-      dispatch(getUsers(name))
+    getUsers: (userId) => {
+      dispatch(getUsers(userId))
     }
   }
 }

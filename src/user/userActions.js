@@ -95,10 +95,10 @@ export function submitUser(name, avatarUrl) {
   }
 }
 
-export function selectUser(name) {
+export function selectUser(userId) {
   return function(dispatch) {
 
-    return fetch('/api/user/' + name,{
+    return fetch('/api/user/' + userId,{
         method: "GET",
     }).then(rawResponse => {
         if(rawResponse.status !== 200){ throw new Error(rawResponse.text) }
@@ -132,10 +132,12 @@ export function followUser(userId, targetId) {
         if(rawResponse.status !== 200){ throw new Error(rawResponse.text) }
         return rawResponse.json()
       }
-    ).then(userList => {
+    ).then(userObject => {
+        dispatch(userLoggedIn(userObject))
+
         dispatch(getTimelineByUser(userId))
         dispatch(getMessagesByUser(userId))
-        return dispatch(userListUpdate(userList))
+        return dispatch(getUsers(userId))
       }
     ).catch(error => {
       console.error('action error', error)
@@ -159,10 +161,12 @@ export function unFollowUser(userId, targetId) {
         if(rawResponse.status !== 200){ throw new Error(rawResponse.text) }
         return rawResponse.json()
       }
-    ).then(userList => {
-        dispatch(getTimelineByUser(userId))
-        dispatch(getMessagesByUser(userId))
-        return dispatch(userListUpdate(userList))
+    ).then(userObject => {
+      dispatch(userLoggedIn(userObject))
+
+      dispatch(getTimelineByUser(userId))
+      dispatch(getMessagesByUser(userId))
+      return dispatch(getUsers(userId))
       }
     ).catch(error => {
       console.error('action error', error)

@@ -12,7 +12,7 @@ module.exports = function(app) {
 
   // *USERS*
   app.post('/api/user/list', userController.listUsers);
-  app.get('/api/user/:name', userController.getUser);
+  app.get('/api/user/:userId', userController.getUser);
   app.post('/api/user', userController.saveUser);
 
   // *FOLLOW*

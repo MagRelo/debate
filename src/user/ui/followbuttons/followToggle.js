@@ -7,12 +7,12 @@ const FollowToggle = ({userId, targetId, isFollowing, followUserClick, unFollowU
 
       {isFollowing ?
         <button
-          className="pure-button pure-button-active"
+          className="pure-button pure-button-primary"
           onClick={(event) => unFollowUserClick(event, userId, targetId)}>Unfollow
         </button>
       :
         <button
-          className={"pure-button"}
+          className={"pure-button pure-button-primary"}
           onClick={(event) => followUserClick(event, userId, targetId)}>Follow
         </button>
       }
