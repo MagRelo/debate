@@ -9,6 +9,9 @@ var bluebird = require('bluebird')
 var UserModel = require('../models/user')
 var FollowModel = require('../models/follow')
 
+function isNumeric(n) {
+  return !isNaN(parseFloat(n)) && isFinite(n);
+}
 
 function markFollowers (users, followers, userId) {
 
@@ -18,12 +21,17 @@ function markFollowers (users, followers, userId) {
 
   let markedUsers = users
     .filter(user => {
+
+      // remove the current user from the follow/unfollow list
       return userId !== user._id.toHexString()
     })
     .map((user) => {
+
+      // mark the users that the current user is following
       if (followerIds.indexOf(user._id.toHexString()) !== -1){
         user.followed = true;
       }
+
       return user
     })
 
@@ -123,71 +131,162 @@ exports.getUser = (request, response) => {
 
 exports.followUser = (request, response) => {
 
-  UserModel.findOne({ _id: request.body.target })
-    .then(target => {
+  // data from request
+  const userId =  request.body.user || ''
+  const targetId = request.body.target || ''
+  const stakeValue = request.body.stakeValue || ''
 
-      if (target){
-        const follow = new FollowModel({
-          user: request.body.user,
-          target: request.body.target,
-          valueStaked: 10
-        });
+  // data from mongo
+  let user = null
+  let target = null
+  let follow = null
 
-        return follow.save()
-          .then(follow => {
-            return UserModel.findOne({ _id: request.body.user })
-          }).then((user)=>{
-            // decrement balance
-            user.balance = user.balance - 10
-            return user.save()
-          }).then((user)=>{
-            return getUserWithBalances(request.body.user)
-          }).then((user)=>{
-            return response.json(user)
-          })
+  // get: user, target, and any existing follows
+  bluebird.all([
+    UserModel.findOne({ _id: request.body.user }),
+    UserModel.findOne({ _id: request.body.target }),
+    FollowModel.findOne({ user: request.body.user, target: request.body.target })
+  ]).then((reponseArray) => {
 
+    // unpack array
+    user = reponseArray[0]
+    target = reponseArray[1]
+    follow = reponseArray[2]
+
+    // check that user exists, target exists
+    if(!user || !target){
+      throw {
+        clientError: true,
+        status: 400,
+        message: 'users not found',
+        data: {
+          user: !!user,
+          target: !!target
         }
+      }
+    }
 
-        // target user not found
-        return response.status(404).send('Not found');
-    })
-    .catch(error => {
+    // check that user has available balance > stakeValue
+    if(!isNumeric(stakeValue) || user.balance < stakeValue){
+      throw {
+        clientError: true,
+        status: 400,
+        message: 'bad request data',
+        data: {
+          stakeValueNumeric: isNumeric(stakeValue),
+          balanceAvailable: user.balance < stakeValue
+        }
+      }
+    }
+
+    // decrease user balance and save
+    user.balance = user.balance - stakeValue
+    return user.save()
+
+  }).then((user) => {
+
+    if(follow){
+
+      // increase stake of existing follow
+      follow.valueStaked = follow.valueStaked + stakeValue
+      return follow.save()
+
+    } else {
+
+      // create new follow
+      const newFollow = new FollowModel({
+        user: request.body.user,
+        target: request.body.target,
+        valueStaked: request.body.stakeValue
+      })
+      return newFollow.save()
+
+    }
+
+  }).then((follow) => {
+
+    // get updated user balances
+    return getUserWithBalances(user._id)
+
+  }).then((user) => {
+
+    // send response
+    return response.json(user)
+
+  }).catch((error) => {
+
+    // client error
+    if(error.clientError){
       console.error(error.message)
-      return response.status(500).json({error: error.message});
-    })
+      return response.status(error.status).json({error: error.message});
+    }
+
+    // server error
+    console.error(error.message)
+    return response.status(500).json({error: error.message});
+
+  })
 
 }
 
 exports.unFollowUser = (request, response) => {
 
-  FollowModel.findOne({
-    user: request.body.user,
-    target: request.body.target
-  }).then(follow => {
+  // data from request
+  const userId =  request.body.user || ''
+  const targetId = request.body.target || ''
+  let stakeValue = 0
 
-      if(follow){
-        console.log('found, removing...')
-        return follow.remove()
-        .then(follow => {
-          return UserModel.findOne({ _id: request.body.user })
-        }).then((user)=>{
-          // increment balance
-          user.balance = user.balance + 10
-          return user.save()
-        }).then((user)=>{
-          return getUserWithBalances(request.body.user)
-        }).then((user)=>{
-          return response.json(user)
-        })
+  // find the follow to delete
+  FollowModel.findOne({ user: userId, target: targetId })
+    .then(follow => {
 
+      if(!follow){
+        throw {
+          clientError: true,
+          status: 400,
+          message: 'follow not found',
+          data: {
+            follow: !!follow,
+          }
+        }
       }
 
-      console.log('follow not found')
-      return response.status(404).send('Not found');
-    })
-    .catch(error => {
+      // save stake value to refund to User
+      stakeValue = follow.valueStaked
+
+      // remove follow
+      return follow.remove()
+
+  }).then((status) => {
+    return UserModel.findOne({_id: userId})
+  }).then((user) => {
+
+    // refund stakeValue to User
+    user.balance = user.balance + stakeValue
+    return user.save()
+
+  }).then((user) => {
+
+    // get updated user balances
+    return getUserWithBalances(user._id)
+
+  }).then((user) => {
+
+    // send response
+    return response.json(user)
+
+  }).catch((error) => {
+
+    // client error
+    if(error.clientError){
       console.error(error.message)
-      return response.status(500).json({error: error.message});
-    })
+      return response.status(error.status).json({error: error.message});
+    }
+
+    // server error
+    console.error(error.message)
+    return response.status(500).json({error: error.message});
+
+  })
 
 }

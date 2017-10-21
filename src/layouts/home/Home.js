@@ -28,7 +28,9 @@ class Home extends Component {
           <div className="pure-u-1-1">
 
             <h1>Servésa</h1>
+
             <SelectUserContainer/>
+            
             <SignUpFormContainer/>
 
           </div>

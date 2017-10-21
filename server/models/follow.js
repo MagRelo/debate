@@ -17,6 +17,16 @@ var FollowSchema = new Schema({
 // GetStream integration
 FollowSchema.plugin(StreamMongoose.activity);
 
+// add toJSON() method
+FollowSchema.options.toJSON = {
+  transform: function(doc, ret, options) {
+    ret.id = ret._id;
+    delete ret._id;
+    delete ret.__v;
+    return ret;
+  }
+};
+
 FollowSchema.methods.activityNotify = function() {
 	var target_feed = FeedManager.getNotificationFeed(this.target._id);
 	return [target_feed];

@@ -6,6 +6,14 @@
 'use strict';
 const mongoose = require('mongoose');
 const User = require('../models/user') ;
+const Follow = require('../models/follow') ;
+
+
+Follow.find({}).remove()
+  .then(() => {
+    console.log('follows deleted')
+  });
+
 
 User.find({}).remove()
   .then(() => {

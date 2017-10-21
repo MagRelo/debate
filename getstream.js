@@ -1,9 +1,8 @@
 exports.config = {
-	apiKey: 'ynabgekvqzts',
-	apiSecret: 'nfuhvhtb6m4y9r7xmtqehwey2g5b48k8259t7sakajse5vkadytrzfa7cgm7bx8t',
-	apiAppId: '29999',
+	apiKey: process.env.STREAM_KEY || 'rnaqdxgcqj4y',
+	apiSecret: process.env.STREAM_SECRET || 'rnntynnh4fuuzkx6urq9wucss7afp7hfefqn72t4z39h5tx4tymqxrdv6kwq3a4q',
+	apiAppId: process.env.STREAM_SECRET || '30316',
 	apiLocation: '',
-
 	userFeed: 'user',
 	notificationFeed: 'notification',
 	newsFeeds: {

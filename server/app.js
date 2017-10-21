@@ -48,8 +48,7 @@ app.use(helmet());
 app.use(cookieParser());
 app.use(morgan('dev', {
   skip: function (req, res) {
-    // console.log(req)
-    // return true
+    // remove the frontend dev server's 'json' calls from the console output
     return req.originalUrl.indexOf('json') > 0
   }
 }));

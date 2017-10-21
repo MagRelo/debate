@@ -126,23 +126,22 @@ export function followUser(userId, targetId) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           user: userId,
-          target: targetId
+          target: targetId,
+          stakeValue: 10
         })
-    }).then(rawResponse => {
+      }).then(rawResponse => {
         if(rawResponse.status !== 200){ throw new Error(rawResponse.text) }
         return rawResponse.json()
-      }
-    ).then(userObject => {
+      }).then(userObject => {
         dispatch(userLoggedIn(userObject))
 
         dispatch(getTimelineByUser(userId))
         dispatch(getMessagesByUser(userId))
         return dispatch(getUsers(userId))
-      }
-    ).catch(error => {
-      console.error('action error', error)
-      return
-    })
+      }).catch(error => {
+        console.error('action error', error)
+        return
+      })
 
   }
 }
