@@ -37,6 +37,14 @@ pre {
   background: #eee;
 }
 
+.table-100{
+  width: 100%
+}
+
+.account-details{
+  margin-left: 1em;
+}
+
 .currency-box{
   float: right;
   color: #368e4e;

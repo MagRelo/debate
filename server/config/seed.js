@@ -23,13 +23,13 @@ User.find({}).remove()
         _id: mongoose.Types.ObjectId("56a3e4661f46c422ef8bad42"),
         balance: 1000,
         name: 'todd',
-        avatarUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f1/ABS-8752.0-BuildingActivityAustralia-ValueBuildingWorkBySectorAustralianCapitalTerritory-Original-ValueWorkCommenced-AustralianCapitalTerritory-TotalSectors-TotalResidential-AlterationsAdditionsIncludingConversions-A83798021J.svg/320px-thumbnail.svg.png'
+        avatarUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/94/Haltern_am_See%2C_Seebucht_Hohe_Niemen_--_2014_--_1152.jpg/320px-Haltern_am_See%2C_Seebucht_Hohe_Niemen_--_2014_--_1152.jpg'
       },
       {
         _id: mongoose.Types.ObjectId("56a3fc84898cf1bbf055cd5a"),
         balance: 1000,
         name: 'matt',
-        avatarUrl: 'https://c1.staticflickr.com/2/1252/1484545713_a6477d339e_b.jpg'
+        avatarUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/0d/M%C3%BCnster%2C_St.-Paulus-Dom_--_2014_--_0323.jpg/320px-M%C3%BCnster%2C_St.-Paulus-Dom_--_2014_--_0323.jpg'
       }
     )
     .then(() => {
