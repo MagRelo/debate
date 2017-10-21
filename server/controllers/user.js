@@ -27,7 +27,7 @@ function markFollowers (users, followers, userId) {
       return user
     })
 
-  return users
+  return markedUsers
 };
 
 function getMarkedUserList (userId){
@@ -55,10 +55,14 @@ function getUserWithBalances(userId){
     let followingArray = responseArray[1]
     let followedArray = responseArray[2]
 
+    // Users that you are following
+    userObject.followingCount = followingArray.length
     userObject.amountStaked = followingArray.reduce((sum, follow) => {
       return sum + follow.valueStaked
     }, 0)
 
+    // Users that are following you
+    userObject.followerCount = followedArray.length
     userObject.amountStakedonYou = followedArray.reduce((sum, follow) => {
       return sum + follow.valueStaked
     }, 0)

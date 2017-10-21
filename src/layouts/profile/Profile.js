@@ -18,29 +18,37 @@ class Profile extends Component {
         <div className="pure-g">
           <div className="pure-u-1-1">
             <h1>{this.props.authData.name}</h1>
-            <span>
-              <img className="profile-logo" src={this.props.authData.avatarUrl}></img>
-              <p><strong>Available Balance:</strong>
+            <img className="profile-logo" src={this.props.authData.avatarUrl}></img>
+
+            <div>
+
+              <p><strong>Un-staked Balance:</strong>
                 <span className="currency-box">
                   &#536; {this.props.authData.balance}
                 </span>
               </p>
-              <p><strong>Amount You've Staked:</strong>
-                <span className="currency-box">
-                  &#536; {this.props.authData.amountStaked}
-                </span>
-              </p>
+
+
+              <h2>Followers: {this.props.authData.followerCount}</h2>
               <p><strong>Amount Staked on You:</strong>
                 <span className="currency-box">
                   &#536; {this.props.authData.amountStakedonYou}
                 </span>
               </p>
+
+              <h2>Following: {this.props.authData.followingCount}</h2>
+              <p><strong>Amount You've Staked:</strong>
+                <span className="currency-box">
+                  &#536; {this.props.authData.amountStaked}
+                </span>
+              </p>
+
               <p><strong>Total Balance:</strong>
                 <span className="currency-box">
                   &#536; {this.props.authData.totalBalance}
                 </span>
               </p>
-            </span>
+            </div>
 
             <hr></hr>
 
