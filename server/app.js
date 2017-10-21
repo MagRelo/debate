@@ -15,7 +15,7 @@ var morgan = require('morgan');
 var mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 const mongoConfig = {
-  uri: 'mongodb://127.0.0.1:27017/notLinkedin',
+  uri: process.env.MONGODB_URL_INT || 'mongodb://127.0.0.1:27017/notLinkedin',
   options: {
     useMongoClient: true
   }
