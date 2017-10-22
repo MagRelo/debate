@@ -96,7 +96,7 @@ blockquote p {
 
 .compose-title-container{
   padding: 1em;
-  background-color: #03a0ca;
+  background-color: #000000;
   margin-bottom: 0.5em;
 }
 .compose-title-container .title{
@@ -120,8 +120,8 @@ blockquote p {
 
 .editor-input{
   margin-bottom: 0.4em;
-  background-color: #ebf8fb;
-  border: dashed 1px #03a0ca;
+  background-color: #f3f3f3;
+  border: dashed 1px #000000;
   min-height: 80px;
   border-radius: 5px;
 }
@@ -134,7 +134,7 @@ blockquote p {
 
 /*Buttons*/
 .pure-button-primary {
-  background-color: #01A0CA;
+  background-color: #000000;
 }
 .pure-button-primary:hover {
   background-color: #233e5e;
@@ -142,7 +142,7 @@ blockquote p {
 
 .pure-button-danger {
   /*color: white;*/
-  /*background-color: #01A0CA;*/
+  /*background-color: #000000;*/
 }
 .pure-button-danger:hover {
   background-color: #f3d6db;
@@ -202,7 +202,7 @@ blockquote p {
 .navbar {
   position: fixed;
   padding: 5px;
-  background: #01A0CA;
+  background: #000000;
   font-family: 'Oswald', 'Arial Narrow', sans-serif;
 }
 
@@ -240,7 +240,7 @@ blockquote p {
   max-height: 160px;
   max-width: 160px;
   border-radius: 80px;
-  border: 2px solid #01A0CA;
+  border: 2px solid #000000;
 }
 
 
@@ -291,4 +291,58 @@ blockquote p {
 
 .feedItem .button-container button{
   margin-left: 0.5em;
+}
+
+
+.react-tabs__tab-list {
+  border-bottom: 1px solid #aaa;
+  margin: 0 0 10px;
+  padding: 0;
+}
+
+.react-tabs__tab {
+  display: inline-block;
+  border: 1px solid transparent;
+  border-bottom: none;
+  bottom: -1px;
+  position: relative;
+  list-style: none;
+  padding: 6px 12px;
+  cursor: pointer;
+}
+
+.react-tabs__tab--selected {
+  background: #fff;
+  border-color: #aaa;
+  color: black;
+  border-radius: 5px 5px 0 0;
+}
+
+.react-tabs__tab-panel {
+  display: none;
+}
+
+.react-tabs__tab-panel--selected {
+  display: block;
+}
+
+.react-tabs__tab--disabled {
+  color: GrayText;
+  cursor: default;
+}
+
+.react-tabs__tab:focus {
+  box-shadow: 0 0 5px hsl(208, 99%, 50%);
+  border-color: hsl(208, 99%, 50%);
+  outline: none;
+}
+
+.react-tabs__tab:focus:after {
+  content: "";
+  position: absolute;
+  height: 5px;
+  left: -4px;
+  right: -4px;
+  bottom: -5px;
+  background: #fff;
 }

@@ -127,7 +127,7 @@ export function followUser(userId, targetId) {
         body: JSON.stringify({
           user: userId,
           target: targetId,
-          stakeValue: 10
+          tokensToPurchase: 1
         })
       }).then(rawResponse => {
         if(rawResponse.status !== 200){ throw new Error(rawResponse.text) }

@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { Link } from 'react-router'
 
 import FeedContainer from '../../messages/feed/FeedContainer'
+import Compose from '../../messages/compose/ComposeContainer'
 
 
 class Feed extends Component {
@@ -16,7 +17,10 @@ class Feed extends Component {
         <div className="pure-g">
           <div className="pure-u-1-1">
 
-            <h1>Network Feed</h1>
+            <Compose/>
+
+            <hr></hr>
+
             <FeedContainer messages={this.props.feedList}/>
 
           </div>

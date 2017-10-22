@@ -9,6 +9,29 @@ var bluebird = require('bluebird')
 var UserModel = require('../models/user')
 var FollowModel = require('../models/follow')
 
+
+function nextTokenPrice(tokensOutstanding){
+  const exponent = 20
+  return Math.floor(Math.log(tokensOutstanding + 1) * exponent)
+}
+function purchasePrice(tokensOutstanding, numberOfTokensToPurchase){
+  tokens = Array(numberOfTokensToPurchase).fill('');
+  return tokens.reduce((sum, token, index)=>{
+    return sum + nextTokenPrice(tokensOutstanding + index)
+  }, 0)
+}
+
+
+function currentTokenPrice(tokensOutstanding){
+  return (Math.floor(purchasePrice(0, tokensOutstanding)/tokensOutstanding))
+}
+function salePrice(tokensOutstanding, numberOfTokensToSell){
+  tokens = Array(numberOfTokensToSell).fill('');
+  return tokens.reduce((sum, token, index)=>{
+    return sum + currentTokenPrice(tokensOutstanding - index)
+  }, 0)
+}
+
 function isNumeric(n) {
   return !isNaN(parseFloat(n)) && isFinite(n);
 }
@@ -26,6 +49,10 @@ function markFollowers (users, followers, userId) {
       return userId !== user._id.toHexString()
     })
     .map((user) => {
+
+      // calc prices for display and search
+      user.priceOfNextToken = nextTokenPrice(user.tokensOutstanding)
+      user.salePriceOfCurrentToken = currentTokenPrice(user.tokensOutstanding)
 
       // mark the users that the current user is following
       if (followerIds.indexOf(user._id.toHexString()) !== -1){
@@ -66,14 +93,18 @@ function getUserWithBalances(userId){
     // Users that you are following
     userObject.followingCount = followingArray.length
     userObject.amountStaked = followingArray.reduce((sum, follow) => {
-      return sum + follow.valueStaked
+      return sum + follow.tokens
     }, 0)
 
     // Users that are following you
     userObject.followerCount = followedArray.length
     userObject.amountStakedonYou = followedArray.reduce((sum, follow) => {
-      return sum + follow.valueStaked
+      return sum + follow.tokens
     }, 0)
+
+
+    userObject.priceOfNextToken = nextTokenPrice(userObject.tokensOutstanding)
+    userObject.salePriceOfCurrentToken = currentTokenPrice(userObject.tokensOutstanding)
 
     userObject.totalBalance = userObject.balance + userObject.amountStaked + userObject.amountStakedonYou
 
@@ -134,21 +165,23 @@ exports.followUser = (request, response) => {
   // data from request
   const userId =  request.body.user || ''
   const targetId = request.body.target || ''
-  const stakeValue = request.body.stakeValue || ''
+  const tokensToPurchase = request.body.tokensToPurchase || ''
 
-  // data from mongo
+  // create variables for the results of mongo queries
   let user = null
   let target = null
   let follow = null
 
+  let tokenPurchasePrice = 0
+
   // get: user, target, and any existing follows
   bluebird.all([
-    UserModel.findOne({ _id: request.body.user }),
-    UserModel.findOne({ _id: request.body.target }),
-    FollowModel.findOne({ user: request.body.user, target: request.body.target })
+    UserModel.findOne({ _id: userId }),
+    UserModel.findOne({ _id: targetId }),
+    FollowModel.findOne({ user: userId, target: targetId })
   ]).then((reponseArray) => {
 
-    // unpack array
+    // unpack array of mongo queries
     user = reponseArray[0]
     target = reponseArray[1]
     follow = reponseArray[2]
@@ -166,21 +199,24 @@ exports.followUser = (request, response) => {
       }
     }
 
+    // get token price
+    tokenPurchasePrice = purchasePrice(target.tokensOutstanding, tokensToPurchase)
+
     // check that user has available balance > stakeValue
-    if(!isNumeric(stakeValue) || user.balance < stakeValue){
+    if(!isNumeric(tokensToPurchase) || user.balance < tokenPurchasePrice){
       throw {
         clientError: true,
         status: 400,
         message: 'bad request data',
         data: {
-          stakeValueNumeric: isNumeric(stakeValue),
-          balanceAvailable: user.balance < stakeValue
+          tokensToPurchaseNumeric: isNumeric(tokensToPurchase),
+          balanceAvailable: user.balance > tokenPurchasePrice
         }
       }
     }
 
     // decrease user balance and save
-    user.balance = user.balance - stakeValue
+    user.balance = user.balance - tokenPurchasePrice
     return user.save()
 
   }).then((user) => {
@@ -188,22 +224,29 @@ exports.followUser = (request, response) => {
     if(follow){
 
       // increase stake of existing follow
-      follow.valueStaked = follow.valueStaked + stakeValue
+      follow.tokens = follow.tokens + tokensToPurchase
       return follow.save()
 
     } else {
 
       // create new follow
       const newFollow = new FollowModel({
-        user: request.body.user,
-        target: request.body.target,
-        valueStaked: request.body.stakeValue
+        user: userId,
+        target: targetId,
+        tokens: tokensToPurchase
       })
       return newFollow.save()
 
     }
 
   }).then((follow) => {
+
+    // increment target tokens outstanding
+    target.tokensOutstanding = target.tokensOutstanding + tokensToPurchase
+    target.escrowBalance = target.escrowBalance + tokenPurchasePrice
+    return target.save()
+
+  }).then((target) => {
 
     // get updated user balances
     return getUserWithBalances(user._id)
@@ -234,7 +277,9 @@ exports.unFollowUser = (request, response) => {
   // data from request
   const userId =  request.body.user || ''
   const targetId = request.body.target || ''
-  let stakeValue = 0
+
+  let tokensStaked = 0
+  let tokenSalePrice = 0
 
   // find the follow to delete
   FollowModel.findOne({ user: userId, target: targetId })
@@ -252,12 +297,22 @@ exports.unFollowUser = (request, response) => {
       }
 
       // save stake value to refund to User
-      stakeValue = follow.valueStaked
+      tokensStaked = follow.tokens
+      tokenSalePrice = salePrice(follow.tokensOutstanding, follow.tokens)
 
       // remove follow
       return follow.remove()
 
   }).then((status) => {
+    return UserModel.findOne({_id: targetId})
+  }).then((target) => {
+
+    // increment target tokens outstanding
+    target.tokensOutstanding = target.tokensOutstanding - tokensStaked
+    target.escrowBalance = target.escrowBalance - tokenSalePrice
+    return target.save()
+
+  }).then((user) => {
     return UserModel.findOne({_id: userId})
   }).then((user) => {
 

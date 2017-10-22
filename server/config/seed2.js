@@ -45,33 +45,33 @@ User.find({}).remove()
       {
         _id: mongoose.Types.ObjectId("56a3e4661f46c422ef8bac61"),
         balance: 1000,
-        tokensOutstanding: 44,
+        tokensOutstanding: 1,
         name: 'ben',
         avatarUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/99/Location_of_%22We_Thank_Thee_O_God%22_inscription_-_panoramio.jpg/320px-Location_of_%22We_Thank_Thee_O_God%22_inscription_-_panoramio.jpg',
         tokenHistory: [
           {
             name: moment().format("M/D"),
-            tokensOutstanding: 12,
-            priceOfNextToken: nextTokenPrice(12),
-            salePriceOfCurrentToken: currentTokenPrice(12)
+            tokensOutstanding: 0,
+            priceOfNextToken: nextTokenPrice(1),
+            salePriceOfCurrentToken: currentTokenPrice(1)
           },
           {
             name: moment().format("M/D"),
-            tokensOutstanding: 17,
-            priceOfNextToken: nextTokenPrice(17),
-            salePriceOfCurrentToken: currentTokenPrice(17)
+            tokensOutstanding: 0,
+            priceOfNextToken: nextTokenPrice(1),
+            salePriceOfCurrentToken: currentTokenPrice(1)
           },
           {
             name: moment().format("M/D"),
-            tokensOutstanding: 28,
-            priceOfNextToken: nextTokenPrice(28),
-            salePriceOfCurrentToken: currentTokenPrice(28)
+            tokensOutstanding: 0,
+            priceOfNextToken: nextTokenPrice(1),
+            salePriceOfCurrentToken: currentTokenPrice(1)
           },
           {
             name: moment().format("M/D"),
-            tokensOutstanding: 44,
-            priceOfNextToken: nextTokenPrice(44),
-            salePriceOfCurrentToken: currentTokenPrice(44)
+            tokensOutstanding: 0,
+            priceOfNextToken: nextTokenPrice(1),
+            salePriceOfCurrentToken: currentTokenPrice(1)
           }
         ]
 
@@ -79,66 +79,66 @@ User.find({}).remove()
       {
         _id: mongoose.Types.ObjectId("56a3e4661f46c422ef8bad42"),
         balance: 1000,
-        tokensOutstanding: 21,
+        tokensOutstanding: 1,
         name: 'todd',
         avatarUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/94/Haltern_am_See%2C_Seebucht_Hohe_Niemen_--_2014_--_1152.jpg/320px-Haltern_am_See%2C_Seebucht_Hohe_Niemen_--_2014_--_1152.jpg',
         tokenHistory: [
           {
             name: moment().format("M/D"),
-            tokensOutstanding: 2,
-            priceOfNextToken: nextTokenPrice(2),
-            salePriceOfCurrentToken: currentTokenPrice(2)
+            tokensOutstanding: 1,
+            priceOfNextToken: nextTokenPrice(1),
+            salePriceOfCurrentToken: currentTokenPrice(1)
           },
           {
             name: moment().format("M/D"),
-            tokensOutstanding: 17,
-            priceOfNextToken: nextTokenPrice(17),
-            salePriceOfCurrentToken: currentTokenPrice(17)
+            tokensOutstanding: 0,
+            priceOfNextToken: nextTokenPrice(1),
+            salePriceOfCurrentToken: currentTokenPrice(1)
           },
           {
             name: moment().format("M/D"),
-            tokensOutstanding: 56,
-            priceOfNextToken: nextTokenPrice(56),
-            salePriceOfCurrentToken: currentTokenPrice(56)
+            tokensOutstanding: 0,
+            priceOfNextToken: nextTokenPrice(1),
+            salePriceOfCurrentToken: currentTokenPrice(1)
           },
           {
             name: moment().format("M/D"),
-            tokensOutstanding: 21,
-            priceOfNextToken: nextTokenPrice(21),
-            salePriceOfCurrentToken: currentTokenPrice(21)
+            tokensOutstanding: 0,
+            priceOfNextToken: nextTokenPrice(1),
+            salePriceOfCurrentToken: currentTokenPrice(1)
           }
         ]
       },
       {
         _id: mongoose.Types.ObjectId("56a3fc84898cf1bbf055cd5a"),
         balance: 1000,
-        tokensOutstanding: 379,
+        tokensOutstanding: 1,
         name: 'matt',
         avatarUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/0d/M%C3%BCnster%2C_St.-Paulus-Dom_--_2014_--_0323.jpg/320px-M%C3%BCnster%2C_St.-Paulus-Dom_--_2014_--_0323.jpg',
         tokenHistory: [
           {
             name: moment().format("M/D"),
-            tokensOutstanding: 200,
-            priceOfNextToken: nextTokenPrice(200),
-            salePriceOfCurrentToken: currentTokenPrice(200)
+            tokensOutstanding: 1,
+            priceOfNextToken: nextTokenPrice(1),
+            salePriceOfCurrentToken: currentTokenPrice(1)
           },
           {
             name: moment().format("M/D"),
-            tokensOutstanding: 248,
-            priceOfNextToken: nextTokenPrice(248),
-            salePriceOfCurrentToken: currentTokenPrice(248)
+            tokensOutstanding: 1,
+            priceOfNextToken: nextTokenPrice(1),
+            salePriceOfCurrentToken: currentTokenPrice(1)
           },
           {
             name: moment().format("M/D"),
-            tokensOutstanding: 179,
-            priceOfNextToken: nextTokenPrice(179),
-            salePriceOfCurrentToken: currentTokenPrice(179)
+            tokensOutstanding: 1,
+            priceOfNextToken: nextTokenPrice(1),
+            salePriceOfCurrentToken: currentTokenPrice(1)
           },
           {
             name: moment().format("M/D"),
-            tokensOutstanding: 379,
-            priceOfNextToken: nextTokenPrice(379),
-            salePriceOfCurrentToken: currentTokenPrice(379)
+            tokensOutstanding: 1,
+            priceOfNextToken: nextTokenPrice(1),
+            salePriceOfCurrentToken: currentTokenPrice(1)
           }
         ]
       }

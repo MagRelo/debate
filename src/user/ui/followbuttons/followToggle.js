@@ -8,12 +8,12 @@ const FollowToggle = ({userId, targetId, isFollowing, followUserClick, unFollowU
       {isFollowing ?
         <button
           className="pure-button pure-button-primary"
-          onClick={(event) => unFollowUserClick(event, userId, targetId)}>Unfollow
+          onClick={(event) => unFollowUserClick(event, userId, targetId)}>Sell
         </button>
       :
         <button
           className={"pure-button pure-button-primary"}
-          onClick={(event) => followUserClick(event, userId, targetId)}>Follow
+          onClick={(event) => followUserClick(event, userId, targetId)}>Buy
         </button>
       }
 

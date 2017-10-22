@@ -7,7 +7,10 @@ var UserSchema = new Schema({
   name: String,
   timestamp: Date,
   avatarUrl: String,
-  balance: Number
+  balance: Number,
+  tokensOutstanding: Number,
+  escrowBalance: Number,
+  tokenHistory: Object
 });
 
 
