@@ -1,6 +1,6 @@
 import { connect } from 'react-redux'
-import followToggle from './followToggle'
-import { followUser, unFollowUser, getUsers } from '../../userActions'
+import FormComponent from './formComponent'
+import { followUser, unFollowUser} from '../../userActions'
 
 const mapStateToProps = (state, ownProps) => {
   return {}
@@ -19,9 +19,9 @@ const mapDispatchToProps = (dispatch) => {
   }
 }
 
-const FollowToggleContainer = connect(
+const FormContainer = connect(
   mapStateToProps,
   mapDispatchToProps
-)(followToggle)
+)(FormComponent)
 
-export default FollowToggleContainer
+export default FormContainer

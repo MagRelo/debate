@@ -4,6 +4,7 @@ import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 
 import LogoutButtonContainer from '../../user/ui/logoutbutton/LogoutButtonContainer'
 import FollowToggleContainer from '../../user/ui/followbuttons/FollowToggleContainer'
+import TokenFormContainer from '../../user/ui/tokenTransaction/FormContainer'
 
 import TokenPriceChart from '../../user/ui/tokenPriceChart/tokenPriceChartContainer'
 
@@ -15,31 +16,9 @@ class Profile extends Component {
     authData = this.props
   }
 
-  testData(){
-
-    let data = [1,2,3,4].map((data, index)=>{
-      return {
-        name: 'week ' + data,
-        priceOfNextToken: index * 10,
-        salePriceOfCurrentToken: index * 12
-      }
-    })
-
-    return data
-  }
-
-
   render() {
     return(
       <main className="container">
-
-        <div style={{
-            'backgroundImage': 'url(' + this.props.authData.avatarUrl + ')',
-            'backgroundSize': 'cover',
-            'minHeight': '160px',
-            'marginTop': '1em'
-          }}>
-        </div>
         <div className="pure-g">
           <div className="pure-u-1-1">
             <h1>{this.props.authData.name}</h1>
@@ -51,33 +30,39 @@ class Profile extends Component {
                   <Tab>Following</Tab>
                   <Tab>Followers</Tab>
                   <Tab>Activity</Tab>
-
                 </TabList>
 
                 <TabPanel>
-
 
                   <TokenPriceChart data={this.props.authData.tokenHistory}/>
 
                   <h3>My Token</h3>
                   <div className="account-details">
-                    <p><strong>Tokens outstanding</strong>
-                      <span className="currency-box">
-                        {this.props.authData.tokensOutstanding}
-                      </span>
-                    </p>
                     <p><strong>Buy Price</strong>
                       <span className="currency-box">
-                        {this.props.authData.priceOfNextToken}
+                        &#536; {this.props.authData.priceOfNextToken}
+                      </span>
+                    </p>
+                    <p><strong>Token Supply</strong>
+                      <span className="currency-box">
+                        {this.props.authData.tokenSupply}
+                      </span>
+                    </p>
+                    <p><strong>Escrow Balance</strong>
+                      <span className="currency-box">
+                        &#536; {this.props.authData.escrowBalance}
                       </span>
                     </p>
                     <p><strong>Sale Price</strong>
                       <span className="currency-box">
-                        {this.props.authData.salePriceOfCurrentToken}
+                        &#536; {this.props.authData.salePriceOfCurrentToken}
                       </span>
                     </p>
                   </div>
-                  <hr></hr>
+
+                  <TokenFormContainer userId={this.props.authData._id} targetId={this.props.authData}/>
+
+                <hr></hr>
                   <LogoutButtonContainer/>
 
                 </TabPanel>

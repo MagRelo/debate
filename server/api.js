@@ -16,8 +16,8 @@ module.exports = function(app) {
   app.post('/api/user', userController.saveUser);
 
   // *FOLLOW*
-  app.post('/api/follow', userController.followUser);
-  app.delete('/api/follow', userController.unFollowUser);
+  app.post('/api/follow', userController.purchaseTokens);
+  app.delete('/api/follow', userController.sellTokens);
 
   // * MESSAGES*
   app.get('/api/messages/:userId', messageController.getMessagesByUser);

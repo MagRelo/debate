@@ -9,32 +9,8 @@ var bluebird = require('bluebird')
 var UserModel = require('../models/user')
 var FollowModel = require('../models/follow')
 
-
-function nextTokenPrice(tokensOutstanding){
-  const exponent = 20
-  return Math.floor(Math.log(tokensOutstanding + 1) * exponent)
-}
-function purchasePrice(tokensOutstanding, numberOfTokensToPurchase){
-  tokens = Array(numberOfTokensToPurchase).fill('');
-  return tokens.reduce((sum, token, index)=>{
-    return sum + nextTokenPrice(tokensOutstanding + index)
-  }, 0)
-}
-
-
-function currentTokenPrice(tokensOutstanding){
-  return (Math.floor(purchasePrice(0, tokensOutstanding)/tokensOutstanding))
-}
-function salePrice(tokensOutstanding, numberOfTokensToSell){
-  tokens = Array(numberOfTokensToSell).fill('');
-  return tokens.reduce((sum, token, index)=>{
-    return sum + currentTokenPrice(tokensOutstanding - index)
-  }, 0)
-}
-
-function isNumeric(n) {
-  return !isNaN(parseFloat(n)) && isFinite(n);
-}
+const pricingFunctions = require('../config/pricing')
+const utils = require('../config/utils')
 
 function markFollowers (users, followers, userId) {
 
@@ -44,15 +20,14 @@ function markFollowers (users, followers, userId) {
 
   let markedUsers = users
     .filter(user => {
-
       // remove the current user from the follow/unfollow list
       return userId !== user._id.toHexString()
     })
     .map((user) => {
 
       // calc prices for display and search
-      user.priceOfNextToken = nextTokenPrice(user.tokensOutstanding)
-      user.salePriceOfCurrentToken = currentTokenPrice(user.tokensOutstanding)
+      user.priceOfNextToken = pricingFunctions.nextTokenPrice(user.tokenSupply)
+      user.salePriceOfCurrentToken = pricingFunctions.currentTokenPrice(user.tokenSupply, user.escrowBalance)
 
       // mark the users that the current user is following
       if (followerIds.indexOf(user._id.toHexString()) !== -1){
@@ -77,41 +52,6 @@ function getMarkedUserList (userId){
     })
 }
 
-function getUserWithBalances(userId){
-
-  return bluebird.all([
-    UserModel.findOne({_id: userId}).lean(),
-    FollowModel.find({user: userId}).lean(),
-    FollowModel.find({target: userId}).lean()
-  ])
-  .then((responseArray)=>{
-
-    let userObject = responseArray[0]
-    let followingArray = responseArray[1]
-    let followedArray = responseArray[2]
-
-    // Users that you are following
-    userObject.followingCount = followingArray.length
-    userObject.amountStaked = followingArray.reduce((sum, follow) => {
-      return sum + follow.tokens
-    }, 0)
-
-    // Users that are following you
-    userObject.followerCount = followedArray.length
-    userObject.amountStakedonYou = followedArray.reduce((sum, follow) => {
-      return sum + follow.tokens
-    }, 0)
-
-
-    userObject.priceOfNextToken = nextTokenPrice(userObject.tokensOutstanding)
-    userObject.salePriceOfCurrentToken = currentTokenPrice(userObject.tokensOutstanding)
-
-    userObject.totalBalance = userObject.balance + userObject.amountStaked + userObject.amountStakedonYou
-
-    return userObject
-  })
-
-}
 
 
 exports.listUsers = (request, response) => {
@@ -139,6 +79,10 @@ exports.saveUser = (request, response) => {
 
   return user.save()
     .then((mongoResponse)=>{
+      // follow yourself so you're activity shows up in timeline feed
+      const newFollow = new FollowModel({ user: userId, target: userId })
+      return newFollow.save()
+    }).then((mongoResponse)=>{
       return response.json(mongoResponse)
     }).catch((error)=>{
       return response.json(error)
@@ -150,9 +94,16 @@ exports.getUser = (request, response) => {
 
   const userId = request.params.userId || 'default name'
 
-  getUserWithBalances(userId)
+  UserModel.findOne({_id: userId})
     .then(user => {
-      return response.json(user)
+
+      let userObject = user.toObject()
+
+      // calc prices for display and search
+      userObject.priceOfNextToken = pricingFunctions.nextTokenPrice(user.tokenSupply)
+      userObject.salePriceOfCurrentToken = pricingFunctions.currentTokenPrice(user.tokenSupply, user.escrowBalance)
+
+      return response.json(userObject)
     })
     .catch((error)=>{
       return response.json(error)
@@ -160,18 +111,32 @@ exports.getUser = (request, response) => {
 
 }
 
-exports.followUser = (request, response) => {
+
+exports.purchaseTokens = (request, response) => {
+
+  // TODO: data from auth
+  const userId =  request.body.user || ''
 
   // data from request
-  const userId =  request.body.user || ''
   const targetId = request.body.target || ''
-  const tokensToPurchase = request.body.tokensToPurchase || ''
+  const tokensToPurchase = request.body.tokensToPurchase || null
 
-  // create variables for the results of mongo queries
+  // validate inputs
+  if(!userId || !targetId || !utils.isNumeric(tokensToPurchase)){
+    return response.status(400).json({
+      clientError: true,
+      status: 400,
+      message: 'bad request data',
+      data: {
+        tokensToPurchaseNumeric: utils.isNumeric(tokensToPurchase),
+      }
+    })
+  }
+
+  // create scoped variables
   let user = null
   let target = null
   let follow = null
-
   let tokenPurchasePrice = 0
 
   // get: user, target, and any existing follows
@@ -199,69 +164,64 @@ exports.followUser = (request, response) => {
       }
     }
 
-    // get token price
-    tokenPurchasePrice = purchasePrice(target.tokensOutstanding, tokensToPurchase)
+    // get token prices
+    tokenPurchasePrice = pricingFunctions.purchasePrice(target.tokenSupply, tokensToPurchase)
 
-    // check that user has available balance > stakeValue
-    if(!isNumeric(tokensToPurchase) || user.balance < tokenPurchasePrice){
+    // check that user has enough funds
+    if(user.balance < tokenPurchasePrice){
       throw {
         clientError: true,
         status: 400,
-        message: 'bad request data',
+        message: 'not enough funds',
         data: {
-          tokensToPurchaseNumeric: isNumeric(tokensToPurchase),
-          balanceAvailable: user.balance > tokenPurchasePrice
+          balanceAvailable: user.balance < tokenPurchasePrice,
         }
       }
     }
 
-    // decrease user balance and save
+    // Step #1 - decrease user balance
     user.balance = user.balance - tokenPurchasePrice
     return user.save()
 
-  }).then((user) => {
+  }).then((updatedUser) => {
 
-    if(follow){
-
-      // increase stake of existing follow
-      follow.tokens = follow.tokens + tokensToPurchase
-      return follow.save()
-
-    } else {
-
-      // create new follow
-      const newFollow = new FollowModel({
-        user: userId,
-        target: targetId,
-        tokens: tokensToPurchase
-      })
-      return newFollow.save()
-
-    }
-
-  }).then((follow) => {
-
-    // increment target tokens outstanding
-    target.tokensOutstanding = target.tokensOutstanding + tokensToPurchase
+    // Step #2 - create new tokens and assign to user
+    target.createAndAssignNewTokens(user._id.toHexString(), tokensToPurchase)
     target.escrowBalance = target.escrowBalance + tokenPurchasePrice
     return target.save()
 
-  }).then((target) => {
+  }).then((updatedTarget) => {
 
-    // get updated user balances
-    return getUserWithBalances(user._id)
+    // Step #3 - update user's wallet to reflect new coins
+    user.saveToWallet(target._id.toHexString(), tokensToPurchase)
+    return user.save()
 
-  }).then((user) => {
+  }).then((updatedUser) => {
+
+    // Step #4 - create follow relationship
+    if(!follow){
+
+      const newFollow = new FollowModel({ user: userId, target: targetId })
+      return newFollow.save()
+
+    } else {
+      // do nothing
+      return {'ok': 1}
+    }
+
+  }).then((updatedFollow) => {
+    return UserModel.findOne({ _id: userId }).lean()
+  }).then((updatedUser) => {
 
     // send response
-    return response.json(user)
+    return response.json(updatedUser)
 
   }).catch((error) => {
 
     // client error
     if(error.clientError){
       console.error(error.message)
-      return response.status(error.status).json({error: error.message});
+      return response.status(error.status).json(error);
     }
 
     // server error
@@ -272,70 +232,101 @@ exports.followUser = (request, response) => {
 
 }
 
-exports.unFollowUser = (request, response) => {
+exports.sellTokens = (request, response) => {
+
+  // TODO: data from auth
+  const userId =  request.body.user || ''
 
   // data from request
-  const userId =  request.body.user || ''
   const targetId = request.body.target || ''
+  const tokensToSell = request.body.tokensToSell || null
 
-  let tokensStaked = 0
-  let tokenSalePrice = 0
+  // validate inputs
+  if(!userId || !targetId || !utils.isNumeric(tokensToSell)){
+    return response.status(400).json({
+      clientError: true,
+      status: 400,
+      message: 'bad request data',
+      data: {
+        user: !!user,
+        target: !!target,
+        tokensToSell: tokensToSell,
+        tokensToSellNumeric: utils.isNumeric(tokensToSell),
+      }
+    })
+  }
 
-  // find the follow to delete
-  FollowModel.findOne({ user: userId, target: targetId })
-    .then(follow => {
+  // value of tokens to sell
+  let targetTokenSellValue = 0
 
-      if(!follow){
-        throw {
-          clientError: true,
-          status: 400,
-          message: 'follow not found',
-          data: {
-            follow: !!follow,
-          }
+  // get: user, target, and any existing follows
+  bluebird.all([
+    UserModel.findOne({ _id: userId }),
+    UserModel.findOne({ _id: targetId })
+  ]).then((reponseArray) => {
+
+    // unpack array of mongo queries
+    user = reponseArray[0]
+    target = reponseArray[1]
+
+    // get target info
+    targetTokenSellValue = pricingFunctions.salePrice(target.tokenSupply, target.escrowBalance, tokensToSell)
+
+    // validate inputs
+    if(!user || !target || target.ownedTokenCount(userId) < tokensToSell){
+      throw {
+        clientError: true,
+        status: 400,
+        message: 'bad data',
+        data: {
+          user: !!user,
+          target: !!target,
+          tokensToSell: tokensToSell,
+          targetTokensAvailableForSale: target.ownedTokenCount(userId)
         }
       }
+    }
 
-      // save stake value to refund to User
-      tokensStaked = follow.tokens
-      tokenSalePrice = salePrice(follow.tokensOutstanding, follow.tokens)
-
-      // remove follow
-      return follow.remove()
-
-  }).then((status) => {
-    return UserModel.findOne({_id: targetId})
-  }).then((target) => {
-
-    // increment target tokens outstanding
-    target.tokensOutstanding = target.tokensOutstanding - tokensStaked
-    target.escrowBalance = target.escrowBalance - tokenSalePrice
-    return target.save()
-
-  }).then((user) => {
-    return UserModel.findOne({_id: userId})
-  }).then((user) => {
-
-    // refund stakeValue to User
-    user.balance = user.balance + stakeValue
+    // Step #1 - remove tokens from user wallet
+    user.removeFromWallet(target._id.toHexString(), tokensToSell)
     return user.save()
 
+  }).then((updatedUser) => {
+
+    // Step #2 - remove tokens from target ledger
+    target.destroyTokens(user._id.toHexString(), tokensToSell)
+
+    // Step #3 - reduce target's escrow balance
+    target.escrowBalance = target.escrowBalance - targetTokenSellValue
+    return target.save()
+
+  }).then((updatedTarget) => {
+
+    // Step #4 - transfer token sell value to user
+    user.balance = user.balance + targetTokenSellValue
+    return user.save()
+
+  }).then((responseArray) => {
+
+    // Step #5 - if user's token balance was decreased to zero then remove follow
+    if(!target.ownedTokenCount(user._id.toHexString())){
+      return FollowModel.remove({user: user._id})
+    }
+
+    // return empty object to continue promise chain
+    return {}
+
+  }).then((response) => {
+    return UserModel.findOne({ _id: userId }).lean()
   }).then((user) => {
-
-    // get updated user balances
-    return getUserWithBalances(user._id)
-
-  }).then((user) => {
-
     // send response
     return response.json(user)
-
   }).catch((error) => {
 
     // client error
     if(error.clientError){
       console.error(error.message)
-      return response.status(error.status).json({error: error.message});
+      return response.status(error.status).json(error);
     }
 
     // server error

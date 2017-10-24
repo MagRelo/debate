@@ -41,8 +41,8 @@ export function loginUser(name) {
       return rawResponse.json()
     })
     .then(userObject => {
-      dispatch(getTimelineByUser(userObject._id))
-      dispatch(getMessagesByUser(userObject._id))
+      dispatch(getTimelineByUser(userObject.id))
+      dispatch(getMessagesByUser(userObject.id))
       return dispatch(userLoggedIn(userObject))
     })
     .catch(error => {
@@ -118,7 +118,7 @@ export function selectUser(userId) {
   }
 }
 
-export function followUser(userId, targetId) {
+export function followUser(userId, targetId, tokensToPurchase) {
   return function(dispatch) {
 
     return fetch('/api/follow', {
@@ -127,14 +127,13 @@ export function followUser(userId, targetId) {
         body: JSON.stringify({
           user: userId,
           target: targetId,
-          tokensToPurchase: 1
+          tokensToPurchase: tokensToPurchase
         })
       }).then(rawResponse => {
         if(rawResponse.status !== 200){ throw new Error(rawResponse.text) }
         return rawResponse.json()
       }).then(userObject => {
         dispatch(userLoggedIn(userObject))
-
         dispatch(getTimelineByUser(userId))
         dispatch(getMessagesByUser(userId))
         return dispatch(getUsers(userId))
@@ -146,7 +145,7 @@ export function followUser(userId, targetId) {
   }
 }
 
-export function unFollowUser(userId, targetId) {
+export function unFollowUser(userId, targetId, tokensToSell) {
   return function(dispatch) {
 
     return fetch('/api/follow', {
@@ -154,7 +153,8 @@ export function unFollowUser(userId, targetId) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           user: userId,
-          target: targetId
+          target: targetId,
+          tokensToSell: tokensToSell
         })
     }).then(rawResponse => {
         if(rawResponse.status !== 200){ throw new Error(rawResponse.text) }

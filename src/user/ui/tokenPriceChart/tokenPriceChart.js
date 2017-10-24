@@ -1,20 +1,9 @@
 import React from 'react'
 import { AreaChart, XAxis, YAxis, CartesianGrid, Tooltip, Area, ResponsiveContainer  } from 'recharts';
 
+// <Area type="monotone" dataKey="salePriceOfCurrentToken" stroke="#f14646" fillOpacity={1} fill="url(#colorSell)" />
+
 const tokenPriceChart = ({data}) => {
-
-  function testData(){
-
-    let data = [1,2,3,4].map((data, index)=>{
-      return {
-        name: 'week ' + data,
-        priceOfNextToken: index * 10,
-        salePriceOfCurrentToken: index * 12
-      }
-    })
-
-    return data
-  }
 
   return(
     <div style={{'height': '140px'}}>
@@ -24,11 +13,11 @@ const tokenPriceChart = ({data}) => {
           <defs>
             <linearGradient id="colorSell" x1="1" y1="0" x2="0" y2="0">
               <stop offset="5%" stopColor="#f14646" stopOpacity={0.8}/>
-              <stop offset="95%" stopColor="#f14646" stopOpacity={0}/>
+              <stop offset="95%" stopColor="#f14646" stopOpacity={0.25}/>
             </linearGradient>
             <linearGradient id="colorBuy" x1="1" y1="0" x2="0" y2="0">
               <stop offset="5%" stopColor="#12ca01" stopOpacity={0.8}/>
-              <stop offset="95%" stopColor="#12ca01" stopOpacity={0}/>
+              <stop offset="95%" stopColor="#12ca01" stopOpacity={0.25}/>
             </linearGradient>
           </defs>
 
@@ -38,7 +27,7 @@ const tokenPriceChart = ({data}) => {
           <Tooltip />
 
           <Area type="monotone" dataKey="priceOfNextToken" stroke="#12ca01" fillOpacity={1} fill="url(#colorBuy)" />
-          <Area type="monotone" dataKey="salePriceOfCurrentToken" stroke="#f14646" fillOpacity={1} fill="url(#colorSell)" />
+
 
         </AreaChart>
       </ResponsiveContainer>

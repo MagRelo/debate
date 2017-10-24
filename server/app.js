@@ -33,10 +33,11 @@ var StreamMongoose = stream.mongoose;
 StreamMongoose.setupMongoose(mongoose);
 
 // seed database
-if(process.env.SEED_DB === 'true'){
-  require('./config/seed')
-} else {
-  console.log('not seeding database')
+if(process.env.SEED_DB_CLEAN === 'true'){
+  require('./config/db_seed/seed_clean')
+}
+if(process.env.SEED_DB_RICH === 'true'){
+  require('./config/db_seed/seed_rich')
 }
 
 // routing config
