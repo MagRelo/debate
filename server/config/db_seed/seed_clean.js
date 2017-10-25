@@ -44,32 +44,7 @@ User.find({}).remove()
         wallet: {
           "56a3e4661f46c422ef8bac61": 10
         },
-        tokenHistory: [
-          {
-            name: moment().format("M/D"),
-            tokenLedgerCount: 0,
-            priceOfNextToken: pricingFunctions.nextTokenPrice(10),
-            salePriceOfCurrentToken: pricingFunctions.currentTokenPrice(10, 100)
-          },
-          {
-            name: moment().format("M/D"),
-            tokenLedgerCount: 0,
-            priceOfNextToken: pricingFunctions.nextTokenPrice(10),
-            salePriceOfCurrentToken: pricingFunctions.currentTokenPrice(10, 100)
-          },
-          {
-            name: moment().format("M/D"),
-            tokenLedgerCount: 0,
-            priceOfNextToken: pricingFunctions.nextTokenPrice(10),
-            salePriceOfCurrentToken: pricingFunctions.currentTokenPrice(10, 100)
-          },
-          {
-            name: moment().format("M/D"),
-            tokenLedgerCount: 0,
-            priceOfNextToken: pricingFunctions.nextTokenPrice(10),
-            salePriceOfCurrentToken: pricingFunctions.currentTokenPrice(10, 100)
-          }
-        ]
+        tokenHistory: []
 
       },
       {
@@ -85,32 +60,7 @@ User.find({}).remove()
         wallet: {
           "56a3e4661f46c422ef8bad42": 10
         },
-        tokenHistory: [
-          {
-            name: moment().format("M/D"),
-            tokenLedgerCount: 1,
-            priceOfNextToken: pricingFunctions.nextTokenPrice(1),
-            salePriceOfCurrentToken: pricingFunctions.currentTokenPrice(1, 10)
-          },
-          {
-            name: moment().format("M/D"),
-            tokenLedgerCount: 1,
-            priceOfNextToken: pricingFunctions.nextTokenPrice(40),
-            salePriceOfCurrentToken: pricingFunctions.currentTokenPrice(40, 410)
-          },
-          {
-            name: moment().format("M/D"),
-            tokenLedgerCount: 1,
-            priceOfNextToken: pricingFunctions.nextTokenPrice(410),
-            salePriceOfCurrentToken: pricingFunctions.currentTokenPrice(410, 4700)
-          },
-          {
-            name: moment().format("M/D"),
-            tokenLedgerCount: 1,
-            priceOfNextToken: pricingFunctions.nextTokenPrice(100),
-            salePriceOfCurrentToken: pricingFunctions.currentTokenPrice(100, 1200)
-          }
-        ]
+        tokenHistory: []
       },
       {
         _id: mongoose.Types.ObjectId("56a3fc84898cf1bbf055cd5a"),
@@ -125,32 +75,7 @@ User.find({}).remove()
         wallet: {
           "56a3fc84898cf1bbf055cd5a": 10
         },
-        tokenHistory: [
-          {
-            name: moment().format("M/D"),
-            tokenLedgerCount: 1,
-            priceOfNextToken: pricingFunctions.nextTokenPrice(1),
-            salePriceOfCurrentToken: pricingFunctions.currentTokenPrice(1, 10)
-          },
-          {
-            name: moment().format("M/D"),
-            tokenLedgerCount: 1,
-            priceOfNextToken: pricingFunctions.nextTokenPrice(40),
-            salePriceOfCurrentToken: pricingFunctions.currentTokenPrice(40, 410)
-          },
-          {
-            name: moment().format("M/D"),
-            tokenLedgerCount: 1,
-            priceOfNextToken: pricingFunctions.nextTokenPrice(410),
-            salePriceOfCurrentToken: pricingFunctions.currentTokenPrice(410, 4700)
-          },
-          {
-            name: moment().format("M/D"),
-            tokenLedgerCount: 1,
-            priceOfNextToken: pricingFunctions.nextTokenPrice(1000),
-            salePriceOfCurrentToken: pricingFunctions.currentTokenPrice(1000, 12000)
-          }
-        ]
+        tokenHistory: []
       }
     )
     .then(() => {
