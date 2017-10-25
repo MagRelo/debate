@@ -31,7 +31,7 @@ function _currentTokenSellPrice(tokenSupply, escrowBalance){
 }
 
 function _salePrice(tokenSupply, escrowBalance, numberOfTokensToSell) {
-  return _currentTokenSellPrice(tokenSupply,escrowBalance) * numberOfTokensToSell
+  return util.round(_currentTokenSellPrice(tokenSupply,escrowBalance) * numberOfTokensToSell, 4)
 }
 
 exports.nextTokenPrice = _nextTokenPrice
