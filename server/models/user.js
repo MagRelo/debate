@@ -1,5 +1,7 @@
 'use strict';
 
+var pricingFunctions = require('../config/pricing')
+
 var mongoose = require('mongoose'),
     Schema = mongoose.Schema;
 
@@ -8,9 +10,9 @@ var UserSchema = new Schema({
   timestamp: Date,
   avatarUrl: String,
   balance: Number,
-  escrowBalance: Number,
-  tokenSupply: Number,
+  tokenLedgerCount: Number,
   tokenLedger: Object,
+  tokenLedgerEscrowBalance: Number,
   wallet: Object,
   tokenHistory: Array
 });
@@ -19,7 +21,7 @@ UserSchema.methods.ownedTokenCount = function(ownerAddress) {
   return this.tokenLedger[ownerAddress] || 0
 }
 
-UserSchema.methods.createAndAssignNewTokens = function(ownerAddress, numberOfTokens) {
+UserSchema.methods.createAndAssignNewTokens = function(ownerAddress, numberOfTokens, purchasePrice) {
 
   // create tokens in ledger
   const tempLedgerObject = this.toObject().tokenLedger
@@ -30,14 +32,34 @@ UserSchema.methods.createAndAssignNewTokens = function(ownerAddress, numberOfTok
   }
   this.tokenLedger = tempLedgerObject
 
-  this.tokenSupply = this.tokenSupply + numberOfTokens
+  // update token ledger escrow balance
+  this.tokenLedgerEscrowBalance = this.tokenLedgerEscrowBalance + purchasePrice
+
+  // update token ledger token count
+  this.tokenLedgerCount = this.tokenLedgerCount + numberOfTokens
+
+  // record transaction
+  this.tokenHistory.push({
+    type: 'create',
+    timestamp: new Date(),
+    purchase: {
+      ownerAddress: ownerAddress,
+      isSelf: ownerAddress === this._id.toHexString(),
+      numberOfTokens: numberOfTokens,
+      purchasePrice: purchasePrice,
+    },
+    contractStatus: this.toObject(),
+    priceOfNextToken: pricingFunctions.nextTokenPrice(this.tokenLedgerCount),
+    salePriceOfCurrentToken: pricingFunctions.currentTokenPrice(this.tokenLedgerCount, this.tokenLedgerEscrowBalance)
+  })
+
 }
 
-UserSchema.methods.destroyTokens = function(ownerAddress, numberOfTokens) {
+UserSchema.methods.destroyTokens = function(ownerAddress, numberOfTokens, purchasePrice) {
 
   const tempLedgerObject = this.toObject().tokenLedger
 
-  // decrease balance
+  // decrease token balance in ledger
   tempLedgerObject[ownerAddress] = tempLedgerObject[ownerAddress] - numberOfTokens
 
   // remove address if balance is zero
@@ -46,7 +68,11 @@ UserSchema.methods.destroyTokens = function(ownerAddress, numberOfTokens) {
   }
   this.tokenLedger = tempLedgerObject
 
-  this.tokenSupply = this.tokenSupply - numberOfTokens
+  // update token ledger escrow balance
+  this.tokenLedgerEscrowBalance = this.tokenLedgerEscrowBalance - purchasePrice
+
+  // update token ledger token count
+  this.tokenLedgerCount = this.tokenLedgerCount - numberOfTokens
 }
 
 UserSchema.methods.saveToWallet = function(ownerAddress, numberOfTokens) {

@@ -36,8 +36,8 @@ User.find({}).remove()
         name: 'ben',
         avatarUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/99/Location_of_%22We_Thank_Thee_O_God%22_inscription_-_panoramio.jpg/320px-Location_of_%22We_Thank_Thee_O_God%22_inscription_-_panoramio.jpg',
         balance: 1000,
-        escrowBalance: 100,
-        tokenSupply: 10,
+        tokenLedgerEscrowBalance: 100,
+        tokenLedgerCount: 10,
         tokenLedger:{
           "56a3e4661f46c422ef8bac61": 10
         },
@@ -47,25 +47,25 @@ User.find({}).remove()
         tokenHistory: [
           {
             name: moment().format("M/D"),
-            tokenSupply: 0,
+            tokenLedgerCount: 0,
             priceOfNextToken: pricingFunctions.nextTokenPrice(10),
             salePriceOfCurrentToken: pricingFunctions.currentTokenPrice(10, 100)
           },
           {
             name: moment().format("M/D"),
-            tokenSupply: 0,
+            tokenLedgerCount: 0,
             priceOfNextToken: pricingFunctions.nextTokenPrice(10),
             salePriceOfCurrentToken: pricingFunctions.currentTokenPrice(10, 100)
           },
           {
             name: moment().format("M/D"),
-            tokenSupply: 0,
+            tokenLedgerCount: 0,
             priceOfNextToken: pricingFunctions.nextTokenPrice(10),
             salePriceOfCurrentToken: pricingFunctions.currentTokenPrice(10, 100)
           },
           {
             name: moment().format("M/D"),
-            tokenSupply: 0,
+            tokenLedgerCount: 0,
             priceOfNextToken: pricingFunctions.nextTokenPrice(10),
             salePriceOfCurrentToken: pricingFunctions.currentTokenPrice(10, 100)
           }
@@ -77,8 +77,8 @@ User.find({}).remove()
         name: 'todd',
         avatarUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/94/Haltern_am_See%2C_Seebucht_Hohe_Niemen_--_2014_--_1152.jpg/320px-Haltern_am_See%2C_Seebucht_Hohe_Niemen_--_2014_--_1152.jpg',
         balance: 1000,
-        escrowBalance: 100,
-        tokenSupply: 10,
+        tokenLedgerEscrowBalance: 100,
+        tokenLedgerCount: 10,
         tokenLedger: {
           "56a3e4661f46c422ef8bad42": 10
         },
@@ -88,25 +88,25 @@ User.find({}).remove()
         tokenHistory: [
           {
             name: moment().format("M/D"),
-            tokenSupply: 1,
+            tokenLedgerCount: 1,
             priceOfNextToken: pricingFunctions.nextTokenPrice(1),
             salePriceOfCurrentToken: pricingFunctions.currentTokenPrice(1, 10)
           },
           {
             name: moment().format("M/D"),
-            tokenSupply: 1,
+            tokenLedgerCount: 1,
             priceOfNextToken: pricingFunctions.nextTokenPrice(40),
             salePriceOfCurrentToken: pricingFunctions.currentTokenPrice(40, 410)
           },
           {
             name: moment().format("M/D"),
-            tokenSupply: 1,
+            tokenLedgerCount: 1,
             priceOfNextToken: pricingFunctions.nextTokenPrice(410),
             salePriceOfCurrentToken: pricingFunctions.currentTokenPrice(410, 4700)
           },
           {
             name: moment().format("M/D"),
-            tokenSupply: 1,
+            tokenLedgerCount: 1,
             priceOfNextToken: pricingFunctions.nextTokenPrice(100),
             salePriceOfCurrentToken: pricingFunctions.currentTokenPrice(100, 1200)
           }
@@ -117,8 +117,8 @@ User.find({}).remove()
         name: 'matt',
         avatarUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/0d/M%C3%BCnster%2C_St.-Paulus-Dom_--_2014_--_0323.jpg/320px-M%C3%BCnster%2C_St.-Paulus-Dom_--_2014_--_0323.jpg',
         balance: 1000,
-        escrowBalance: 100,
-        tokenSupply: 10,
+        tokenLedgerEscrowBalance: 100,
+        tokenLedgerCount: 10,
         tokenLedger: {
           "56a3fc84898cf1bbf055cd5a": 10
         },
@@ -128,25 +128,25 @@ User.find({}).remove()
         tokenHistory: [
           {
             name: moment().format("M/D"),
-            tokenSupply: 1,
+            tokenLedgerCount: 1,
             priceOfNextToken: pricingFunctions.nextTokenPrice(1),
             salePriceOfCurrentToken: pricingFunctions.currentTokenPrice(1, 10)
           },
           {
             name: moment().format("M/D"),
-            tokenSupply: 1,
+            tokenLedgerCount: 1,
             priceOfNextToken: pricingFunctions.nextTokenPrice(40),
             salePriceOfCurrentToken: pricingFunctions.currentTokenPrice(40, 410)
           },
           {
             name: moment().format("M/D"),
-            tokenSupply: 1,
+            tokenLedgerCount: 1,
             priceOfNextToken: pricingFunctions.nextTokenPrice(410),
             salePriceOfCurrentToken: pricingFunctions.currentTokenPrice(410, 4700)
           },
           {
             name: moment().format("M/D"),
-            tokenSupply: 1,
+            tokenLedgerCount: 1,
             priceOfNextToken: pricingFunctions.nextTokenPrice(1000),
             salePriceOfCurrentToken: pricingFunctions.currentTokenPrice(1000, 12000)
           }
@@ -155,14 +155,23 @@ User.find({}).remove()
     )
     .then(() => {
       console.log('finished populating users');
+
+      return Follow.create(
+        {user: mongoose.Types.ObjectId("56a3e4661f46c422ef8bac61"), target: mongoose.Types.ObjectId("56a3e4661f46c422ef8bac61")},
+        {user: mongoose.Types.ObjectId("56a3e4661f46c422ef8bad42"), target: mongoose.Types.ObjectId("56a3e4661f46c422ef8bad42")},
+        {user: mongoose.Types.ObjectId("56a3fc84898cf1bbf055cd5a"), target: mongoose.Types.ObjectId("56a3fc84898cf1bbf055cd5a")}
+      )
+
+    }).then(() => {
+      console.log('finished populating follows');
     });
   });
 
 
-Follow.create(
-  {user: mongoose.Types.ObjectId("56a3e4661f46c422ef8bac61"), target: mongoose.Types.ObjectId("56a3e4661f46c422ef8bac61")},
-  {user: mongoose.Types.ObjectId("56a3e4661f46c422ef8bad42"), target: mongoose.Types.ObjectId("56a3e4661f46c422ef8bad42")},
-  {user: mongoose.Types.ObjectId("56a3fc84898cf1bbf055cd5a"), target: mongoose.Types.ObjectId("56a3fc84898cf1bbf055cd5a")}
-).then(()=>{
-  consol
-})
+// Follow.create(
+//   {user: mongoose.Types.ObjectId("56a3e4661f46c422ef8bac61"), target: mongoose.Types.ObjectId("56a3e4661f46c422ef8bac61")},
+//   {user: mongoose.Types.ObjectId("56a3e4661f46c422ef8bad42"), target: mongoose.Types.ObjectId("56a3e4661f46c422ef8bad42")},
+//   {user: mongoose.Types.ObjectId("56a3fc84898cf1bbf055cd5a"), target: mongoose.Types.ObjectId("56a3fc84898cf1bbf055cd5a")}
+// ).then(()=>{
+//   console.log('finished populating follows');
+// })

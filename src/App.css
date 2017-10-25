@@ -14,13 +14,13 @@ white - FFFFFF
 body,
 .pure-g [class*=pure-u] {
   font-family: 'Open Sans', sans-serif;
-  background: #FFFFFF;
-  color: #4C4C4C;
+  background: #4C4C4C;
+  color: #FFFFFF;
 }
 
 h1{
   font-family: 'Oswald', 'Arial Narrow', sans-serif;
-  color: #585858;
+  color: #FFFFFF;
   border-bottom: solid 2px;
 }
 
@@ -159,6 +159,11 @@ blockquote p {
 
 /*#01ca4c*/
 
+.pure-table > thead {
+  background: inherit;
+  color: inherit;
+}
+
 
 .pure-form input[type="text"]:focus {
   border-color: #0c1a2b;
@@ -227,11 +232,6 @@ blockquote p {
   float: right;
 }
 
-.navbar .uport-logo {
-  height: 16px;
-  margin-right: 10px;
-}
-
 /* HOME */
 .logo{
   max-width: 100%;
@@ -270,8 +270,6 @@ blockquote p {
 }
 
 .feedItem .content-container{
-  /*margin-top: -50px;
-  margin-left: 70px;*/
   padding-left: 1em;
   padding-right: 4em;
   padding-bottom: 1em;
@@ -295,7 +293,7 @@ blockquote p {
   margin-left: 0.5em;
 }
 
-
+/* --- TABS --- */
 .react-tabs__tab-list {
   border-bottom: 1px solid #aaa;
   margin: 0 0 10px;
@@ -311,12 +309,21 @@ blockquote p {
   list-style: none;
   padding: 6px 12px;
   cursor: pointer;
+
+  text-transform: uppercase;
+  color: gold;
 }
 
 .react-tabs__tab--selected {
-  background: #fff;
+
+  /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#616161+0,4c4c4c+95,4c4c4c+100 */
+  background: #616161; /* Old browsers */
+  background: -moz-linear-gradient(top, #616161 0%, #4c4c4c 95%, #4c4c4c 100%); /* FF3.6-15 */
+  background: -webkit-linear-gradient(top, #616161 0%,#4c4c4c 95%,#4c4c4c 100%); /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(to bottom, #616161 0%,#4c4c4c 95%,#4c4c4c 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#616161', endColorstr='#4c4c4c',GradientType=0 ); /* IE6-9 */
+
   border-color: #aaa;
-  color: black;
   border-radius: 5px 5px 0 0;
 }
 
@@ -329,7 +336,7 @@ blockquote p {
 }
 
 .react-tabs__tab--disabled {
-  color: GrayText;
+  color: gray;
   cursor: default;
 }
 

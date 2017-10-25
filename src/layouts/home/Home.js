@@ -9,7 +9,7 @@ import SelectUserContainer from '../../user/ui/selectUser/SelectUserContainer'
 
 //
 //
-// <h1>Servésa</h1>
+// <h1>Legible</h1>
 // <h3> Trust Networks</h3>
 // <img className="logo" src={Logo}></img>
 //
@@ -27,7 +27,7 @@ class Home extends Component {
         <div className="pure-g">
           <div className="pure-u-1-1">
 
-            <h1>Servésa</h1>
+            <h1>Legible</h1>
 
             <SelectUserContainer/>
             

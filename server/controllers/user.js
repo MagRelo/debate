@@ -14,20 +14,19 @@ const utils = require('../config/utils')
 
 function markFollowers (users, followers, userId) {
 
-  var followerIds = followers.map(function(item) {
+  const followerIds = followers.map(function(item) {
 		return item.target.toHexString();
 	});
 
-  let markedUsers = users
-    .filter(user => {
-      // remove the current user from the follow/unfollow list
-      return userId !== user._id.toHexString()
-    })
+  const markedUsers = users
     .map((user) => {
 
       // calc prices for display and search
-      user.priceOfNextToken = pricingFunctions.nextTokenPrice(user.tokenSupply)
-      user.salePriceOfCurrentToken = pricingFunctions.currentTokenPrice(user.tokenSupply, user.escrowBalance)
+      user.priceOfNextToken = pricingFunctions.nextTokenPrice(user.tokenLedgerCount)
+      user.salePriceOfCurrentToken = pricingFunctions.currentTokenPrice(user.tokenLedgerCount, user.tokenLedgerEscrowBalance)
+
+      user.priceTrend = 67
+      user.tokensOwned = user.tokenLedger[userId] || 0
 
       // mark the users that the current user is following
       if (followerIds.indexOf(user._id.toHexString()) !== -1){
@@ -46,7 +45,7 @@ function getMarkedUserList (userId){
   return UserModel.find({}).lean()
     .then((userListArray)=>{
       userList = userListArray
-      return FollowModel.find({user: userId}).lean()
+      return FollowModel.find({user: userId})
     }).then((FollowArray)=>{
       return markFollowers(userList, FollowArray, userId)
     })
@@ -100,8 +99,8 @@ exports.getUser = (request, response) => {
       let userObject = user.toObject()
 
       // calc prices for display and search
-      userObject.priceOfNextToken = pricingFunctions.nextTokenPrice(user.tokenSupply)
-      userObject.salePriceOfCurrentToken = pricingFunctions.currentTokenPrice(user.tokenSupply, user.escrowBalance)
+      userObject.priceOfNextToken = pricingFunctions.nextTokenPrice(user.tokenLedgerCount)
+      userObject.salePriceOfCurrentToken = pricingFunctions.currentTokenPrice(user.tokenLedgerCount, user.tokenLedgerEscrowBalance)
 
       return response.json(userObject)
     })
@@ -164,8 +163,8 @@ exports.purchaseTokens = (request, response) => {
       }
     }
 
-    // get token prices
-    tokenPurchasePrice = pricingFunctions.purchasePrice(target.tokenSupply, tokensToPurchase)
+    // get total purchase price of the order
+    tokenPurchasePrice = pricingFunctions.purchasePrice(target.tokenLedgerCount, tokensToPurchase)
 
     // check that user has enough funds
     if(user.balance < tokenPurchasePrice){
@@ -186,8 +185,7 @@ exports.purchaseTokens = (request, response) => {
   }).then((updatedUser) => {
 
     // Step #2 - create new tokens and assign to user
-    target.createAndAssignNewTokens(user._id.toHexString(), tokensToPurchase)
-    target.escrowBalance = target.escrowBalance + tokenPurchasePrice
+    target.createAndAssignNewTokens(user._id.toHexString(), tokensToPurchase, tokenPurchasePrice)
     return target.save()
 
   }).then((updatedTarget) => {
@@ -270,7 +268,7 @@ exports.sellTokens = (request, response) => {
     target = reponseArray[1]
 
     // get target info
-    targetTokenSellValue = pricingFunctions.salePrice(target.tokenSupply, target.escrowBalance, tokensToSell)
+    targetTokenSellValue = pricingFunctions.salePrice(target.tokenLedgerCount, target.tokenLedgerEscrowBalance, tokensToSell)
 
     // validate inputs
     if(!user || !target || target.ownedTokenCount(userId) < tokensToSell){
@@ -294,10 +292,7 @@ exports.sellTokens = (request, response) => {
   }).then((updatedUser) => {
 
     // Step #2 - remove tokens from target ledger
-    target.destroyTokens(user._id.toHexString(), tokensToSell)
-
-    // Step #3 - reduce target's escrow balance
-    target.escrowBalance = target.escrowBalance - targetTokenSellValue
+    target.destroyTokens(user._id.toHexString(), tokensToSell, targetTokenSellValue)
     return target.save()
 
   }).then((updatedTarget) => {
@@ -319,7 +314,6 @@ exports.sellTokens = (request, response) => {
   }).then((response) => {
     return UserModel.findOne({ _id: userId }).lean()
   }).then((user) => {
-    // send response
     return response.json(user)
   }).catch((error) => {
 
