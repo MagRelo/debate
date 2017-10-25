@@ -32,17 +32,22 @@ class SignUpForm extends Component {
       <main className="signup">
         <h2>Create User</h2>
         <form className="pure-form pure-form-stacked " onSubmit={this.handleSubmit.bind(this)}>
-          <label>Name</label>
-          <input
-            name="name"
-            onChange={this.handleInputChange.bind(this)}>
-          </input>
 
-          <label>Avatar Url</label>
-          <input
-            name="avatarUrl"
-            onChange={this.handleInputChange.bind(this)}>
-          </input>
+          <fieldset>
+            <label>Name</label>
+            <input
+              name="name"
+              onChange={this.handleInputChange.bind(this)}>
+            </input>
+          </fieldset>
+
+          <fieldset>
+            <label>Avatar Url</label>
+            <input
+              name="avatarUrl"
+              onChange={this.handleInputChange.bind(this)}>
+            </input>  
+          </fieldset>
 
           <button
             type="submit"

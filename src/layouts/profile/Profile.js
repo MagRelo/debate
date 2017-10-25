@@ -36,11 +36,52 @@ class Profile extends Component {
 
                   <p><strong>Available Balance:</strong>
                     <span className="currency-box">
-                      &#536; {this.props.authData.balance}
+                      ∯ {this.props.authData.balance}
                     </span>
                   </p>
 
                   <h2>My Token</h2>
+                  <table className="pure-table pure-table-horizontal table-100">
+                    <thead>
+                      <tr>
+                        <td>Name</td>
+                        <td>Tokens</td>
+                        <td>Trend</td>
+                        <td>View</td>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {
+                        this.props.userList.map((targetUser) =>
+
+                          {targetUser._id === this.props.authData._id ?
+
+                            <tr key={targetUser._id}>
+                              <td>
+                                {targetUser.name}
+                              </td>
+                              <td>&#536; {targetUser.priceOfNextToken}</td>
+                              <td>&#536; {targetUser.salePriceOfCurrentToken}</td>
+                              <td style={{'textAlign': 'center'}}>
+
+                                {
+                                  // <FollowToggleContainer
+                                  //   userId={this.props.authData._id}
+                                  //   targetId={targetUser._id}
+                                  //   isFollowing={targetUser.followed}/>
+                                }
+
+                              </td>
+                            </tr>
+
+                          : null
+                          }
+
+                        ) //end map
+                      }
+
+                    </tbody>
+                  </table>
 
                   <h2>Other Tokens</h2>
                   <table className="pure-table pure-table-horizontal table-100">
@@ -62,7 +103,7 @@ class Profile extends Component {
                           <td>&#536; {targetUser.priceOfNextToken}</td>
                           <td>&#536; {targetUser.salePriceOfCurrentToken}</td>
                           <td style={{'textAlign': 'center'}}>
-                            
+
                             {
                               // <FollowToggleContainer
                               //   userId={this.props.authData._id}
@@ -88,7 +129,7 @@ class Profile extends Component {
                   <div className="account-details">
                     <p><strong>Buy Price</strong>
                       <span className="currency-box">
-                        &#536; {this.props.authData.priceOfNextToken}
+                        ∯ {this.props.authData.priceOfNextToken}
                       </span>
                     </p>
                     <p><strong>Token Supply</strong>
@@ -98,12 +139,12 @@ class Profile extends Component {
                     </p>
                     <p><strong>Escrow Balance</strong>
                       <span className="currency-box">
-                        &#536; {this.props.authData.tokenLedgerEscrowBalance}
+                        ∯ {this.props.authData.tokenLedgerEscrowBalance}
                       </span>
                     </p>
                     <p><strong>Sale Price</strong>
                       <span className="currency-box">
-                        &#536; {this.props.authData.salePriceOfCurrentToken}
+                        ∯ {this.props.authData.salePriceOfCurrentToken}
                       </span>
                     </p>
                   </div>

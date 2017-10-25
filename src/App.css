@@ -1,12 +1,12 @@
 /* PAGE */
 
-/*colour pallate: http://www.colourlovers.com/palette/4529624/Endeavor
+/*colour pallate: http://www.colourlovers.com/palette/3205166/Firestarter
 
-grey - 4C4C4C
-green - 00AA99
-yellow - F7BF5C
-blue - 01A0CA
-white - FFFFFF
+light blue - 177B9F
+medium blue - 175772
+dark blue - 103A52
+red/orange - FF5934
+toape? - FAE7C7
 
 */
 
@@ -14,54 +14,21 @@ white - FFFFFF
 body,
 .pure-g [class*=pure-u] {
   font-family: 'Open Sans', sans-serif;
-  background: #4C4C4C;
-  color: #FFFFFF;
+  background: #175772;
+  color: #eceeef;
 }
 
 h1{
   font-family: 'Oswald', 'Arial Narrow', sans-serif;
-  color: #FFFFFF;
+  color: #eceeef;
   border-bottom: solid 2px;
 }
 
 h2, h3 {
   font-family: 'Oswald', 'Arial Narrow', sans-serif;
-  color: #949494;
+  color: #eceeef;
   border-bottom: solid 1px;
 }
-
-/*pre {
-  display: block;
-  margin: 20px 0 15px 0;
-  padding: 10px;
-  background: #eee;
-}
-
-blockquote {
-  background: #f9f9f9;
-  border-left: 10px solid #ccc;
-  margin: 1.5em 10px;
-  padding: 0.5em 10px;
-  quotes: "\201C""\201D""\2018""\2019";
-  font-style: italic;
-}
-blockquote:before {
-  color: #ccc;
-  content: open-quote;
-  font-size: 4em;
-  line-height: 0.1em;
-  margin-right: 0.25em;
-  vertical-align: -0.4em;
-}
-blockquote p {
-  display: inline;
-}
-
-.blockquote-attribution{
-  float: right;
-}*/
-/*
-*/
 
 .table-100{
   width: 100%
@@ -73,7 +40,7 @@ blockquote p {
 
 .currency-box{
   float: right;
-  color: #368e4e;
+  color: #12ca01;
 }
 
 .red-text{
@@ -89,24 +56,20 @@ blockquote p {
 
 .compose-container {
   text-align: left;
-
   margin-top: 2em;
-
-  border: solid 1px #c3c3c3;
-  box-shadow: 2px 2px 2px #d2d2d2;
+  border: solid 1px #103A52;
 }
 
 .compose-title-container{
   padding: 1em;
-  background-color: #000000;
-  margin-bottom: 0.5em;
+  background-color: #103A52;
 }
 .compose-title-container .title{
   color: white;
 }
 
 .compose-editor-container{
-  padding: 0 1em 1em 1em;
+
 }
 
 .time-block{
@@ -123,7 +86,7 @@ blockquote p {
 .editor-input{
   margin-bottom: 0.4em;
   background-color: #f3f3f3;
-  border: dashed 1px #000000;
+  border: dashed 1px #103A52;
   min-height: 80px;
   border-radius: 5px;
 }
@@ -136,7 +99,7 @@ blockquote p {
 
 /*Buttons*/
 .pure-button-primary {
-  background-color: #000000;
+  background-color: #103A52;
 }
 .pure-button-primary:hover {
   background-color: #233e5e;
@@ -144,7 +107,7 @@ blockquote p {
 
 .pure-button-danger {
   /*color: white;*/
-  /*background-color: #000000;*/
+  /*background-color: #103A52;*/
 }
 .pure-button-danger:hover {
   background-color: #f3d6db;
@@ -164,6 +127,17 @@ blockquote p {
   color: inherit;
 }
 
+.pure-form{
+  background-color: #177B9F;
+  padding: 0 1em 1em 1em;
+
+  /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#177b9f+0,175772+100 */
+  background: #177b9f; /* Old browsers */
+  background: -moz-linear-gradient(top, #177b9f 0%, #175772 100%); /* FF3.6-15 */
+  background: -webkit-linear-gradient(top, #177b9f 0%,#175772 100%); /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(to bottom, #177b9f 0%,#175772 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#177b9f', endColorstr='#175772',GradientType=0 ); /* IE6-9 */
+}
 
 .pure-form input[type="text"]:focus {
   border-color: #0c1a2b;
@@ -172,11 +146,17 @@ blockquote p {
 .pure-form input{
   width: 100%;
   margin-bottom: 1em;
+  border-color: #175872;
+  background-color: #175872;
+  box-shadow: none;
 }
 
 .pure-form label{
+  text-transform: uppercase;
   font-size: smaller;
-  color: #676767;
+
+  /*toape? - FAE7C7*/
+  color: #FAE7C7;
 }
 
 /*Copied from w3schools: https://www.w3schools.com/howto/howto_css_loader.asp*/
@@ -209,7 +189,7 @@ blockquote p {
 .navbar {
   position: fixed;
   padding: 5px;
-  background: #000000;
+  background: #103A52;
   font-family: 'Oswald', 'Arial Narrow', sans-serif;
 }
 
@@ -220,7 +200,7 @@ blockquote p {
 .navbar a:active,
 .navbar a:focus,
 .navbar a:hover {
-  background: #F7BF5C;
+  /*background: #F7BF5C;*/
 }
 
 .navbar .pure-menu-heading {
@@ -242,7 +222,7 @@ blockquote p {
   max-height: 160px;
   max-width: 160px;
   border-radius: 80px;
-  border: 2px solid #000000;
+  border: 2px solid #103A52;
 }
 
 
@@ -311,17 +291,16 @@ blockquote p {
   cursor: pointer;
 
   text-transform: uppercase;
-  color: gold;
 }
 
 .react-tabs__tab--selected {
 
-  /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#616161+0,4c4c4c+95,4c4c4c+100 */
-  background: #616161; /* Old browsers */
-  background: -moz-linear-gradient(top, #616161 0%, #4c4c4c 95%, #4c4c4c 100%); /* FF3.6-15 */
-  background: -webkit-linear-gradient(top, #616161 0%,#4c4c4c 95%,#4c4c4c 100%); /* Chrome10-25,Safari5.1-6 */
-  background: linear-gradient(to bottom, #616161 0%,#4c4c4c 95%,#4c4c4c 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#616161', endColorstr='#4c4c4c',GradientType=0 ); /* IE6-9 */
+  /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#177B9F+0,175772+95,175772+100 */
+  background: #177B9F; /* Old browsers */
+  background: -moz-linear-gradient(top, #177B9F 0%, #175772 99%, #175772 100%); /* FF3.6-15 */
+  background: -webkit-linear-gradient(top, #177B9F 0%,#175772 99%,#175772 100%); /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(to bottom, #177B9F 0%,#175772 99%,#175772 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#177B9F', endColorstr='#175772',GradientType=0 ); /* IE6-9 */
 
   border-color: #aaa;
   border-radius: 5px 5px 0 0;

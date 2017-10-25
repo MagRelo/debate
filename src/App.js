@@ -21,10 +21,10 @@ class App extends Component {
     const OnlyAuthLinks = VisibleOnlyAuth(() =>
       <span>
         <li className="pure-menu-item">
-          <Link to="/feed" activeStyle={{ color: '#FCD036' }} className="pure-menu-link">Feed</Link>
+          <Link to="/feed" activeStyle={{ color: '#FF5934' }} className="pure-menu-link">Feed</Link>
         </li>
         <li className="pure-menu-item">
-          <Link to="/profile" activeStyle={{ color: '#FCD036' }} className="pure-menu-link">Profile</Link>
+          <Link to="/profile" activeStyle={{ color: '#FF5934' }} className="pure-menu-link">Profile</Link>
         </li>
       </span>
     )
@@ -37,7 +37,7 @@ class App extends Component {
     return (
       <div className="App">
         <nav className="navbar pure-menu pure-menu-horizontal">
-          <Link to="/" className="pure-menu-heading pure-menu-link">Legible</Link>
+          <Link to="/" className="pure-menu-heading pure-menu-link" activeStyle={{ color: '#FF5934' }} >Legible</Link>
           <ul className="pure-menu-list navbar-right">
             <OnlyGuestLinks />
             <OnlyAuthLinks />

@@ -41,9 +41,6 @@ class SelectForm extends Component {
       <main className="signup">
         <h2>Select User</h2>
         <form className="pure-form pure-form-stacked " onSubmit={this.handleSubmit.bind(this)}>
-
-          <label>Select User</label>
-
           <ul>
           {this.props.userList.map(user => {
             return <li key={user._id}>
