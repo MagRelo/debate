@@ -8,6 +8,8 @@ import TokenFormContainer from '../../user/ui/tokenTransaction/FormContainer'
 
 import TokenPriceChart from '../../user/ui/tokenPriceChart/tokenPriceChartContainer'
 
+import TokenDetail from '../../user/ui/tokenDetail/tokenDetailContainer'
+
 import FeedContainer from '../../messages/feed/FeedContainer'
 
 class Profile extends Component {
@@ -16,11 +18,31 @@ class Profile extends Component {
     authData = this.props
   }
 
+  calculatePriceTrend(tokenHistoryArray, salePriceOfCurrentToken){
+    const trend = 140
+
+    // Temp hack: grab total over last four prices and compare with most recent
+    let totalPrice = tokenHistoryArray.slice(0, 4)
+      .reduce((sum, current)=>{
+        return sum + current.salePriceOfCurrentToken
+      },0)
+
+    const lastFourAverage = totalPrice/4
+
+    if(lastFourAverage > 0){
+      const priceRatio = (1 / (lastFourAverage/salePriceOfCurrentToken))
+      return (trend * priceRatio).toFixed(3)
+    }
+
+    return trend
+  }
+
   render() {
     return(
       <main className="container">
         <div className="pure-g">
-          <div className="pure-u-1-1">
+          <div className="pure-u-1 pure-u-md-1-3"></div>
+          <div className="pure-u-1 pure-u-md-1-3">
             <h1>{this.props.authData.name}</h1>
 
               <Tabs>
@@ -28,19 +50,14 @@ class Profile extends Component {
                 <TabList>
                   <Tab>My Wallet</Tab>
                   <Tab>My Token</Tab>
+                  <Tab>Profile</Tab>
                 </TabList>
 
                 <TabPanel>
 
                   <TokenPriceChart data={this.props.authData.tokenHistory}/>
 
-                  <p><strong>Available Balance:</strong>
-                    <span className="currency-box">
-                      ∯ {this.props.authData.balance}
-                    </span>
-                  </p>
-
-                  <h2>My Token</h2>
+                  <h2>Tokens in my wallet</h2>
                   <table className="pure-table pure-table-horizontal table-100">
                     <thead>
                       <tr>
@@ -51,68 +68,27 @@ class Profile extends Component {
                       </tr>
                     </thead>
                     <tbody>
-                      {
-                        this.props.userList.map((targetUser) =>
 
-                          {targetUser._id === this.props.authData._id ?
-
-                            <tr key={targetUser._id}>
-                              <td>
-                                {targetUser.name}
-                              </td>
-                              <td>&#536; {targetUser.priceOfNextToken}</td>
-                              <td>&#536; {targetUser.salePriceOfCurrentToken}</td>
-                              <td style={{'textAlign': 'center'}}>
-
-                                {
-                                  // <FollowToggleContainer
-                                  //   userId={this.props.authData._id}
-                                  //   targetId={targetUser._id}
-                                  //   isFollowing={targetUser.followed}/>
-                                }
-
-                              </td>
-                            </tr>
-
-                          : null
-                          }
-
-                        ) //end map
-                      }
-
-                    </tbody>
-                  </table>
-
-                  <h2>Other Tokens</h2>
-                  <table className="pure-table pure-table-horizontal table-100">
-                    <thead>
-                      <tr>
-                        <td>Name</td>
-                        <td>Tokens</td>
-                        <td>Trend</td>
-                        <td>View</td>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {
-                        this.props.userList.map((targetUser)=>
-                        <tr key={targetUser._id}>
-                          <td>
-                            {targetUser.name}
-                          </td>
-                          <td>&#536; {targetUser.priceOfNextToken}</td>
-                          <td>&#536; {targetUser.salePriceOfCurrentToken}</td>
-                          <td style={{'textAlign': 'center'}}>
-
-                            {
-                              // <FollowToggleContainer
-                              //   userId={this.props.authData._id}
-                              //   targetId={targetUser._id}
-                              //   isFollowing={targetUser.followed}/>
-                            }
-
-                          </td>
-                        </tr>
+                      {this.props.userList
+                        .filter((targetUser)=>{
+                          return targetUser.tokensOwned && targetUser.tokensOwned > 0
+                        })
+                        .map((targetUser) =>
+                          <tr key={targetUser._id}>
+                            <td>
+                              {targetUser.name}
+                            </td>
+                            <td>{targetUser.tokensOwned}</td>
+                            <td>
+                              <img className="priceTrendArrow"
+                                src="https://upload.wikimedia.org/wikipedia/commons/c/c4/Left_simple_arrow_-_black.svg"
+                                style={{
+                                  'transform': 'rotateZ(' + this.calculatePriceTrend(targetUser.tokenHistory, targetUser.salePriceOfCurrentToken) + 'deg)',
+                                  'fill': this.calculatePriceTrend(targetUser.tokenHistory, targetUser.salePriceOfCurrentToken) > 50 ? 'green' : 'red'
+                                }}></img>
+                            </td>
+                            <td style={{'textAlign': 'center'}}></td>
+                          </tr>
                         )
                       }
 
@@ -123,33 +99,18 @@ class Profile extends Component {
                 </TabPanel>
                 <TabPanel>
 
-                  <TokenPriceChart data={this.props.authData.tokenHistory}/>
+                  <TokenDetail contractData={this.props.authData}/>
 
+                </TabPanel>
+                <TabPanel>
 
-                  <div className="account-details">
-                    <p><strong>Buy Price</strong>
-                      <span className="currency-box">
-                        ∯ {this.props.authData.priceOfNextToken}
-                      </span>
-                    </p>
-                    <p><strong>Token Supply</strong>
-                      <span className="currency-box">
-                        {this.props.authData.tokenLedgerCount}
-                      </span>
-                    </p>
-                    <p><strong>Escrow Balance</strong>
-                      <span className="currency-box">
-                        ∯ {this.props.authData.tokenLedgerEscrowBalance}
-                      </span>
-                    </p>
-                    <p><strong>Sale Price</strong>
-                      <span className="currency-box">
-                        ∯ {this.props.authData.salePriceOfCurrentToken}
-                      </span>
-                    </p>
-                  </div>
+                  <p>{this.props.authData.name}</p>
 
-                  <TokenFormContainer userId={this.props.authData._id} targetId={this.props.authData}/>
+                  <p><strong>Available Balance:</strong>
+                    <span className="currency-box">
+                      ∯ {this.props.authData.balance}
+                    </span>
+                  </p>
 
                   <hr></hr>
 

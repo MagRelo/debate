@@ -1,6 +1,7 @@
 'use strict';
 
 var pricingFunctions = require('../config/pricing')
+var utils = require('../config/utils')
 
 var mongoose = require('mongoose'),
     Schema = mongoose.Schema;
@@ -10,8 +11,8 @@ var UserSchema = new Schema({
   timestamp: Date,
   avatarUrl: String,
   balance: Number,
-  tokenLedgerCount: Number,
   tokenLedger: Object,
+  tokenLedgerCount: Number,
   tokenLedgerEscrowBalance: Number,
   wallet: Object,
   tokenHistory: Array
@@ -48,7 +49,7 @@ UserSchema.methods.createAndAssignNewTokens = function(ownerAddress, numberOfTok
       numberOfTokens: numberOfTokens,
       purchasePrice: purchasePrice,
     },
-    contractStatus: this.toObject(),
+    // contractStatus: this.toObject(),
     priceOfNextToken: pricingFunctions.nextTokenPrice(this.tokenLedgerCount),
     salePriceOfCurrentToken: pricingFunctions.currentTokenPrice(this.tokenLedgerCount, this.tokenLedgerEscrowBalance)
   })
@@ -73,6 +74,22 @@ UserSchema.methods.destroyTokens = function(ownerAddress, numberOfTokens, purcha
 
   // update token ledger token count
   this.tokenLedgerCount = this.tokenLedgerCount - numberOfTokens
+
+
+  // record transaction
+  this.tokenHistory.push({
+    type: 'destroy',
+    timestamp: new Date(),
+    purchase: {
+      ownerAddress: ownerAddress,
+      isSelf: ownerAddress === this._id.toHexString(),
+      numberOfTokens: numberOfTokens,
+      purchasePrice: purchasePrice,
+    },
+    // contractStatus: this.toObject(),
+    priceOfNextToken: pricingFunctions.nextTokenPrice(this.tokenLedgerCount),
+    salePriceOfCurrentToken: pricingFunctions.currentTokenPrice(this.tokenLedgerCount, this.tokenLedgerEscrowBalance)
+  })
 }
 
 UserSchema.methods.saveToWallet = function(ownerAddress, numberOfTokens) {
@@ -99,6 +116,5 @@ UserSchema.methods.removeFromWallet = function(ownerAddress, numberOfTokens) {
   }
   this.wallet = tempLedgerObject
 }
-
 
 module.exports = mongoose.model('User', UserSchema);

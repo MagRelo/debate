@@ -1,10 +1,10 @@
 
 // set 'messages.loading' to true
 export const MESSAGE_SUBMITTED = 'MESSAGE_SUBMITTED'
-function messageSubmitted() {
+function messageSubmitted(message) {
   return {
     type: MESSAGE_SUBMITTED,
-    payload: {}
+    payload: message
   }
 }
 
@@ -30,7 +30,7 @@ export function messageSubmit(message, user) {
   return function(dispatch) {
 
     // set 'messages.loading' to true
-    dispatch(messageSubmitted())
+    dispatch(messageSubmitted(message))
 
     return fetch('/api/messages',
       {
@@ -50,7 +50,7 @@ export function messageSubmit(message, user) {
 
         dispatch(getTimelineByUser(user.data._id))
         dispatch(getMessagesByUser(user.data._id))
-        
+
       }
     ).catch(error => {
       console.error('action error', error)

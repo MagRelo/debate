@@ -24,8 +24,6 @@ function markFollowers (users, followers, userId) {
       // calc prices for display and search
       user.priceOfNextToken = pricingFunctions.nextTokenPrice(user.tokenLedgerCount)
       user.salePriceOfCurrentToken = pricingFunctions.currentTokenPrice(user.tokenLedgerCount, user.tokenLedgerEscrowBalance)
-
-      user.priceTrend = 67
       user.tokensOwned = user.tokenLedger[userId] || 0
 
       // mark the users that the current user is following
@@ -45,7 +43,7 @@ function getMarkedUserList (userId){
   return UserModel.find({}).lean()
     .then((userListArray)=>{
       userList = userListArray
-      return FollowModel.find({user: userId})
+      return FollowModel.find({user: userId}).lean()
     }).then((FollowArray)=>{
       return markFollowers(userList, FollowArray, userId)
     })
@@ -96,12 +94,10 @@ exports.getUser = (request, response) => {
   UserModel.findOne({_id: userId})
     .then(user => {
 
-      let userObject = user.toObject()
-
       // calc prices for display and search
+      let userObject = user.toObject()
       userObject.priceOfNextToken = pricingFunctions.nextTokenPrice(user.tokenLedgerCount)
       userObject.salePriceOfCurrentToken = pricingFunctions.currentTokenPrice(user.tokenLedgerCount, user.tokenLedgerEscrowBalance)
-
       return response.json(userObject)
     })
     .catch((error)=>{
@@ -179,7 +175,7 @@ exports.purchaseTokens = (request, response) => {
     }
 
     // Step #1 - decrease user balance
-    user.balance = user.balance - tokenPurchasePrice
+    user.balance = utils.round(user.balance - tokenPurchasePrice, 4)
     return user.save()
 
   }).then((updatedUser) => {
@@ -208,11 +204,13 @@ exports.purchaseTokens = (request, response) => {
     }
 
   }).then((updatedFollow) => {
-    return UserModel.findOne({ _id: userId }).lean()
+    return UserModel.findOne({ _id: userId })
   }).then((updatedUser) => {
 
-    // send response
-    return response.json(updatedUser)
+    let userObject = updatedUser.toObject()
+    userObject.priceOfNextToken = pricingFunctions.nextTokenPrice(user.tokenLedgerCount)
+    userObject.salePriceOfCurrentToken = pricingFunctions.currentTokenPrice(user.tokenLedgerCount, user.tokenLedgerEscrowBalance)
+    return response.json(userObject)
 
   }).catch((error) => {
 
@@ -298,7 +296,7 @@ exports.sellTokens = (request, response) => {
   }).then((updatedTarget) => {
 
     // Step #4 - transfer token sell value to user
-    user.balance = user.balance + targetTokenSellValue
+    user.balance = utils.round(user.balance + targetTokenSellValue, 4)
     return user.save()
 
   }).then((responseArray) => {
@@ -312,9 +310,12 @@ exports.sellTokens = (request, response) => {
     return {}
 
   }).then((response) => {
-    return UserModel.findOne({ _id: userId }).lean()
+    return UserModel.findOne({ _id: userId })
   }).then((user) => {
-    return response.json(user)
+    let userObject = user.toObject()
+    userObject.priceOfNextToken = pricingFunctions.nextTokenPrice(user.tokenLedgerCount)
+    userObject.salePriceOfCurrentToken = pricingFunctions.currentTokenPrice(user.tokenLedgerCount, user.tokenLedgerEscrowBalance)
+    return response.json(userObject)
   }).catch((error) => {
 
     // client error

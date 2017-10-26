@@ -17,7 +17,7 @@ class FormComponent extends Component {
   handleSubmit(event) {
     event.preventDefault()
 
-    this.props.followUserClick(event, this.props.userId, this.props.targetId, this.state.tokenCount)
+    this.props.followUserClick(event, this.props.userId, this.props.targetId, parseInt(this.state.tokenCount, 10))
     // unFollowUserClick(event, userId, targetId, 7)
 
   }

@@ -41,15 +41,15 @@ class SelectForm extends Component {
       <main className="signup">
         <h2>Select User</h2>
         <form className="pure-form pure-form-stacked " onSubmit={this.handleSubmit.bind(this)}>
-          <ul>
-          {this.props.userList.map(user => {
-            return <li key={user._id}>
-              <button
+          <fieldset>
+            {this.props.userList.map(user => {
+              return <button
+                key={user._id}
                 className="pure-button pure-button-primary"
                 onClick={(event) => this.handleSubmit(event, user._id)}>{user.name}</button>
-            </li>
-          })}
-          </ul>
+            })}
+          </fieldset>
+
 
         </form>
       </main>

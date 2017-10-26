@@ -13,22 +13,22 @@ exports.getMessagesByUser = (request, response) => {
   // GetStream feed
   var userFeed = FeedManager.getUserFeed(userId);
   userFeed.get({})
-   .then(function (body) {
-     var activities = body.results;
-     return StreamBackend.enrichActivities(activities)
-   })
-   .then(function (enrichedActivities) {
+    .then(function (body) {
+       var activities = body.results;
+       return StreamBackend.enrichActivities(activities)
+    })
+    .then(function (enrichedActivities) {
+      return response.json({
+        location: 'feed',
+        user: userId,
+        activities: enrichedActivities
+      });
 
-     return response.json({
-       location: 'feed',
-       user: userId,
-       activities: enrichedActivities
-     });
-
-   })
-   .catch((error)=>{
+    })
+    .catch((error)=>{
+      console.log('rejected')
      return response.json(error)
-   })
+    })
 
 }
 

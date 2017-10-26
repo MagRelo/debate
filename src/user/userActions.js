@@ -126,7 +126,7 @@ export function followUser(userId, targetId, tokensToPurchase) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           user: userId,
-          target: targetId,
+          target: targetId._id,
           tokensToPurchase: tokensToPurchase
         })
       }).then(rawResponse => {
@@ -153,7 +153,7 @@ export function unFollowUser(userId, targetId, tokensToSell) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           user: userId,
-          target: targetId,
+          target: targetId._id,
           tokensToSell: tokensToSell
         })
     }).then(rawResponse => {

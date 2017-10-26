@@ -9,7 +9,17 @@ const messageReducer = (state = initialState, action) => {
   if (action.type === 'MESSAGE_SUBMITTED')
   {
     return Object.assign({}, state, {
-      loading: true
+      loading: true,
+      networkFeed : [ ...state.networkFeed, {
+        id: 'temp-optimistic-update',
+        actor: {
+          name: 'todd'
+        },
+        object: {
+          text: action.payload
+        }
+      }]
+
     })
   }
 
@@ -20,6 +30,7 @@ const messageReducer = (state = initialState, action) => {
       userFeed: action.payload
     })
   }
+
   if (action.type === 'TIMELINE_LIST_UPDATE')
   {
     return Object.assign({}, state, {

@@ -15,11 +15,12 @@ class Feed extends Component {
     return(
       <main className="container">
         <div className="pure-g">
-          <div className="pure-u-1-1">
+          <div className="pure-u-1 pure-u-md-1-3"></div>
+          <div className="pure-u-1 pure-u-md-1-3">
+
+            <h1>Network Posts</h1>
 
             <Compose/>
-
-            <hr></hr>
 
             <FeedContainer messages={this.props.feedList}/>
 

@@ -10,6 +10,7 @@ import LogoutButtonContainer from './user/ui/logoutbutton/LogoutButtonContainer'
 import './css/oswald.css'
 import './css/open-sans.css'
 import './css/pure-min.css'
+import './css/grids-responsive-min.css'
 
 import 'medium-editor/dist/css/medium-editor.css'
 import 'medium-editor/dist/css/themes/default.css'
