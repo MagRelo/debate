@@ -14,18 +14,6 @@ class FormComponent extends Component {
     }
   }
 
-  // handleChange(event) {
-  //   this.setState({tokenCount: event.target.value})
-  // }
-  //
-  // handleSubmit(event) {
-  //   event.preventDefault()
-  //
-  //   this.props.followUserClick(event, this.props.userId, this.props.targetId, parseInt(this.state.tokenCount, 10))
-  //   // unFollowUserClick(event, userId, targetId, 7)
-  //
-  // }
-
   render() {
     return(
       <main className="token-detail">
@@ -33,11 +21,11 @@ class FormComponent extends Component {
         <div className="pure-g">
           <div className="pure-u-1-1">
 
-
-            <TokenPriceChart data={this.props.contractData.tokenHistory}/>
-
-
             <div className="account-details">
+              <p>{this.props.contractData.name}</p>
+
+              <TokenPriceChart data={this.props.contractData.tokenHistory}/>
+
               <p><strong>Token Supply</strong>
                 <span className="currency-box">
                   {this.props.contractData.tokenLedgerCount}

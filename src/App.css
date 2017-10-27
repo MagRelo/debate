@@ -37,7 +37,8 @@ h2, h3 {
 }
 
 .account-details{
-  margin-left: 1em;
+  margin-left: 0.5em;
+  margin-right: 0.5em;
 }
 
 .currency-box{
@@ -158,6 +159,9 @@ h2, h3 {
 .pure-table > thead {
   background: inherit;
   color: inherit;
+  text-transform: uppercase;
+  font-size: small;
+  text-align: center;
 }
 
 .pure-form{

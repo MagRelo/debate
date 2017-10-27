@@ -55,7 +55,7 @@ class FeedItem extends Component {
 
             <div className="text-holder">
               <div className="time-block">
-                <time>{this.formatTimestamp(this.props.timestamp)}</time>
+                <time>{this.formatTimestamp(this.props.itemObject.timestamp)}</time>
               </div>
 
               <div className="feed-title">{this.props.actor.name}</div>

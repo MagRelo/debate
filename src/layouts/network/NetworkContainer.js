@@ -5,7 +5,7 @@ import getUsers from '../../user/userActions'
 
 const mapStateToProps = (state, ownProps) => {
   return {
-    feedList: state.messages.networkFeed
+    feedList: state.messages.userFeed
   }
 }
 

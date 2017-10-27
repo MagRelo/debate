@@ -10,31 +10,14 @@ import TokenPriceChart from '../../user/ui/tokenPriceChart/tokenPriceChartContai
 
 import TokenDetail from '../../user/ui/tokenDetail/tokenDetailContainer'
 
+import WalletListContainer from '../../user/ui/walletList/walletListContainer'
+
 import FeedContainer from '../../messages/feed/FeedContainer'
 
 class Profile extends Component {
   constructor(props, { authData }) {
     super(props)
     authData = this.props
-  }
-
-  calculatePriceTrend(tokenHistoryArray, salePriceOfCurrentToken){
-    const trend = 140
-
-    // Temp hack: grab total over last four prices and compare with most recent
-    let totalPrice = tokenHistoryArray.slice(0, 4)
-      .reduce((sum, current)=>{
-        return sum + current.salePriceOfCurrentToken
-      },0)
-
-    const lastFourAverage = totalPrice/4
-
-    if(lastFourAverage > 0){
-      const priceRatio = (1 / (lastFourAverage/salePriceOfCurrentToken))
-      return (trend * priceRatio).toFixed(3)
-    }
-
-    return trend
   }
 
   render() {
@@ -58,48 +41,29 @@ class Profile extends Component {
                   <TokenPriceChart data={this.props.authData.tokenHistory}/>
 
                   <h2>Tokens in my wallet</h2>
-                  <table className="pure-table pure-table-horizontal table-100">
-                    <thead>
-                      <tr>
-                        <td>Name</td>
-                        <td>Tokens</td>
-                        <td>Trend</td>
-                        <td>View</td>
-                      </tr>
-                    </thead>
-                    <tbody>
-
-                      {this.props.userList
-                        .filter((targetUser)=>{
-                          return targetUser.tokensOwned && targetUser.tokensOwned > 0
+                  <WalletListContainer
+                    contractList={
+                        // filter out contracts that the current user doesn't own
+                        this.props.userList.filter((contractData)=>{
+                          return contractData.tokensOwned && contractData.tokensOwned > 0
                         })
-                        .map((targetUser) =>
-                          <tr key={targetUser._id}>
-                            <td>
-                              {targetUser.name}
-                            </td>
-                            <td>{targetUser.tokensOwned}</td>
-                            <td>
-                              <img className="priceTrendArrow"
-                                src="https://upload.wikimedia.org/wikipedia/commons/c/c4/Left_simple_arrow_-_black.svg"
-                                style={{
-                                  'transform': 'rotateZ(' + this.calculatePriceTrend(targetUser.tokenHistory, targetUser.salePriceOfCurrentToken) + 'deg)',
-                                  'fill': this.calculatePriceTrend(targetUser.tokenHistory, targetUser.salePriceOfCurrentToken) > 50 ? 'green' : 'red'
-                                }}></img>
-                            </td>
-                            <td style={{'textAlign': 'center'}}></td>
-                          </tr>
-                        )
                       }
-
-                    </tbody>
-                  </table>
-
+                  />
 
                 </TabPanel>
                 <TabPanel>
 
                   <TokenDetail contractData={this.props.authData}/>
+
+                  <h2>Token Holders</h2>
+                  <WalletListContainer
+                    contractList={
+                        // filter out contracts that the current user doesn't own
+                        this.props.userList.filter((contractData)=>{
+                          return contractData[this.props.authData._id]
+                        })
+                      }
+                  />
 
                 </TabPanel>
                 <TabPanel>

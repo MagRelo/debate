@@ -51,12 +51,7 @@ class ComposeMessage extends Component {
     this.setState({modalIsOpen: true});
   }
 
-  afterOpenModal() {
-    // references are now sync'd and can be accessed.
-    // this.subtitle.style.color = '#f00';
-
-    // this.props.onMessageSubmit(this.state.text, this.props.user)
-  }
+  afterOpenModal() {}
 
   closeModal() {
     this.setState({modalIsOpen: false});
