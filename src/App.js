@@ -17,6 +17,14 @@ import 'medium-editor/dist/css/themes/default.css'
 
 import './App.css'
 
+// <div className="icon-holder">
+//   <div className="icon">
+//     <div className="stripe-1"></div>
+//     <div className="stripe-2"></div>
+//     <div className="stripe-3"></div>
+//   </div>
+// </div>
+
 class App extends Component {
   render() {
     const OnlyAuthLinks = VisibleOnlyAuth(() =>
@@ -38,7 +46,8 @@ class App extends Component {
     return (
       <div className="App">
         <nav className="navbar pure-menu pure-menu-horizontal">
-          <Link to="/" className="pure-menu-heading pure-menu-link">Legible</Link>
+          <Link to="/" className="pure-menu-heading pure-menu-link">
+            Legible</Link>
           <ul className="pure-menu-list navbar-right">
             <OnlyGuestLinks />
             <OnlyAuthLinks />
