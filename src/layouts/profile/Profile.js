@@ -27,6 +27,11 @@ class Profile extends Component {
           <div className="pure-u-1 pure-u-md-1-3"></div>
           <div className="pure-u-1 pure-u-md-1-3">
             <h1>{this.props.authData.name}</h1>
+            <p>Servésa Balance:
+              <span className="currency-box">
+                ∯ {this.props.authData.balance}
+              </span>
+            </p>
 
               <Tabs>
 
@@ -38,7 +43,7 @@ class Profile extends Component {
 
                 <TabPanel>
 
-                  <TokenPriceChart data={this.props.authData.tokenHistory}/>
+                  <TokenPriceChart data={this.props.authData.walletHistory}/>
 
                   <h2>Tokens in my wallet</h2>
                   <WalletListContainer
@@ -50,10 +55,24 @@ class Profile extends Component {
                       }
                   />
 
+                <h2>Other tokens</h2>
+                  <WalletListContainer
+                    contractList={
+                        // filter out contracts that the current user doesn't own
+                        this.props.userList.filter((contractData)=>{
+                          return !contractData.tokensOwned || contractData.tokensOwned == 0
+                        })
+                      }
+                  />
+
                 </TabPanel>
                 <TabPanel>
 
                   <TokenDetail contractData={this.props.authData}/>
+
+                  {
+                    // TODO: add 'buy' button
+                  }
 
                   <h2>Token Holders</h2>
                   <WalletListContainer
@@ -70,11 +89,6 @@ class Profile extends Component {
 
                   <p>{this.props.authData.name}</p>
 
-                  <p><strong>Available Balance:</strong>
-                    <span className="currency-box">
-                      ∯ {this.props.authData.balance}
-                    </span>
-                  </p>
 
                   <hr></hr>
 

@@ -17,7 +17,7 @@ class Home extends Component {
           <div className="pure-u-1 pure-u-md-1-3"></div>
           <div className="pure-u-1 pure-u-md-1-3">
 
-            <h1>Legible</h1>
+            <h1>Servésa</h1>
 
             <SelectUserContainer/>
 

@@ -3,7 +3,10 @@ import FormComponent from './formComponent'
 import { followUser, unFollowUser} from '../../userActions'
 
 const mapStateToProps = (state, ownProps) => {
-  return {}
+  return {
+    userId: state.user.data._id,
+    availableBalance: state.user.data.balance
+  }
 }
 
 const mapDispatchToProps = (dispatch) => {

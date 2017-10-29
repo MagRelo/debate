@@ -10,7 +10,8 @@ class FormComponent extends Component {
     super(props)
     authData = this.props
     this.state = {
-      tokenCount: 10
+      tokenCount: 10,
+      showForm: true
     }
   }
 
@@ -21,34 +22,47 @@ class FormComponent extends Component {
         <div className="pure-g">
           <div className="pure-u-1-1">
 
+            <div className="compose-title-container">
+              <span>{this.props.contractData.name}</span>
+            </div>
+
             <div className="account-details">
-              <p>{this.props.contractData.name}</p>
 
               <TokenPriceChart data={this.props.contractData.tokenHistory}/>
 
-              <p><strong>Token Supply</strong>
+              <p>Token Supply
                 <span className="currency-box">
                   {this.props.contractData.tokenLedgerCount}
                 </span>
               </p>
-              <p><strong>Escrow Balance</strong>
+              <p>Escrow Balance
                 <span className="currency-box">
                   ∯ {this.props.contractData.tokenLedgerEscrowBalance}
                 </span>
               </p>
-              <p><strong>Current Buy Price</strong>
+              <p>Current Buy Price
                 <span className="currency-box">
                   ∯ {this.props.contractData.priceOfNextToken}
                 </span>
               </p>
-              <p><strong>Current Sale Price</strong>
+              <p>Current Sale Price
                 <span className="currency-box">
                   ∯ {this.props.contractData.salePriceOfCurrentToken}
                 </span>
               </p>
             </div>
 
-            <TokenFormContainer userId={this.props.contractData._id} targetId={this.props.contractData}/>
+            {this.state.showForm ?
+              <TokenFormContainer
+                targetId={this.props.contractData._id}
+                priceOfNextToken={this.props.contractData.priceOfNextToken}
+                ownedTokenCount={this.props.contractData.tokensOwned}
+                salePriceOfCurrentToken={this.props.contractData.salePriceOfCurrentToken}
+                closeModalFunction={this.props.closeModalFunction}
+                />
+              : null
+            }
+
 
 
           </div>

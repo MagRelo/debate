@@ -39,22 +39,26 @@ class FormComponent extends Component {
   }
 
   calculatePriceTrend(tokenHistoryArray, salePriceOfCurrentToken){
-    const trend = 140
 
-    // Temp hack: grab total over last four prices and compare with most recent
-    let totalPrice = tokenHistoryArray.slice(0, 4)
+    // the current arrow is pointed the wrong way (left) so we start at 180deg
+    const baseDegree = 180
+
+    // Temp hack: grab total over last ~four prices and compare with most recent
+    const historyPeriods = Math.min(4, tokenHistoryArray.length)
+    let totalPrice = tokenHistoryArray.slice(0, historyPeriods)
       .reduce((sum, current)=>{
         return sum + current.salePriceOfCurrentToken
       },0)
 
-    const lastFourAverage = totalPrice/4
-
+    const lastFourAverage = totalPrice/historyPeriods
     if(lastFourAverage > 0){
       const priceRatio = (1 / (lastFourAverage/salePriceOfCurrentToken))
-      return (trend * priceRatio).toFixed(3)
+
+      // adjust value to be in range of +/- 90 degrees
+      return (baseDegree + (baseDegree - (baseDegree * priceRatio)) / 2 ).toFixed(3)
     }
 
-    return trend
+    return baseDegree
   }
 
   // Modal functions
@@ -87,7 +91,7 @@ class FormComponent extends Component {
               contentLabel=''>
 
 
-              <TokenDetail contractData={this.state.selectedContract}/>
+              <TokenDetail contractData={this.state.selectedContract} closeModalFunction={this.closeModal}/>
 
 
             </Modal>

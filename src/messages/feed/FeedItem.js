@@ -55,7 +55,7 @@ class FeedItem extends Component {
 
             <div className="text-holder">
               <div className="time-block">
-                <time>{this.formatTimestamp(this.props.itemObject.timestamp)}</time>
+                <time>{this.formatTimestamp(this.props.timestamp)}</time>
               </div>
 
               <div className="feed-title">{this.props.actor.name}</div>
@@ -102,7 +102,7 @@ class FeedItem extends Component {
               <div className="feed-title">{this.props.actor.name}</div>
 
               <div className="feed-description">
-                <p>introduced: {this.props.itemObject.target.name}</p>
+                <p>introduced: {this.props.itemObject.target ? this.props.itemObject.target.name : '(default)'}</p>
               </div>
            </div>
 

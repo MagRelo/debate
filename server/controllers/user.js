@@ -290,7 +290,7 @@ exports.sellTokens = (request, response) => {
   }).then((updatedUser) => {
 
     // Step #2 - remove tokens from target ledger
-    target.destroyTokens(user._id.toHexString(), tokensToSell, targetTokenSellValue)
+    target.sellTokens(user._id.toHexString(), tokensToSell, targetTokenSellValue)
     return target.save()
 
   }).then((updatedTarget) => {

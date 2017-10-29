@@ -43,9 +43,8 @@ class SelectForm extends Component {
         <form className="pure-form pure-form-stacked " onSubmit={this.handleSubmit.bind(this)}>
 
             {this.props.userList.map(user => {
-              return <fieldset>
+              return <fieldset key={user._id}>
                  <button
-                  key={user._id}
                   className="pure-button pure-button-primary"
                   onClick={(event) => this.handleSubmit(event, user._id)}>{user.name}
                 </button>

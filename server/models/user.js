@@ -56,15 +56,15 @@ UserSchema.methods.createAndAssignNewTokens = function(ownerAddress, numberOfTok
 
 }
 
-UserSchema.methods.destroyTokens = function(ownerAddress, numberOfTokens, purchasePrice) {
+UserSchema.methods.sellTokens = function(ownerAddress, numberOfTokens, purchasePrice) {
 
   const tempLedgerObject = this.toObject().tokenLedger
 
   // decrease token balance in ledger
   tempLedgerObject[ownerAddress] = tempLedgerObject[ownerAddress] - numberOfTokens
 
-  // remove address if balance is zero
-  if(tempLedgerObject[ownerAddress] === 0){
+  // remove key from ledger if: not token owner & if balance is zero
+  if(ownerAddress !== this._id.toHexString() && tempLedgerObject[ownerAddress] === 0){
     delete tempLedgerObject[ownerAddress]
   }
   this.tokenLedger = tempLedgerObject
@@ -78,7 +78,7 @@ UserSchema.methods.destroyTokens = function(ownerAddress, numberOfTokens, purcha
 
   // record transaction
   this.tokenHistory.push({
-    type: 'destroy',
+    type: 'sell',
     timestamp: new Date(),
     purchase: {
       ownerAddress: ownerAddress,
@@ -91,6 +91,42 @@ UserSchema.methods.destroyTokens = function(ownerAddress, numberOfTokens, purcha
     salePriceOfCurrentToken: pricingFunctions.currentTokenPrice(this.tokenLedgerCount, this.tokenLedgerEscrowBalance)
   })
 }
+
+
+UserSchema.methods.burnTokens = function(ownerAddress, numberOfTokens, purchasePrice) {
+
+  const tempLedgerObject = this.toObject().tokenLedger
+
+  // decrease token balance in ledger
+  tempLedgerObject[ownerAddress] = tempLedgerObject[ownerAddress] - numberOfTokens
+
+  // remove key from ledger if: not token owner & if balance is zero
+  if(ownerAddress !== this._id.toHexString() && tempLedgerObject[ownerAddress] === 0){
+    delete tempLedgerObject[ownerAddress]
+  }
+  this.tokenLedger = tempLedgerObject
+
+  // *no* update to token ledger escrow balance - escrow remians intact
+
+  // update token ledger token count
+  this.tokenLedgerCount = this.tokenLedgerCount - numberOfTokens
+
+  // record transaction
+  this.tokenHistory.push({
+    type: 'burn',
+    timestamp: new Date(),
+    purchase: {
+      ownerAddress: ownerAddress,
+      isSelf: ownerAddress === this._id.toHexString(),
+      numberOfTokens: numberOfTokens,
+      purchasePrice: purchasePrice,
+    },
+    // contractStatus: this.toObject(),
+    priceOfNextToken: pricingFunctions.nextTokenPrice(this.tokenLedgerCount),
+    salePriceOfCurrentToken: pricingFunctions.currentTokenPrice(this.tokenLedgerCount, this.tokenLedgerEscrowBalance)
+  })
+}
+
 
 UserSchema.methods.saveToWallet = function(ownerAddress, numberOfTokens) {
 
@@ -111,7 +147,7 @@ UserSchema.methods.removeFromWallet = function(ownerAddress, numberOfTokens) {
   tempLedgerObject[ownerAddress] = tempLedgerObject[ownerAddress] - numberOfTokens
 
   // remove address if balance is zero
-  if(tempLedgerObject[ownerAddress] === 0){
+  if(ownerAddress !== this._id.toHexString() && tempLedgerObject[ownerAddress] === 0){
     delete tempLedgerObject[ownerAddress]
   }
   this.wallet = tempLedgerObject

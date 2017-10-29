@@ -10,11 +10,20 @@ toape? - FAE7C7
 
 */
 
+html{
+    height: 100%;
+
+    /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#177b9f+0,175772+100 */
+    background: #177b9f; /* Old browsers */
+    background: -moz-radial-gradient(center, ellipse cover, #177b9f 0%, #175772 100%); /* FF3.6-15 */
+    background: -webkit-radial-gradient(center, ellipse cover, #177b9f 0%,#175772 100%); /* Chrome10-25,Safari5.1-6 */
+    background: radial-gradient(ellipse at center, #177b9f 0%,#175772 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#177b9f', endColorstr='#175772',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
+}
 
 body,
 .pure-g [class*=pure-u] {
   font-family: 'Open Sans', sans-serif;
-  background: #175772;
   color: #eceeef;
 }
 
@@ -37,8 +46,7 @@ h2, h3 {
 }
 
 .account-details{
-  margin-left: 0.5em;
-  margin-right: 0.5em;
+  margin: 0 1em;
 }
 
 .currency-box{
@@ -71,6 +79,24 @@ h2, h3 {
   box-shadow: 0 1px 2px rgba(0,0,0,0.3);
 }
 
+.logo-holder{
+  height: 48px;
+  float: left;
+  margin-right: -2em;
+  margin-left: -2.5em;
+  overflow: hidden;
+}
+.logo-holder .logo{
+  width: 120px;
+  height: 24px;
+  float: left;
+  background-size: 35px 35px;
+  -webkit-transform: rotateZ(35deg);
+  -ms-transform: rotate(35deg);
+  transform: rotateZ(60deg);
+}
+
+
 .feed-title{
   font-size: 1.5em;
   line-height: 75px;
@@ -80,7 +106,7 @@ h2, h3 {
   float: right;
   padding-right: 0.75em;
   padding-top: 0.75em;
-  color: darkgray;
+  color: #3799ca;
   font-size: small;
 }
 .feed-description{
@@ -157,11 +183,19 @@ h2, h3 {
 
 /*#01ca4c*/
 
+.pure-table{
+  border: none;
+}
+
 .pure-table > thead {
   background: inherit;
   color: inherit;
   text-transform: uppercase;
   font-size: small;
+  text-align: center;
+}
+
+.pure-table > tbody{
   text-align: center;
 }
 
@@ -238,6 +272,13 @@ h2, h3 {
   /*background: #F7BF5C;*/
 }
 
+nav.navbar.pure-menu.pure-menu-horizontal{
+  padding: 0
+}
+a.pure-menu-link{
+    padding: 0.75em 1em;
+}
+
 .pure-menu-active>.pure-menu-link, .pure-menu-link:focus, .pure-menu-link:hover{
   background: inherit;
 }
@@ -265,7 +306,6 @@ h2, h3 {
 
 .priceTrendArrow{
   width: 1em;
-  margin-left: 1em;
 }
 
 
@@ -275,11 +315,15 @@ h2, h3 {
 
 }
 
+.token-detail{
+  background-color: #17789c;
+}
+
 .feedItem {
   margin-bottom: 1em;
-  border: solid 1px #3799ca;
+  border: solid 1px #23536b;
   text-align: left;
-  background: inherit;
+  background: #103A52;
 
 }
 
@@ -378,5 +422,20 @@ h2, h3 {
 
 /*MODAL*/
 .ReactModal__Content.ReactModal__Content--after-open{
-  margin-right: 40%
+  margin-right: 40%;
+  max-height: 600px;
+}
+
+
+nav.navbar.pure-menu.pure-menu-horizontal{
+  z-index: 1000;
+}
+
+.purchase-total{
+  border-top: solid 1px #c9c9ca;
+  padding-top: 8px;
+}
+
+.title-button{
+  margin-left: 1em;
 }

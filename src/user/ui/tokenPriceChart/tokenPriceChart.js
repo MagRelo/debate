@@ -7,7 +7,7 @@ const tokenPriceChart = ({data}) => {
 
   return(
     <div style={{'height': '140px'}}>
-      {!data.length ?
+      {!data || !data.length ?
         <div style={{'textAlign': 'center'}}>
           <p style={{'textTransform': 'uppercase', 'color': 'slategrey'}}> Not enough data....</p>
         </div>

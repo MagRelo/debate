@@ -17,13 +17,6 @@ import 'medium-editor/dist/css/themes/default.css'
 
 import './App.css'
 
-// <div className="icon-holder">
-//   <div className="icon">
-//     <div className="stripe-1"></div>
-//     <div className="stripe-2"></div>
-//     <div className="stripe-3"></div>
-//   </div>
-// </div>
 
 class App extends Component {
   render() {
@@ -46,8 +39,17 @@ class App extends Component {
     return (
       <div className="App">
         <nav className="navbar pure-menu pure-menu-horizontal">
+
+          <div className="logo-holder">
+            <div className="logo">
+              <div style={{'backgroundColor': '#ff5935', height: '8px'}}></div>
+              <div style={{'backgroundColor': 'white', height: '6px'}}></div>
+              <div style={{'backgroundColor': '#17799d', height: '9px'}}></div>
+            </div>
+          </div>
+
           <Link to="/" className="pure-menu-heading pure-menu-link">
-            Legible</Link>
+            Servésa</Link>
           <ul className="pure-menu-list navbar-right">
             <OnlyGuestLinks />
             <OnlyAuthLinks />
