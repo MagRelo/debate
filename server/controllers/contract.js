@@ -6,97 +6,50 @@ var StreamBackend = new StreamMongoose.Backend();
 var bluebird = require('bluebird')
 
 // Models
-var UserModel = require('../models/user')
+const UserModel = require('../models/user')
 const populateTargets = 'walletArray.user tokenLedger.user'
 const populateFields= 'name avatarUrl tokenLedgerCount tokenLedgerEscrowBalance tokenBuyPrice tokenSellPrice tokenHistory'
-var FollowModel = require('../models/follow')
+
+const FollowModel = require('../models/follow')
+const ContractModel = require('../models/contract')
 
 const pricingFunctions = require('../config/pricing')
 const utils = require('../config/utils')
 
-function getMarkedUserList (userId){
-  let userList = []
-  return UserModel.find({}).lean()
-    .then((userListArray)=>{
-      userList = userListArray
-      return FollowModel.find({user: userId}).lean()
-    })
-    .then((FollowArray)=>{
+exports.createContract = (request, response) => {
 
-      const followerIds = FollowArray.map(function(item) {
-    		return item.target.toHexString();
-    	});
+  const userId = '56a3e4661f46c422ef8bac61'
 
-      const markedUsers = userList.map((user) => {
-          // mark the users that the current user is following
-          user.followed = (followerIds.indexOf(user._id.toHexString()) !== -1)
-          return user
-        })
-
-      return markedUsers
-    })
-}
-
-exports.listUsers = (request, response) => {
-
-  return getMarkedUserList(request.body.userId)
-    .then((enrichedUserList)=>{
-      return response.json(enrichedUserList)
-    }).catch((error)=>{
-      console.error(error.message)
-      return response.status(500).json({error: error.message});
-    })
-
-}
-
-exports.saveUser = (request, response) => {
-
-  const userName = request.body.name || 'default name'
-  const avatarUrl = request.body.avatarUrl || 'https://x1.xingassets.com/assets/frontend_minified/img/users/nobody_m.original.jpg'
-
-  const user = new UserModel({
-    name: userName,
-    avatarUrl: avatarUrl,
+  newContract = new ContractModel({
+    owner: userId,
+    contractOptions: {
+      tokenBasePrice: 10,
+      exponent: 2,
+      exponentDivisor: 10000,
+      ownerCanDrain: true
+    },
     timestamp: new Date()
   })
 
-  return user.save()
-    .then((mongoResponse)=>{
-      // follow yourself so you're activity shows up in timeline feed
-      const newFollow = new FollowModel({ user: userId, target: userId })
-      return newFollow.save()
-    }).then((mongoResponse)=>{
-      return response.json(mongoResponse)
-    }).catch((error)=>{
-      return response.json(error)
-    })
+  newContract.save()
+    .then(result => response.json(result))
 
 }
 
-exports.getUser = (request, response) => {
+exports.buyTokens = (request, response) => {
 
-  const userId = request.params.userId || 'default name'
-
-  UserModel.findOne({_id: userId})
-    .populate(populateTargets, populateFields)
-    .then(user => {
-      return response.json(user)
-    })
-    .catch((error)=>{
-      return response.json(error)
-    })
-
-}
-
-
-exports.purchaseTokens = (request, response) => {
+  const userId = '56a3e4661f46c422ef8bad42'
+  const targetId = '59f8b84b86a4e6853976ef60'
+  const tokensToPurchase = 10
 
   // TODO: data from auth
-  const userId =  request.body.user || ''
+  // const userId =  request.body.user || ''
 
   // data from request
-  const targetId = request.body.target || ''
-  const tokensToPurchase = parseInt(request.body.tokensToPurchase, 10) || null
+  // const targetId = request.body.target || ''
+
+  // const tokensToPurchase = parseInt(request.body.tokensToPurchase, 10) || null
+
 
   // validate inputs
   if(!userId || !targetId || !utils.isNumeric(tokensToPurchase)){
@@ -119,7 +72,7 @@ exports.purchaseTokens = (request, response) => {
   // get: user, target, and any existing follows
   bluebird.all([
     UserModel.findOne({ _id: userId }),
-    UserModel.findOne({ _id: targetId }),
+    ContractModel.findOne({ _id: targetId }),
     FollowModel.findOne({ user: userId, target: targetId })
   ]).then((reponseArray) => {
 
@@ -163,7 +116,7 @@ exports.purchaseTokens = (request, response) => {
   }).then((updatedUser) => {
 
     // Step #2 - create new tokens and assign to user
-    target.createAndAssignNewTokens(user._id.toHexString(), tokensToPurchase, tokenPurchasePrice)
+    target.buy(user._id.toHexString(), tokensToPurchase, tokenPurchasePrice)
     return target.save()
 
   }).then((updatedTarget) => {
@@ -207,12 +160,16 @@ exports.purchaseTokens = (request, response) => {
 
 exports.sellTokens = (request, response) => {
 
-  // TODO: data from auth
-  const userId =  request.body.user || ''
+  const userId = '56a3e4661f46c422ef8bad42'
+  const targetId = '59f8b84b86a4e6853976ef60'
+  const tokensToSell = 10
 
-  // data from request
-  const targetId = request.body.target || ''
-  const tokensToSell = parseInt(request.body.tokensToSell, 10) || null
+  // // TODO: data from auth
+  // const userId =  request.body.user || ''
+  //
+  // // data from request
+  // const targetId = request.body.target || ''
+  // const tokensToSell = parseInt(request.body.tokensToSell, 10) || null
 
   // validate inputs
   if(!userId || !targetId || !utils.isNumeric(tokensToSell)){
@@ -235,7 +192,7 @@ exports.sellTokens = (request, response) => {
   // get: user, target, and any existing follows
   bluebird.all([
     UserModel.findOne({ _id: userId }),
-    UserModel.findOne({ _id: targetId })
+    ContractModel.findOne({ _id: targetId })
   ]).then((reponseArray) => {
 
     // unpack array of mongo queries
@@ -243,10 +200,10 @@ exports.sellTokens = (request, response) => {
     target = reponseArray[1]
 
     // get target info
-    targetTokenSellValue = pricingFunctions.salePrice(target.tokenLedgerCount, target.tokenLedgerEscrowBalance, tokensToSell)
+    targetTokenSellValue = pricingFunctions.salePrice(target.tokenLedgerCount, target.contractEscrowBalance, tokensToSell)
 
     // validate inputs
-    if(!user || !target || target.ownedTokenCount(userId) < tokensToSell){
+    if(!user || !target || target.getTokenCountByUser(userId) < tokensToSell){
       throw {
         clientError: true,
         status: 400,
@@ -255,7 +212,7 @@ exports.sellTokens = (request, response) => {
           user: !!user,
           target: !!target,
           tokensToSell: tokensToSell,
-          targetTokensAvailableForSale: target.ownedTokenCount(userId)
+          targetTokensAvailableForSale: target.getTokenCountByUser(userId)
         }
       }
     }
@@ -279,7 +236,7 @@ exports.sellTokens = (request, response) => {
   }).then((responseArray) => {
 
     // Step #4 - if user's token balance was decreased to zero then remove follow
-    if(!target.ownedTokenCount(user._id.toHexString())){
+    if(!target.getTokenCountByUser(user._id.toHexString())){
       return FollowModel.remove({user: user._id})
     }
 
@@ -305,3 +262,7 @@ exports.sellTokens = (request, response) => {
   })
 
 }
+
+// Burn Tokens
+
+// Drain Escrow

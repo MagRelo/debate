@@ -12,12 +12,18 @@ const mongoose = require('mongoose');
 const User = require('../../models/user') ;
 const Follow = require('../../models/follow') ;
 const Message = require('../../models/message') ;
+const Contract = require('../../models/contract') ;
 
 const pricingFunctions = require('../pricing')
 
 Message.find({}).remove()
   .then(() => {
     console.log('messages deleted')
+  });
+
+Contract.find({}).remove()
+  .then(() => {
+    console.log('contract deleted')
   });
 
 Follow.find({}).remove()
@@ -65,17 +71,32 @@ User.find({}).remove()
         wallet: {},
         tokenHistory: []
       }
-    )
-    .then(() => {
-      console.log('finished populating users');
+    ).then(()=>{
 
-      return Follow.create(
-        {user: mongoose.Types.ObjectId("56a3e4661f46c422ef8bac61"), target: mongoose.Types.ObjectId("56a3e4661f46c422ef8bac61")},
-        {user: mongoose.Types.ObjectId("56a3e4661f46c422ef8bad42"), target: mongoose.Types.ObjectId("56a3e4661f46c422ef8bad42")},
-        {user: mongoose.Types.ObjectId("56a3fc84898cf1bbf055cd5a"), target: mongoose.Types.ObjectId("56a3fc84898cf1bbf055cd5a")}
-      )
+      Contract.create({
+        _id: mongoose.Types.ObjectId("59f8b84b86a4e6853976ef60"),
+        owner: mongoose.Types.ObjectId("56a3e4661f46c422ef8bac61"),
+        contractOptions: {
+          tokenBasePrice: 10,
+          exponent: 2,
+          exponentDivisor: 10000,
+          ownerCanDrain: true
+        },
+        timestamp: new Date()
+      })
 
-    }).then(() => {
-      console.log('finished populating follows');
-    });
+    })
+
+    // .then(() => {
+    //   console.log('finished populating users');
+    //
+    //   return Follow.create(
+    //     {user: mongoose.Types.ObjectId("56a3e4661f46c422ef8bac61"), target: mongoose.Types.ObjectId("56a3e4661f46c422ef8bac61")},
+    //     {user: mongoose.Types.ObjectId("56a3e4661f46c422ef8bad42"), target: mongoose.Types.ObjectId("56a3e4661f46c422ef8bad42")},
+    //     {user: mongoose.Types.ObjectId("56a3fc84898cf1bbf055cd5a"), target: mongoose.Types.ObjectId("56a3fc84898cf1bbf055cd5a")}
+    //   )
+    //
+    // }).then(() => {
+    //   console.log('finished populating follows');
+    // });
   });

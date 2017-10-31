@@ -4,6 +4,7 @@
 
 const userController = require('./controllers/user')
 const messageController = require('./controllers/message')
+const contractController = require('./controllers/contract')
 
 'use strict';
 var path = require('path');
@@ -18,6 +19,12 @@ module.exports = function(app) {
   // *FOLLOW*
   app.post('/api/follow', userController.purchaseTokens);
   app.delete('/api/follow', userController.sellTokens);
+
+  // *CONTRACTS*
+  app.post('/api/contract/create', contractController.createContract);
+  app.post('/api/contract/buy', contractController.buyTokens);
+  app.post('/api/contract/sell', contractController.sellTokens);
+
 
   // * MESSAGES*
   app.get('/api/messages/:userId', messageController.getMessagesByUser);
