@@ -38,34 +38,35 @@ class FormComponent extends Component {
     this.closeModal = this.closeModal.bind(this);
   }
 
-  calculatePriceTrend(tokenHistoryArray, salePriceOfCurrentToken){
+  calculatePriceTrend(tokenHistoryArray, tokenSellPrice){
 
-    // the current arrow is pointed the wrong way (left) so we start at 180deg
-    const baseDegree = 180
+    // the html arrow char is pointed the wrong way (up) so we start at 90deg
+    const baseDegree = 90
 
     // Temp hack: grab total over last ~four prices and compare with most recent
     const historyPeriods = Math.min(4, tokenHistoryArray.length)
     let totalPrice = tokenHistoryArray.slice(0, historyPeriods)
       .reduce((sum, current)=>{
-        return sum + current.salePriceOfCurrentToken
+        return sum + current.tokenSellPrice
       },0)
 
     const lastFourAverage = totalPrice/historyPeriods
     if(lastFourAverage > 0){
-      const priceRatio = (1 / (lastFourAverage/salePriceOfCurrentToken))
+      const priceRatio = (1 / (lastFourAverage/tokenSellPrice))
 
       // adjust value to be in range of +/- 90 degrees
-      return (baseDegree + (baseDegree - (baseDegree * priceRatio)) / 2 ).toFixed(3)
+      return (baseDegree + (baseDegree - (baseDegree * priceRatio))).toFixed(3)
     }
 
     return baseDegree
   }
 
   // Modal functions
-  openModal(data) {
+  openModal(data, tokenCount) {
     this.setState({
       modalIsOpen: true,
-      selectedContract: data
+      selectedContract: data,
+      tokensOwned: tokenCount
     });
   }
 
@@ -76,6 +77,13 @@ class FormComponent extends Component {
   closeModal() {
     this.setState({modalIsOpen: false});
   }
+
+  // <img className="priceTrendArrow"
+  //   src="https://upload.wikimedia.org/wikipedia/commons/c/c4/Left_simple_arrow_-_black.svg"
+  //   style={{
+  //     'transform': 'rotateZ(' + this.calculatePriceTrend(contractData.tokenHistory, contractData.tokenSellPrice) + 'deg)',
+  //     'fill': this.calculatePriceTrend(contractData.tokenHistory, contractData.tokenSellPrice) > 50 ? 'green' : 'red'
+  //   }}></img>
 
   render() {
     return(
@@ -91,7 +99,10 @@ class FormComponent extends Component {
               contentLabel=''>
 
 
-              <TokenDetail contractData={this.state.selectedContract} closeModalFunction={this.closeModal}/>
+              <TokenDetail
+                tokensOwned={this.state.tokensOwned}
+                contractData={this.state.selectedContract}
+                closeModalFunction={this.closeModal}/>
 
 
             </Modal>
@@ -101,6 +112,7 @@ class FormComponent extends Component {
                 <tr>
                   <td>Name</td>
                   <td>Tokens</td>
+                  <td>+/-</td>
                   <td>Trend</td>
                   <td>View</td>
                 </tr>
@@ -111,20 +123,28 @@ class FormComponent extends Component {
                   .map((contractData) =>
                     <tr key={contractData._id}>
                       <td>
-                        {contractData.name}
+                        {contractData.user.name}
                       </td>
-                      <td>{contractData.tokensOwned}</td>
+                      <td>{contractData.tokenCount}</td>
+                      <td>{
+                          Math.round(
+                            (
+                              (contractData.tokenCount * contractData.user.tokenSellPrice) - contractData.totalPurchasePrice
+                            ) * 10000/10000
+                          )
+                        }</td>
                       <td>
-                        <img className="priceTrendArrow"
-                          src="https://upload.wikimedia.org/wikipedia/commons/c/c4/Left_simple_arrow_-_black.svg"
-                          style={{
-                            'transform': 'rotateZ(' + this.calculatePriceTrend(contractData.tokenHistory, contractData.salePriceOfCurrentToken) + 'deg)',
-                            'fill': this.calculatePriceTrend(contractData.tokenHistory, contractData.salePriceOfCurrentToken) > 50 ? 'green' : 'red'
-                          }}></img>
+
+
+                        <div style={{
+                          'transform': 'rotateZ(' + this.calculatePriceTrend(contractData.user.tokenHistory, contractData.user.tokenSellPrice) + 'deg)',
+                          'color': this.calculatePriceTrend(contractData.user.tokenHistory, contractData.user.tokenSellPrice) < 90 ? '#12ca00' : 'gray',
+                          'fontSize': '24px'
+                        }}>&#8679;</div>
                       </td>
                       <td style={{'textAlign': 'center'}}>
                         <button
-                          onClick={()=>{this.openModal(contractData)}}
+                          onClick={()=>{this.openModal(contractData.user, contractData.tokenCount)}}
                           className="pure-button pure-button-primary"> > </button>
                       </td>
                     </tr>

@@ -35,15 +35,7 @@ StreamMongoose.setupMongoose(mongoose);
 
 // seed database
 if(process.env.SEED_DB_CLEAN === 'true'){
-
-  console.log('sleeping for 3 seconds to seed...')
-  setTimeout(()=>{
-    return require('./config/db_seed/seed_clean')
-  }, 3000)
-
-}
-if(process.env.SEED_DB_RICH === 'true'){
-  require('./config/db_seed/seed_rich')
+  require('./config/db_seed/seed_clean')
 }
 
 // routing config

@@ -10,34 +10,69 @@ var UserSchema = new Schema({
   name: String,
   timestamp: Date,
   avatarUrl: String,
-  balance: Number,
-  tokenLedger: Object,
-  tokenLedgerCount: Number,
-  tokenLedgerEscrowBalance: Number,
+  balance: {type: Number, default: 0},
   wallet: Object,
+  walletArray: [
+    {
+      user: { type: Schema.Types.ObjectId, required: true, ref: 'User' },
+      tokenCount: Number,
+      totalPurchasePrice: Number
+    }
+  ],
+  tokenLedger: Object,
+  tokenLedgerArray: [
+    {
+      user: { type: Schema.Types.ObjectId, required: true, ref: 'User' },
+      tokenCount: Number,
+      totalPurchasePrice: Number
+    }
+  ],
+  tokenBuyPrice: {type: Number, default: 10},
+  tokenSellPrice: {type: Number, default: 0},
+  tokenLedgerCount: {type: Number, default: 0},
+  tokenLedgerEscrowBalance: {type: Number, default: 0},
   tokenHistory: Array
 });
 
 UserSchema.methods.ownedTokenCount = function(ownerAddress) {
-  return this.tokenLedger[ownerAddress] || 0
+  const ownerLedgerEntryIndex = this.tokenLedgerArray.findIndex(x => x.user.toHexString() == ownerAddress);
+
+  if(ownerLedgerEntryIndex > -1){
+    return this.tokenLedgerArray[ownerLedgerEntryIndex].tokenCount
+  }
+
+  return 0
 }
 
 UserSchema.methods.createAndAssignNewTokens = function(ownerAddress, numberOfTokens, purchasePrice) {
 
-  // create tokens in ledger
-  const tempLedgerObject = this.toObject().tokenLedger
-  if(tempLedgerObject[ownerAddress]){
-    tempLedgerObject[ownerAddress] = tempLedgerObject[ownerAddress] + numberOfTokens
+  const ownerLedgerEntryIndex = this.tokenLedgerArray.findIndex(x => x.user.toHexString() == ownerAddress);
+  if(ownerLedgerEntryIndex === -1){
+
+    // add
+    this.tokenLedgerArray.push({
+      'user': ownerAddress,
+      'tokenCount': numberOfTokens,
+      'totalPurchasePrice': purchasePrice
+    })
+
   } else {
-    tempLedgerObject[ownerAddress] = numberOfTokens
+
+    // update
+    const ledgerObj = this.tokenLedgerArray[ownerLedgerEntryIndex]
+    ledgerObj.tokenCount = ledgerObj.tokenCount + parseInt(numberOfTokens, 10)
+    ledgerObj.totalPurchasePrice = ledgerObj.totalPurchasePrice + purchasePrice
+    this.tokenLedgerArray[ownerLedgerEntryIndex] = ledgerObj
+
   }
-  this.tokenLedger = tempLedgerObject
 
   // update token ledger escrow balance
   this.tokenLedgerEscrowBalance = this.tokenLedgerEscrowBalance + purchasePrice
 
-  // update token ledger token count
+  // update token ledger token count & prices
   this.tokenLedgerCount = this.tokenLedgerCount + numberOfTokens
+  this.tokenBuyPrice = pricingFunctions.nextTokenPrice(this.tokenLedgerCount),
+  this.tokenSellPrice = pricingFunctions.currentTokenPrice(this.tokenLedgerCount, this.tokenLedgerEscrowBalance)
 
   // record transaction
   this.tokenHistory.push({
@@ -51,23 +86,19 @@ UserSchema.methods.createAndAssignNewTokens = function(ownerAddress, numberOfTok
     },
     // contractStatus: this.toObject(),
     priceOfNextToken: pricingFunctions.nextTokenPrice(this.tokenLedgerCount),
-    salePriceOfCurrentToken: pricingFunctions.currentTokenPrice(this.tokenLedgerCount, this.tokenLedgerEscrowBalance)
+    tokenBuyPrice: pricingFunctions.currentTokenPrice(this.tokenLedgerCount, this.tokenLedgerEscrowBalance)
   })
 
 }
 
 UserSchema.methods.sellTokens = function(ownerAddress, numberOfTokens, purchasePrice) {
 
-  const tempLedgerObject = this.toObject().tokenLedger
-
-  // decrease token balance in ledger
-  tempLedgerObject[ownerAddress] = tempLedgerObject[ownerAddress] - numberOfTokens
-
-  // remove key from ledger if: not token owner & if balance is zero
-  if(ownerAddress !== this._id.toHexString() && tempLedgerObject[ownerAddress] === 0){
-    delete tempLedgerObject[ownerAddress]
-  }
-  this.tokenLedger = tempLedgerObject
+  // update ledger array
+  const ownerLedgerEntryIndex = this.tokenLedgerArray.findIndex(x => x.user.toHexString() == ownerAddress);
+  const ledgerObj = this.tokenLedgerArray[ownerLedgerEntryIndex]
+  ledgerObj.tokenCount = ledgerObj.tokenCount - parseInt(numberOfTokens, 10)
+  ledgerObj.totalPurchasePrice = ledgerObj.totalPurchasePrice - purchasePrice
+  this.tokenLedgerArray[ownerLedgerEntryIndex] = ledgerObj
 
   // update token ledger escrow balance
   this.tokenLedgerEscrowBalance = this.tokenLedgerEscrowBalance - purchasePrice
@@ -88,25 +119,18 @@ UserSchema.methods.sellTokens = function(ownerAddress, numberOfTokens, purchaseP
     },
     // contractStatus: this.toObject(),
     priceOfNextToken: pricingFunctions.nextTokenPrice(this.tokenLedgerCount),
-    salePriceOfCurrentToken: pricingFunctions.currentTokenPrice(this.tokenLedgerCount, this.tokenLedgerEscrowBalance)
+    tokenBuyPrice: pricingFunctions.currentTokenPrice(this.tokenLedgerCount, this.tokenLedgerEscrowBalance)
   })
 }
 
 
 UserSchema.methods.burnTokens = function(ownerAddress, numberOfTokens, purchasePrice) {
 
-  const tempLedgerObject = this.toObject().tokenLedger
-
-  // decrease token balance in ledger
-  tempLedgerObject[ownerAddress] = tempLedgerObject[ownerAddress] - numberOfTokens
-
-  // remove key from ledger if: not token owner & if balance is zero
-  if(ownerAddress !== this._id.toHexString() && tempLedgerObject[ownerAddress] === 0){
-    delete tempLedgerObject[ownerAddress]
-  }
-  this.tokenLedger = tempLedgerObject
-
-  // *no* update to token ledger escrow balance - escrow remians intact
+  // update ledger array
+  const ownerLedgerEntryIndex = this.tokenLedgerArray.findIndex(x => x.user.toHexString() == ownerAddress);
+  const ledgerObj = this.tokenLedgerArray[ownerLedgerEntryIndex]
+  ledgerObj.tokenCount = ledgerObj.tokenCount - parseInt(numberOfTokens, 10)
+  this.tokenLedgerArray[ownerLedgerEntryIndex] = ledgerObj
 
   // update token ledger token count
   this.tokenLedgerCount = this.tokenLedgerCount - numberOfTokens
@@ -123,34 +147,42 @@ UserSchema.methods.burnTokens = function(ownerAddress, numberOfTokens, purchaseP
     },
     // contractStatus: this.toObject(),
     priceOfNextToken: pricingFunctions.nextTokenPrice(this.tokenLedgerCount),
-    salePriceOfCurrentToken: pricingFunctions.currentTokenPrice(this.tokenLedgerCount, this.tokenLedgerEscrowBalance)
+    tokenBuyPrice: pricingFunctions.currentTokenPrice(this.tokenLedgerCount, this.tokenLedgerEscrowBalance)
   })
 }
 
 
-UserSchema.methods.saveToWallet = function(ownerAddress, numberOfTokens) {
+UserSchema.methods.saveToWallet = function(ownerAddress, numberOfTokens, purchasePrice) {
 
-  const tempLedgerObject = this.toObject().wallet
-  if(tempLedgerObject[ownerAddress]){
-    tempLedgerObject[ownerAddress] = tempLedgerObject[ownerAddress] + numberOfTokens
+  const ownerLedgerEntryIndex = this.walletArray.findIndex(x => x.user.toHexString() == ownerAddress);
+  if(ownerLedgerEntryIndex > -1){
+
+    // update
+    const ledgerObj = this.walletArray[ownerLedgerEntryIndex]
+    ledgerObj.tokenCount = ledgerObj.tokenCount + parseInt(numberOfTokens, 10)
+    ledgerObj.totalPurchasePrice = ledgerObj.totalPurchasePrice + purchasePrice
+    this.walletArray[ownerLedgerEntryIndex] = ledgerObj
+
   } else {
-    tempLedgerObject[ownerAddress] = numberOfTokens
+
+    // add
+    this.walletArray.push({
+      'user': ownerAddress,
+      'tokenCount': numberOfTokens,
+      'totalPurchasePrice': purchasePrice
+    })
   }
-  this.wallet = tempLedgerObject
+
 }
 
 UserSchema.methods.removeFromWallet = function(ownerAddress, numberOfTokens) {
 
-  const tempLedgerObject = this.toObject().wallet
+  // update ledger array
+  const ownerLedgerEntryIndex = this.walletArray.findIndex(x => x.user.toHexString() == ownerAddress);
+  const ledgerObj = this.walletArray[ownerLedgerEntryIndex]
+  ledgerObj.tokenCount = ledgerObj.tokenCount - numberOfTokens
+  this.walletArray[ownerLedgerEntryIndex] = ledgerObj
 
-  // decrease balance
-  tempLedgerObject[ownerAddress] = tempLedgerObject[ownerAddress] - numberOfTokens
-
-  // remove address if balance is zero
-  if(ownerAddress !== this._id.toHexString() && tempLedgerObject[ownerAddress] === 0){
-    delete tempLedgerObject[ownerAddress]
-  }
-  this.wallet = tempLedgerObject
 }
 
 module.exports = mongoose.model('User', UserSchema);

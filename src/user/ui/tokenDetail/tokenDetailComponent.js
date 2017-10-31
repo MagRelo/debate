@@ -1,9 +1,15 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router'
+import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 
 
-import TokenPriceChart from '../tokenPriceChart/tokenPriceChartContainer'
-import TokenFormContainer from '../tokenTransaction/FormContainer'
+import TokenPriceChart from './tokenPriceChart'
+
+// Forms
+import BuyForm from './buyForm'
+import SellForm from './sellForm'
+import BurnForm from './burnForm'
+
 
 class FormComponent extends Component {
   constructor(props, { authData }) {
@@ -15,6 +21,22 @@ class FormComponent extends Component {
     }
   }
 
+  buyTokens(tokenCount){
+    this.props.buyTokens(this.props.userId, this.props.contractData._id, tokenCount)
+    return this.props.closeModalFunction()
+  }
+
+  sellTokens(tokenCount){
+    this.props.sellTokens(this.props.userId, this.props.contractData._id, tokenCount)
+    return this.props.closeModalFunction()
+  }
+
+  burnTokens(tokenCount){
+    this.props.burnTokens(this.props.userId, this.props.contractData._id, tokenCount)
+    return this.props.closeModalFunction()
+  }
+
+
   render() {
     return(
       <main className="token-detail">
@@ -23,12 +45,23 @@ class FormComponent extends Component {
           <div className="pure-u-1-1">
 
             <div className="compose-title-container">
-              <span>{this.props.contractData.name}</span>
+              <span>Contract Detail</span>
             </div>
 
-            <div className="account-details">
 
-              <TokenPriceChart data={this.props.contractData.tokenHistory}/>
+              <div className="icon-holder">
+                <div
+                  className="icon"
+                  style={{'backgroundImage': 'url(\'' + this.props.contractData.avatarUrl + '\')'}}>
+                </div>
+              </div>
+
+              <div className="text-holder">
+                <div className="feed-title">{this.props.contractData.name}</div>
+             </div>
+
+
+            <div className="account-details">
 
               <p>Token Supply
                 <span className="currency-box">
@@ -40,28 +73,63 @@ class FormComponent extends Component {
                   ∯ {this.props.contractData.tokenLedgerEscrowBalance}
                 </span>
               </p>
-              <p>Current Buy Price
+              <p>Current Buy / Sell
                 <span className="currency-box">
-                  ∯ {this.props.contractData.priceOfNextToken}
+                  ∯ {this.props.contractData.tokenBuyPrice}
+                  &nbsp; / &nbsp;
+                  ∯ {this.props.contractData.tokenSellPrice}
                 </span>
               </p>
-              <p>Current Sale Price
-                <span className="currency-box">
-                  ∯ {this.props.contractData.salePriceOfCurrentToken}
-                </span>
-              </p>
+
             </div>
 
-            {this.state.showForm ?
-              <TokenFormContainer
-                targetId={this.props.contractData._id}
-                priceOfNextToken={this.props.contractData.priceOfNextToken}
-                ownedTokenCount={this.props.contractData.tokensOwned}
-                salePriceOfCurrentToken={this.props.contractData.salePriceOfCurrentToken}
-                closeModalFunction={this.props.closeModalFunction}
-                />
-              : null
-            }
+            <section style={{height: '320px'}}>
+              <Tabs>
+
+                <TabList>
+                  <Tab>History</Tab>
+                  <Tab>Buy</Tab>
+                  <Tab
+                    disabled={!this.props.tokensOwned || this.props.tokensOwned < 1}> Sell
+                  </Tab>
+                  <Tab
+                    disabled={!this.props.tokensTheyOwn || this.props.tokensTheyOwn < 1}>Burn
+                  </Tab>
+                </TabList>
+
+                <TabPanel>
+                  <TokenPriceChart data={this.props.contractData.tokenHistory}/>
+                </TabPanel>
+
+
+                <TabPanel>
+
+                  <BuyForm
+                    buyTokenFunction={this.buyTokens.bind(this)}
+                    tokenBuyPrice={this.props.contractData.tokenBuyPrice}
+                    availableBalance={this.props.availableBalance}
+                    />
+
+                </TabPanel>
+                <TabPanel>
+
+                  <SellForm
+                    sellTokenFunction={this.sellTokens.bind(this)}
+                    tokenSellPrice={this.props.contractData.tokenSellPrice}
+                    ownedTokenCount={this.props.tokensOwned}/>
+
+                </TabPanel>
+                <TabPanel>
+
+                  <BurnForm
+                    handleSubmit={this.burnTokens.bind(this)}
+                    ownedTokenCount={this.props.tokensOwned}
+                    />
+
+                </TabPanel>
+              </Tabs>
+
+            </section>
 
 
 

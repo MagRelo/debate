@@ -7,6 +7,8 @@ var bluebird = require('bluebird')
 
 // Models
 var UserModel = require('../models/user')
+const populateTargets = 'walletArray.user tokenLedgerArray.user'
+const populateFields= 'name avatarUrl tokenLedgerCount tokenLedgerEscrowBalance tokenBuyPrice tokenSellPrice tokenHistory'
 var FollowModel = require('../models/follow')
 
 const pricingFunctions = require('../config/pricing')
@@ -20,11 +22,6 @@ function markFollowers (users, followers, userId) {
 
   const markedUsers = users
     .map((user) => {
-
-      // calc prices for display and search
-      user.priceOfNextToken = pricingFunctions.nextTokenPrice(user.tokenLedgerCount)
-      user.salePriceOfCurrentToken = pricingFunctions.currentTokenPrice(user.tokenLedgerCount, user.tokenLedgerEscrowBalance)
-      user.tokensOwned = user.tokenLedger[userId] || 0
 
       // mark the users that the current user is following
       if (followerIds.indexOf(user._id.toHexString()) !== -1){
@@ -92,13 +89,9 @@ exports.getUser = (request, response) => {
   const userId = request.params.userId || 'default name'
 
   UserModel.findOne({_id: userId})
+    .populate(populateTargets, populateFields)
     .then(user => {
-
-      // calc prices for display and search
-      let userObject = user.toObject()
-      userObject.priceOfNextToken = pricingFunctions.nextTokenPrice(user.tokenLedgerCount)
-      userObject.salePriceOfCurrentToken = pricingFunctions.currentTokenPrice(user.tokenLedgerCount, user.tokenLedgerEscrowBalance)
-      return response.json(userObject)
+      return response.json(user)
     })
     .catch((error)=>{
       return response.json(error)
@@ -187,7 +180,7 @@ exports.purchaseTokens = (request, response) => {
   }).then((updatedTarget) => {
 
     // Step #3 - update user's wallet to reflect new coins
-    user.saveToWallet(target._id.toHexString(), tokensToPurchase)
+    user.saveToWallet(target._id.toHexString(), tokensToPurchase, tokenPurchasePrice)
     return user.save()
 
   }).then((updatedUser) => {
@@ -204,13 +197,10 @@ exports.purchaseTokens = (request, response) => {
     }
 
   }).then((updatedFollow) => {
-    return UserModel.findOne({ _id: userId })
+    return UserModel.findOne({ _id: userId }).populate(populateTargets, populateFields)
   }).then((updatedUser) => {
 
-    let userObject = updatedUser.toObject()
-    userObject.priceOfNextToken = pricingFunctions.nextTokenPrice(user.tokenLedgerCount)
-    userObject.salePriceOfCurrentToken = pricingFunctions.currentTokenPrice(user.tokenLedgerCount, user.tokenLedgerEscrowBalance)
-    return response.json(userObject)
+    return response.json(updatedUser)
 
   }).catch((error) => {
 
@@ -310,12 +300,9 @@ exports.sellTokens = (request, response) => {
     return {}
 
   }).then((response) => {
-    return UserModel.findOne({ _id: userId })
+    return UserModel.findOne({ _id: userId }).populate(populateTargets, populateFields)
   }).then((user) => {
-    let userObject = user.toObject()
-    userObject.priceOfNextToken = pricingFunctions.nextTokenPrice(user.tokenLedgerCount)
-    userObject.salePriceOfCurrentToken = pricingFunctions.currentTokenPrice(user.tokenLedgerCount, user.tokenLedgerEscrowBalance)
-    return response.json(userObject)
+    return response.json(user)
   }).catch((error) => {
 
     // client error

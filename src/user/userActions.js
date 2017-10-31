@@ -86,7 +86,7 @@ export function submitUser(name, avatarUrl) {
     })
     .then(userObject => {
       dispatch(userLoggedIn(userObject))
-      return browserHistory.push('/feed')
+      return browserHistory.push('/profile')
     })
     .catch(error => {
       return console.error('action error', error)
@@ -108,7 +108,7 @@ export function selectUser(userId) {
         dispatch(getMessagesByUser(userObject._id))
         dispatch(getUsers(userObject._id))
         dispatch(userLoggedIn(userObject))
-        return browserHistory.push('/feed')
+        return browserHistory.push('/profile')
       }
     ).catch(error => {
       console.error('action error', error)

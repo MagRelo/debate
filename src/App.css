@@ -45,10 +45,6 @@ h2, h3 {
   width: 100%
 }
 
-.account-details{
-  margin: 0 1em;
-}
-
 .currency-box{
   float: right;
   color: #12ca01;
@@ -200,15 +196,9 @@ h2, h3 {
 }
 
 .pure-form{
-  background-color: #177B9F;
+  /*background-color: #177B9F;*/
   padding: 0 1em 1em 1em;
 
-  /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#177b9f+0,175772+100 */
-  background: #177b9f; /* Old browsers */
-  background: -moz-linear-gradient(top, #177b9f 0%, #175772 100%); /* FF3.6-15 */
-  background: -webkit-linear-gradient(top, #177b9f 0%,#175772 100%); /* Chrome10-25,Safari5.1-6 */
-  background: linear-gradient(to bottom, #177b9f 0%,#175772 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#177b9f', endColorstr='#175772',GradientType=0 ); /* IE6-9 */
 }
 
 .pure-form input[type="text"]:focus {
@@ -316,7 +306,26 @@ a.pure-menu-link{
 }
 
 .token-detail{
-  background-color: #17789c;
+  min-width: 320px;
+  max-width: 640px;
+
+  /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#177b9f+0,175772+100 */
+  background: #177b9f; /* Old browsers */
+  background: -moz-linear-gradient(top, #177b9f 0%, #175772 100%); /* FF3.6-15 */
+  background: -webkit-linear-gradient(top, #177b9f 0%,#175772 100%); /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(to bottom, #177b9f 0%,#175772 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#177b9f', endColorstr='#175772',GradientType=0 ); /* IE6-9 */
+
+}
+
+
+.account-details{
+  margin: 0 1em 1em;
+}
+
+.account-details > p {
+  margin: 0.4em 0;
+  font-size: smaller;
 }
 
 .feedItem {
@@ -361,7 +370,7 @@ a.pure-menu-link{
 
 /* --- TABS --- */
 .react-tabs__tab-list {
-  border-bottom: 1px solid #aaa;
+  border-bottom: 2px solid #0f3b52;
   margin: 0 0 10px;
   padding: 0;
 }
@@ -380,15 +389,24 @@ a.pure-menu-link{
 
 .react-tabs__tab--selected {
 
-  /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#177B9F+0,175772+95,175772+100 */
-  background: #177B9F; /* Old browsers */
-  background: -moz-linear-gradient(top, #177B9F 0%, #175772 99%, #175772 100%); /* FF3.6-15 */
-  background: -webkit-linear-gradient(top, #177B9F 0%,#175772 99%,#175772 100%); /* Chrome10-25,Safari5.1-6 */
-  background: linear-gradient(to bottom, #177B9F 0%,#175772 99%,#175772 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#177B9F', endColorstr='#175772',GradientType=0 ); /* IE6-9 */
+  background-color: #0f3b52;
+  border-color: #0f3b52;
+  border-radius: 2px 2px 0 0;
+}
 
-  border-color: #aaa;
-  border-radius: 5px 5px 0 0;
+.react-tabs__tab:focus {
+  box-shadow: none;
+  border-color: none;
+  outline: none;
+}
+.react-tabs__tab:focus:after {
+  content: "";
+  position: absolute;
+  height: 5px;
+  left: -4px;
+  right: -4px;
+  bottom: -5px;
+  background: inherit;
 }
 
 .react-tabs__tab-panel {

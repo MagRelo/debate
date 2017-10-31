@@ -3,14 +3,10 @@ import React, { Component } from 'react'
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 
 import LogoutButtonContainer from '../../user/ui/logoutbutton/LogoutButtonContainer'
-import FollowToggleContainer from '../../user/ui/followbuttons/FollowToggleContainer'
-import TokenFormContainer from '../../user/ui/tokenTransaction/FormContainer'
-
-import TokenPriceChart from '../../user/ui/tokenPriceChart/tokenPriceChartContainer'
-
 import TokenDetail from '../../user/ui/tokenDetail/tokenDetailContainer'
 
 import WalletListContainer from '../../user/ui/walletList/walletListContainer'
+import ContractListContainer from '../../user/ui/contractList/contractListContainer'
 
 import FeedContainer from '../../messages/feed/FeedContainer'
 
@@ -19,6 +15,8 @@ class Profile extends Component {
     super(props)
     authData = this.props
   }
+
+  // <WalletListContainer contractList={this.props.userList} />
 
   render() {
     return(
@@ -39,61 +37,32 @@ class Profile extends Component {
                   <Tab>My Wallet</Tab>
                   <Tab>My Token</Tab>
                   <Tab>Profile</Tab>
+                  <Tab>Search</Tab>
                 </TabList>
 
                 <TabPanel>
 
-                  <TokenPriceChart data={this.props.authData.walletHistory}/>
-
                   <h2>Tokens in my wallet</h2>
-                  <WalletListContainer
-                    contractList={
-                        // filter out contracts that the current user doesn't own
-                        this.props.userList.filter((contractData)=>{
-                          return contractData.tokensOwned && contractData.tokensOwned > 0
-                        })
-                      }
-                  />
-
-                <h2>Other tokens</h2>
-                  <WalletListContainer
-                    contractList={
-                        // filter out contracts that the current user doesn't own
-                        this.props.userList.filter((contractData)=>{
-                          return !contractData.tokensOwned || contractData.tokensOwned == 0
-                        })
-                      }
-                  />
+                  <WalletListContainer contractList={this.props.authData.walletArray} />
 
                 </TabPanel>
                 <TabPanel>
-
-                  <TokenDetail contractData={this.props.authData}/>
-
-                  {
-                    // TODO: add 'buy' button
-                  }
 
                   <h2>Token Holders</h2>
-                  <WalletListContainer
-                    contractList={
-                        // filter out contracts that the current user doesn't own
-                        this.props.userList.filter((contractData)=>{
-                          return contractData[this.props.authData._id]
-                        })
-                      }
-                  />
+                  <WalletListContainer contractList={this.props.authData.tokenLedgerArray} />
 
                 </TabPanel>
                 <TabPanel>
 
-                  <p>{this.props.authData.name}</p>
-
+                  <h2>{this.props.authData.name}</h2>
 
                   <hr></hr>
 
                   <LogoutButtonContainer/>
 
+                </TabPanel>
+                <TabPanel>
+                  <ContractListContainer contractList={this.props.userList} />
                 </TabPanel>
               </Tabs>
 

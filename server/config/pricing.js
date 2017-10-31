@@ -15,11 +15,11 @@ function _purchasePrice(tokenSupply, numberOfTokensToPurchase){
   let tokens = Array(numberOfTokensToPurchase).fill('');
   let value = 0
   value = tokens.reduce((sum, token, index)=>{
-    console.log('token #' + (tokenSupply + index) + ': $' + _nextTokenPrice(tokenSupply + index))
+    // console.log('token #' + (tokenSupply + index) + ': $' + _nextTokenPrice(tokenSupply + index))
     return sum + _nextTokenPrice(tokenSupply + index)
   }, 0)
 
-  console.log('purchase price:', util.round(value, 4))
+  console.log('buy tokens - purchase price:', util.round(value, 4))
   return util.round(value, 4)
 }
 
