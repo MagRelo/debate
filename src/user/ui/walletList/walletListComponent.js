@@ -85,6 +85,15 @@ class FormComponent extends Component {
   //     'fill': this.calculatePriceTrend(contractData.tokenHistory, contractData.tokenSellPrice) > 50 ? 'green' : 'red'
   //   }}></img>
 
+  //
+  // <td>{
+  //     Math.round(
+  //       (
+  //         (contractData.tokenCount * contractData.user.tokenSellPrice) - contractData.totalPurchasePrice
+  //       ) * 10000/10000
+  //     )
+  //   }</td>
+  //
   render() {
     return(
       <main className="">
@@ -98,6 +107,11 @@ class FormComponent extends Component {
               style={customStyles}
               contentLabel=''>
 
+              <button
+                className="pure-button pure-button-primary"
+                style={{position: 'absolute', right: '0', fontSize: 'small'}}
+                onClick={()=> this.closeModal()}>x
+              </button>
 
               <TokenDetail
                 tokensOwned={this.state.tokensOwned}
@@ -112,7 +126,6 @@ class FormComponent extends Component {
                 <tr>
                   <td>Name</td>
                   <td>Tokens</td>
-                  <td>+/-</td>
                   <td>Trend</td>
                   <td>View</td>
                 </tr>
@@ -126,16 +139,7 @@ class FormComponent extends Component {
                         {contractData.user.name}
                       </td>
                       <td>{contractData.tokenCount}</td>
-                      <td>{
-                          Math.round(
-                            (
-                              (contractData.tokenCount * contractData.user.tokenSellPrice) - contractData.totalPurchasePrice
-                            ) * 10000/10000
-                          )
-                        }</td>
                       <td>
-
-
                         <div style={{
                           'transform': 'rotateZ(' + this.calculatePriceTrend(contractData.user.tokenHistory, contractData.user.tokenSellPrice) + 'deg)',
                           'color': this.calculatePriceTrend(contractData.user.tokenHistory, contractData.user.tokenSellPrice) < 90 ? '#12ca00' : 'gray',

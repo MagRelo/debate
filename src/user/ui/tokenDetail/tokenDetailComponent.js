@@ -4,6 +4,7 @@ import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 
 
 import TokenPriceChart from './tokenPriceChart'
+import WalletListContainer from '../walletList/walletListContainer'
 
 // Forms
 import BuyForm from './buyForm'
@@ -23,17 +24,17 @@ class FormComponent extends Component {
 
   buyTokens(tokenCount){
     this.props.buyTokens(this.props.userId, this.props.contractData._id, tokenCount)
-    return this.props.closeModalFunction()
+    if(this.props.closeModalFunction) return this.props.closeModalFunction()
   }
 
   sellTokens(tokenCount){
     this.props.sellTokens(this.props.userId, this.props.contractData._id, tokenCount)
-    return this.props.closeModalFunction()
+    if(this.props.closeModalFunction) return this.props.closeModalFunction()
   }
 
   burnTokens(tokenCount){
     this.props.burnTokens(this.props.userId, this.props.contractData._id, tokenCount)
-    return this.props.closeModalFunction()
+    if(this.props.closeModalFunction) return this.props.closeModalFunction()
   }
 
 
@@ -45,10 +46,6 @@ class FormComponent extends Component {
           <div className="pure-u-1-1">
 
             <div className="compose-title-container">
-              <span>Contract Detail</span>
-            </div>
-
-
               <div className="icon-holder">
                 <div
                   className="icon"
@@ -58,7 +55,8 @@ class FormComponent extends Component {
 
               <div className="text-holder">
                 <div className="feed-title">{this.props.contractData.name}</div>
-             </div>
+              </div>
+            </div>
 
 
             <div className="account-details">
@@ -93,7 +91,7 @@ class FormComponent extends Component {
                     disabled={!this.props.tokensOwned || this.props.tokensOwned < 1}> Sell
                   </Tab>
                   <Tab
-                    disabled={!this.props.tokensTheyOwn || this.props.tokensTheyOwn < 1}>Burn
+                    disabled={!this.props.tokenHolderList}>Collect
                   </Tab>
                 </TabList>
 
@@ -121,10 +119,10 @@ class FormComponent extends Component {
                 </TabPanel>
                 <TabPanel>
 
-                  <BurnForm
-                    handleSubmit={this.burnTokens.bind(this)}
-                    ownedTokenCount={this.props.tokensOwned}
-                    />
+
+                  <h2>Followers</h2>
+                  <WalletListContainer contractList={this.props.contractData.tokenLedgerArray} />
+
 
                 </TabPanel>
               </Tabs>

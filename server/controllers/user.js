@@ -14,39 +14,28 @@ var FollowModel = require('../models/follow')
 const pricingFunctions = require('../config/pricing')
 const utils = require('../config/utils')
 
-function markFollowers (users, followers, userId) {
-
-  const followerIds = followers.map(function(item) {
-		return item.target.toHexString();
-	});
-
-  const markedUsers = users
-    .map((user) => {
-
-      // mark the users that the current user is following
-      if (followerIds.indexOf(user._id.toHexString()) !== -1){
-        user.followed = true;
-      }
-
-      return user
-    })
-
-  return markedUsers
-};
-
 function getMarkedUserList (userId){
   let userList = []
-
   return UserModel.find({}).lean()
     .then((userListArray)=>{
       userList = userListArray
       return FollowModel.find({user: userId}).lean()
-    }).then((FollowArray)=>{
-      return markFollowers(userList, FollowArray, userId)
+    })
+    .then((FollowArray)=>{
+
+      const followerIds = FollowArray.map(function(item) {
+    		return item.target.toHexString();
+    	});
+
+      const markedUsers = userList.map((user) => {
+          // mark the users that the current user is following
+          user.followed = (followerIds.indexOf(user._id.toHexString()) !== -1)
+          return user
+        })
+
+      return markedUsers
     })
 }
-
-
 
 exports.listUsers = (request, response) => {
 
@@ -107,7 +96,7 @@ exports.purchaseTokens = (request, response) => {
 
   // data from request
   const targetId = request.body.target || ''
-  const tokensToPurchase = request.body.tokensToPurchase || null
+  const tokensToPurchase = parseInt(request.body.tokensToPurchase, 10) || null
 
   // validate inputs
   if(!userId || !targetId || !utils.isNumeric(tokensToPurchase)){
@@ -199,9 +188,7 @@ exports.purchaseTokens = (request, response) => {
   }).then((updatedFollow) => {
     return UserModel.findOne({ _id: userId }).populate(populateTargets, populateFields)
   }).then((updatedUser) => {
-
     return response.json(updatedUser)
-
   }).catch((error) => {
 
     // client error
@@ -225,7 +212,7 @@ exports.sellTokens = (request, response) => {
 
   // data from request
   const targetId = request.body.target || ''
-  const tokensToSell = request.body.tokensToSell || null
+  const tokensToSell = parseInt(request.body.tokensToSell, 10) || null
 
   // validate inputs
   if(!userId || !targetId || !utils.isNumeric(tokensToSell)){
@@ -285,13 +272,13 @@ exports.sellTokens = (request, response) => {
 
   }).then((updatedTarget) => {
 
-    // Step #4 - transfer token sell value to user
+    // Step #3 - transfer token sell value to user
     user.balance = utils.round(user.balance + targetTokenSellValue, 4)
     return user.save()
 
   }).then((responseArray) => {
 
-    // Step #5 - if user's token balance was decreased to zero then remove follow
+    // Step #4 - if user's token balance was decreased to zero then remove follow
     if(!target.ownedTokenCount(user._id.toHexString())){
       return FollowModel.remove({user: user._id})
     }

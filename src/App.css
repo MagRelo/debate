@@ -116,7 +116,7 @@ h2, h3 {
   min-width: 320px;
 }
 .compose-title-container{
-  padding: 1em;
+  padding-bottom: 0.3em;
   background-color: #103A52;
 }
 .compose-title-container .title{
@@ -320,7 +320,7 @@ a.pure-menu-link{
 
 
 .account-details{
-  margin: 0 1em 1em;
+  padding: 1em;
 }
 
 .account-details > p {

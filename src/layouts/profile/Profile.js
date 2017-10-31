@@ -16,8 +16,6 @@ class Profile extends Component {
     authData = this.props
   }
 
-  // <WalletListContainer contractList={this.props.userList} />
-
   render() {
     return(
       <main className="container">
@@ -35,7 +33,6 @@ class Profile extends Component {
 
                 <TabList>
                   <Tab>My Wallet</Tab>
-                  <Tab>My Token</Tab>
                   <Tab>Profile</Tab>
                   <Tab>Search</Tab>
                 </TabList>
@@ -48,13 +45,10 @@ class Profile extends Component {
                 </TabPanel>
                 <TabPanel>
 
-                  <h2>Token Holders</h2>
-                  <WalletListContainer contractList={this.props.authData.tokenLedgerArray} />
-
-                </TabPanel>
-                <TabPanel>
-
-                  <h2>{this.props.authData.name}</h2>
+                  <TokenDetail
+                    tokensOwned={20}
+                    contractData={this.props.authData}
+                    tokenHolderList={this.props.authData.tokenLedgerArray}/>
 
                   <hr></hr>
 
