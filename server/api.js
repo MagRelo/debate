@@ -22,8 +22,11 @@ module.exports = function(app) {
 
   // *CONTRACTS*
   app.post('/api/contract/create', contractController.createContract);
-  app.post('/api/contract/buy', contractController.buyTokens);
-  app.post('/api/contract/sell', contractController.sellTokens);
+
+  app.put('/api/contract/buy', contractController.buyTokens);
+  app.put('/api/contract/sell', contractController.sellTokens);
+  app.put('/api/contract/burn', contractController.burnTokens);
+  app.put('/api/contract/drain', contractController.drainEscrow);
 
 
   // * MESSAGES*

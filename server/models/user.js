@@ -46,12 +46,13 @@ UserSchema.methods.saveToWallet = function(contractAddress, numberOfTokens, purc
 
 }
 
-UserSchema.methods.removeFromWallet = function(contractAddress, numberOfTokens) {
+UserSchema.methods.removeFromWallet = function(contractAddress, numberOfTokens, salePrice) {
 
   // update ledger array
   const ownerLedgerEntryIndex = this.walletArray.findIndex(item => item.contract.toHexString() == contractAddress);
   const ledgerObj = this.walletArray[ownerLedgerEntryIndex]
   ledgerObj.tokenCount = ledgerObj.tokenCount - numberOfTokens
+  ledgerObj.totalPurchasePrice = ledgerObj.totalPurchasePrice - salePrice
   this.walletArray[ownerLedgerEntryIndex] = ledgerObj
 
 }
