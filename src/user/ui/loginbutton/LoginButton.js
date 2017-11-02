@@ -2,11 +2,8 @@ import React from 'react'
 
 import TwitterLogin from 'react-twitter-auth'
 
-// Images
-import uPortLogo from '../../../img/uport-logo.svg'
 
 const LoginButton = ({ loginSuccess }) => {
-
 
   function onSuccess(response) {
     response.json().then(body => {
