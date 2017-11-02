@@ -26,34 +26,22 @@ function userLoggedOut(user) {
   }
 }
 
-export function loginUser(name) {
+export function loginUser(user) {
   return function(dispatch) {
 
-    fetch('/api/login', {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name: name
-        })
-    })
-    .then(rawResponse => {
-      if(rawResponse.status !== 200){ throw new Error(rawResponse.text)}
-      return rawResponse.json()
-    })
-    .then(userObject => {
-      dispatch(getTimelineByUser(userObject.id))
-      dispatch(getMessagesByUser(userObject.id))
-      return dispatch(userLoggedIn(userObject))
-    })
-    .catch(error => {
-      return console.error('action error', error)
-    })
+    dispatch(getTimelineByUser(user._id))
+    dispatch(getMessagesByUser(user._id))
+    dispatch(getUsers(user._id))
+    dispatch(userLoggedIn(user))
 
     // Location stuff(?)
     var currentLocation = browserHistory.getCurrentLocation()
     if ('redirect' in currentLocation.query){
       return browserHistory.push(decodeURIComponent(currentLocation.query.redirect))
     }
+
+    // send to profile
+    return browserHistory.push('/profile')
 
   }
 }

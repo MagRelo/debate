@@ -9,6 +9,7 @@ var methodOverride = require('method-override');
 var helmet = require('helmet');
 var cookieParser = require('cookie-parser');
 var morgan = require('morgan');
+var cors = require('cors');
 
 
 // Connect to database
@@ -32,11 +33,19 @@ var stream = require('getstream-node');
 var StreamMongoose = stream.mongoose;
 StreamMongoose.setupMongoose(mongoose);
 
-
 // seed database
 if(process.env.SEED_DB_CLEAN === 'true'){
   require('./config/db_seed/seed_clean')
 }
+
+// enable cors
+var corsOption = {
+  origin: true,
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  credentials: true,
+  exposedHeaders: ['x-auth-token']
+};
+app.use(cors(corsOption));
 
 // routing config
 app.use(compression());

@@ -19,6 +19,9 @@ class Home extends Component {
 
             <h1>Servésa</h1>
 
+            <LoginButtonContainer/>
+            <hr></hr>
+
             <SelectUserContainer/>
 
           </div>
