@@ -457,3 +457,12 @@ nav.navbar.pure-menu.pure-menu-horizontal{
 .title-button{
   margin-left: 1em;
 }
+
+.contractList{
+  list-style: none;
+  padding: 0;
+}
+
+.contractList li {
+  border: solid 1px;
+}

@@ -32,32 +32,27 @@ class Profile extends Component {
               <Tabs>
 
                 <TabList>
-                  <Tab>My Wallet</Tab>
-                  <Tab>Profile</Tab>
+                  <Tab>Contracts</Tab>
+                  <Tab>Wallet</Tab>
                   <Tab>Search</Tab>
                 </TabList>
 
+
                 <TabPanel>
-
-                  <h2>Tokens in my wallet</h2>
-                  <WalletListContainer contractList={this.props.authData.walletArray} />
-
+                  <ContractListContainer contractList={this.props.authData.contracts} />
                 </TabPanel>
-                <TabPanel>
 
-                  <TokenDetail
-                    tokensOwned={20}
-                    contractData={this.props.authData}
-                    tokenHolderList={this.props.authData.tokenLedgerArray}/>
-
-                  <hr></hr>
-
-                  <LogoutButtonContainer/>
-
-                </TabPanel>
                 <TabPanel>
                   <ContractListContainer contractList={this.props.userList} />
                 </TabPanel>
+
+                <TabPanel>
+                  <h2>Tokens in my wallet</h2>
+                  <WalletListContainer contractList={this.props.authData.walletArray} />
+                  <hr></hr>
+                  <LogoutButtonContainer/>
+                </TabPanel>
+
               </Tabs>
 
           </div>

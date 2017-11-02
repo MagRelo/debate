@@ -19,8 +19,6 @@ const customStyles = {
   }
 };
 
-
-
 class FormComponent extends Component {
   constructor(props, { authData }) {
     super(props)
@@ -83,6 +81,15 @@ class FormComponent extends Component {
   //     'transform': 'rotateZ(' + this.calculatePriceTrend(contractData.tokenHistory, contractData.tokenSellPrice) + 'deg)',
   //     'fill': this.calculatePriceTrend(contractData.tokenHistory, contractData.tokenSellPrice) > 50 ? 'green' : 'red'
   //   }}></img>
+  // <td>
+  //
+  //
+  //   <div style={{
+  //     'transform': 'rotateZ(' + this.calculatePriceTrend(contractData.tokenHistory, contractData.tokenSellPrice) + 'deg)',
+  //     'color': this.calculatePriceTrend(contractData.tokenHistory, contractData.tokenSellPrice) < 90 ? '#12ca00' : 'gray',
+  //     'fontSize': '24px'
+  //   }}>&#8679;</div>
+  // </td>
 
   render() {
     return(
@@ -103,44 +110,25 @@ class FormComponent extends Component {
 
             </Modal>
 
-            <table className="pure-table pure-table-horizontal table-100">
-              <thead>
-                <tr>
-                  <td>Name</td>
-                  <td>Tokens</td>
-                  <td>Trend</td>
-                  <td>View</td>
-                </tr>
-              </thead>
-              <tbody>
+            <ul className="contractList">
+              {this.props.contractList
+                .map((contractData) =>
 
-                {this.props.contractList
-                  .map((contractData) =>
-                    <tr key={contractData._id}>
-                      <td>
-                        {contractData.name}
-                      </td>
-                      <td>{contractData.tokensCount}</td>
-                      <td>
+                  <li key={contractData._id}>
+                    <button
+                      onClick={()=>{this.openModal(contractData)}}
+                      className="">
+                      <div>
+                        <p>{contractData.name}</p>
+                        <p>{contractData.tokenLedgerCount}</p>
+                        <p>{contractData.contractEscrowBalance}</p>
+                      </div>
+                    </button>
+                  </li>
 
-
-                        <div style={{
-                          'transform': 'rotateZ(' + this.calculatePriceTrend(contractData.tokenHistory, contractData.tokenSellPrice) + 'deg)',
-                          'color': this.calculatePriceTrend(contractData.tokenHistory, contractData.tokenSellPrice) < 90 ? '#12ca00' : 'gray',
-                          'fontSize': '24px'
-                        }}>&#8679;</div>
-                      </td>
-                      <td style={{'textAlign': 'center'}}>
-                        <button
-                          onClick={()=>{this.openModal(contractData)}}
-                          className="pure-button pure-button-primary"> > </button>
-                      </td>
-                    </tr>
-                  )
-                }
-
-              </tbody>
-            </table>
+                )
+              }
+            </ul>
 
           </div>
         </div>
