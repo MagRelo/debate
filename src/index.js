@@ -11,9 +11,12 @@ import App from './App'
 // Routes
 import Home from './layouts/home/Home'
 import Feed from './layouts/network/NetworkContainer'
+
 import Profile from './layouts/profile/ProfileContainer'
+
 import ContractDetail from './layouts/contract/ContractContainer'
 import ContractList from './layouts/contractList/ContractListContainer'
+
 import Page404 from  './layouts/errors/404'
 
 // Redux Store
