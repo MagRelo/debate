@@ -1,6 +1,8 @@
 var UserModel = require('../models/user')
 var MessageModel = require('../models/message')
 
+const encrypt = require('../config/encrypt')
+
 var stream_node = require('getstream-node');
 var FeedManager = stream_node.FeedManager;
 var StreamMongoose = stream_node.mongoose;
@@ -18,16 +20,24 @@ exports.getMessagesByUser = (request, response) => {
        return StreamBackend.enrichActivities(activities)
     })
     .then(function (enrichedActivities) {
+
+      const decrypted = enrichedActivities.map(activity => {
+        if(activity.object){
+          activity.object.text = encrypt.decrypt(activity.object.text)
+        }
+        return activity
+      })
+
       return response.json({
         location: 'feed',
         user: userId,
-        activities: enrichedActivities
+        activities: decrypted
       });
 
     })
     .catch((error)=>{
-      console.log('rejected')
-     return response.json(error)
+      console.log(error.message)
+      return response.json(error)
     })
 
 }
@@ -90,7 +100,7 @@ exports.saveMessage = (request, response) => {
 
   return MessageModel.create({
       user: userId,
-      text: message,
+      text: encrypt.encrypt(message),
       created_at: new Date()
   })
   .then((mongoSaveResponse)=>{

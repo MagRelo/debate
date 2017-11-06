@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router'
 
-import TokenDetail from '../tokenDetail/tokenDetailContainer'
+import TokenDetail from '../../../contracts/list/contractListContainer'
 
 import Modal from 'react-modal';
 const customStyles = {

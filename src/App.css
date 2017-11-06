@@ -97,6 +97,13 @@ h2, h3 {
   font-size: 1.5em;
   line-height: 75px;
 }
+.feed-title small{
+  text-transform: uppercase;
+  float: right;
+  color: #949494;
+  font-size: small;
+}
+
 .time-block{
   text-align: right;
   float: right;
@@ -196,7 +203,7 @@ h2, h3 {
 }
 
 .pure-form{
-  /*background-color: #177B9F;*/
+  background-color: #177B9F;
   padding: 0 1em 1em 1em;
 
 }
@@ -206,7 +213,7 @@ h2, h3 {
 }
 
 .pure-form input{
-  width: 100%;
+  /*width: 100%;*/
   margin-bottom: 1em;
   border-color: #175872;
   background-color: #175872;
@@ -463,6 +470,35 @@ nav.navbar.pure-menu.pure-menu-horizontal{
   padding: 0;
 }
 
+.contract-list-item-container{
+  padding: 0.5em 1em 1em;
+  background: #eceeef;
+  color: #222222;
+}
+
 .contractList li {
-  border: solid 1px;
+  margin-bottom: 1em;
+}
+.contractList li a{
+  text-decoration: none;
+  color: white;
+}
+.contractList .text-holder{
+  padding: 0 1em;
+}
+
+.contractOptions {
+  display: flex;
+
+  text-align: center;
+  text-transform: uppercase;
+  font-size: smaller;
+
+  padding: 0.5em 1em;
+}
+.contractOptions div {
+  flex-grow: 1;
+}
+.contractOptions div {
+  margin-top: .3em;
 }

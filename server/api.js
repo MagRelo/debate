@@ -91,9 +91,15 @@ module.exports = function(app) {
 
   // USERS
   app.post('/api/user/list', userController.listUsers);
-  app.get('/api/user/:userId', userController.getUser);
+  app.post('/api/user/create', userController.saveUser);
+  app.get('/api/user/:userId', [
+    // authenticate,
+    userController.getUser
+  ]);
 
   // CONTRACTS
+  app.get('/api/contract/list', contractController.listContracts);
+  app.get('/api/contract/:contractId', contractController.getContract);
   app.post('/api/contract/create', contractController.createContract);
   app.put('/api/contract/buy', contractController.buyTokens);
   app.put('/api/contract/sell', contractController.sellTokens);

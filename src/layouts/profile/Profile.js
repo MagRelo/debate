@@ -1,12 +1,14 @@
 import React, { Component } from 'react'
-
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 
 import LogoutButtonContainer from '../../user/ui/logoutbutton/LogoutButtonContainer'
-import TokenDetail from '../../user/ui/tokenDetail/tokenDetailContainer'
 
 import WalletListContainer from '../../user/ui/walletList/walletListContainer'
-import ContractListContainer from '../../user/ui/contractList/contractListContainer'
+
+
+import CreateContractButton from '../../contracts/create/CreateContractContainer'
+import ContractList from '../../contracts/list/contractListContainer'
+
 
 import FeedContainer from '../../messages/feed/FeedContainer'
 
@@ -37,13 +39,13 @@ class Profile extends Component {
                   <Tab>Search</Tab>
                 </TabList>
 
-
                 <TabPanel>
-                  <ContractListContainer contractList={this.props.authData.contracts} />
+                  <CreateContractButton/>
+                  <ContractList contractList={this.props.authData.contracts} />
                 </TabPanel>
 
                 <TabPanel>
-                  <ContractListContainer contractList={this.props.userList} />
+                  <ContractList contractList={this.props.userList} />
                 </TabPanel>
 
                 <TabPanel>

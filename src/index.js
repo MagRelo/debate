@@ -8,12 +8,12 @@ import { UserIsAuthenticated } from './util/wrappers.js'
 // Layouts
 import App from './App'
 
+// Routes
 import Home from './layouts/home/Home'
 import Feed from './layouts/network/NetworkContainer'
-import User from './layouts/user/UserContainer'
 import Profile from './layouts/profile/ProfileContainer'
-import Transactions from './layouts/transactions/TransactionList'
-
+import ContractDetail from './layouts/contract/ContractContainer'
+import ContractList from './layouts/contractList/ContractListContainer'
 import Page404 from  './layouts/errors/404'
 
 // Redux Store
@@ -25,12 +25,13 @@ ReactDOM.render((
     <Provider store={store}>
       <Router history={history}>
         <Route path="/" component={App}>
-          <IndexRoute component={Home} />
+          <IndexRoute component={ContractList} />
+
+          <Route path="contract/:contractId" component={ContractDetail} />
+          <Route path="contracts" component={ContractList} />
 
           <Route path="feed" component={UserIsAuthenticated(Feed)} />
-          <Route path="messages" component={UserIsAuthenticated(User)} />
           <Route path="profile" component={UserIsAuthenticated(Profile)} />
-          <Route path="transactions" component={Transactions} />
 
           <Route path='*' exact={true} component={Page404} />
         </Route>

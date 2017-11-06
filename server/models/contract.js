@@ -1,7 +1,8 @@
 'use strict';
 
-// var pricingFunctions = require('../config/pricing')
 var utils = require('../config/utils')
+
+const crypto = require('crypto');
 
 var mongoose = require('mongoose'),
     Schema = mongoose.Schema;
@@ -9,11 +10,16 @@ var mongoose = require('mongoose'),
 var ContractSchema = new Schema({
   owner: { type: Schema.Types.ObjectId, required: true, ref: 'User' },
   contractOptions: {
+    name: {type: String, required: true},
+    avatarUrl: {type: String, default: 'https://cdn0.iconfinder.com/data/icons/iconico-3/1024/48.png'},
     tokenBasePrice: {type: Number, required: true},
     exponent: {type: Number, required: true},
     exponentDivisor: {type: Number, required: true},
+    ownerCanBurn: {type: Boolean, required: true},
     ownerCanDrain: {type: Boolean, required: true}
   },
+  words: {type: Array, unique: true},
+  key: {type: Buffer, required: true, default: crypto.randomBytes(32)},
   contractEscrowBalance: {type: Number, default: 0},
   tokenLedger: [
     {
@@ -144,7 +150,6 @@ ContractSchema.methods.sell = function(userAddress, numberOfTokens) {
   })
 }
 
-
 ContractSchema.methods.burn = function(userAddress, numberOfTokens) {
 
   const ownerLedgerEntryIndex = this.tokenLedger.findIndex(x => x.user.toHexString() == userAddress);
@@ -233,6 +238,15 @@ ContractSchema.methods.getTokenCountByUser = function(userAddress) {
   return 0
 }
 
+ContractSchema.methods.getKey = function(userAddress) {
+  const ownerLedgerEntryIndex = this.tokenLedger.findIndex(item => item.user.toHexString() == userAddress);
+  if(ownerLedgerEntryIndex > -1){
+    return this.key
+  }
+  return null
+}
+
+
 ContractSchema.methods.getPurchaseTotal = function(numberOfTokens) {
   return _purchaseTotal.call(this, numberOfTokens)
 }
@@ -256,7 +270,13 @@ function _saleTotal(numberOfTokens){
 }
 
 function _nextBuyPrice(tokenSupply){
-  return utils.round(this.contractOptions.tokenBasePrice + (Math.pow(tokenSupply + 1, this.contractOptions.exponent) / this.contractOptions.exponentDivisor), 4)
+  if(this.contractOptions.exponent > 0){
+    return utils.round(
+      this.contractOptions.tokenBasePrice +
+      (Math.pow(tokenSupply + 1, this.contractOptions.exponent) / this.contractOptions.exponentDivisor), 4)
+  } else {
+    return this.contractOptions.tokenBasePrice
+  }
 }
 
 function _purchaseTotal(numberOfTokens){

@@ -10,15 +10,8 @@ var UserSchema = new Schema({
   name: String,
   username: String,
   avatarUrl: String,
-  email: {
-    type: String, required: true,
-    trim: true, unique: true,
-    match: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
-  },
-  twitterProvider: {
-    type: { id: String, token: String },
-    select: false
-  },
+  email: { type: String, trim: true, match: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/ },
+  twitterProvider: { type: { id: String, token: String }, select: false },
   balance: {type: Number, default: 0},
   walletArray: [
     {

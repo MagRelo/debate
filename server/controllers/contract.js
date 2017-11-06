@@ -15,42 +15,117 @@ const ContractModel = require('../models/contract')
 
 const pricingFunctions = require('../config/pricing')
 const utils = require('../config/utils')
+const randomWords = require('random-words');
+
+// List
+exports.listContracts = (request, response) => {
+
+  // get: user, target, and any existing follows
+  ContractModel.find({}).sort({contractEscrowBalance: -1})
+    .then((contractArray) => {
+    return response.json(contractArray)
+  }).catch((error) => {
+
+    // client error
+    if(error.clientError){
+      console.error(error.message)
+      return response.status(error.status).json(error);
+    }
+
+    // server error
+    console.error(error.message)
+    return response.status(500).json({error: error.message});
+
+  })
+
+}
+
+exports.getContract = (request, response) => {
+
+  const contractId = request.params.contractId
+
+  // get: user, target, and any existing follows
+  ContractModel.findOne({_id: contractId})
+    .then((contract) => {
+    return response.json(contract)
+  }).catch((error) => {
+
+    // client error
+    if(error.clientError){
+      console.error(error.message)
+      return response.status(error.status).json(error);
+    }
+
+    // server error
+    console.error(error.message)
+    return response.status(500).json({error: error.message});
+
+  })
+
+}
 
 exports.createContract = (request, response) => {
 
-  const userId = '56a3e4661f46c422ef8bac61'
+  // get from req.user
+  const userId = '59fb427172ffe62800d6d400'
+
+  const contractOptions = request.body.contractOptions
+
+
+  // validate params
+  if(!contractOptions || !userId){
+    return response.status(400).json({
+      clientError: true,
+      status: 400,
+      message: 'bad request data',
+      data: {
+        contractOptions: contractOptions
+      }
+    })
+  }
 
   newContract = new ContractModel({
     owner: userId,
-    contractOptions: {
-      tokenBasePrice: 10,
-      exponent: 2,
-      exponentDivisor: 10000,
-      ownerCanDrain: true
-    },
+    contractOptions: contractOptions,
+    words: randomWords(3),
     timestamp: new Date()
   })
 
   newContract.save()
+    .then(contract => {
+      return UserModel.findByIdAndUpdate(
+        {_id: userId},
+        {$push:{contracts: contract._id}},
+        {new: true}
+      )
+    })
     .then(result => response.json(result))
+    .catch((error) => {
+
+      // client error
+      if(error.clientError){
+        console.error(error.message)
+        return response.status(error.status).json(error);
+      }
+
+      // server error
+      console.error(error.message)
+      return response.status(500).json({error: error.message});
+
+    })
 
 }
 
 exports.buyTokens = (request, response) => {
 
-  const userId = '56a3e4661f46c422ef8bad42'
-  const targetId = '59f8b84b86a4e6853976ef60'
-  const tokensToPurchase = 10
-  const payment = 100.0285
 
   // TODO: data from auth
-  // const userId =  request.body.user || ''
+  // const userId =  request.user || ''
+  const userId = '56a3e4661f46c422ef8bad42'
 
-  // data from request
-  // const targetId = request.body.target || ''
-
-  // const tokensToPurchase = parseInt(request.body.tokensToPurchase, 10) || null
-
+  const targetId = request.body.targetId
+  const tokensToPurchase = request.body.tokensToPurchase
+  const payment = request.body.payment
 
   // validate inputs
   if(!userId || !targetId || !utils.isNumeric(tokensToPurchase)){
@@ -140,9 +215,9 @@ exports.buyTokens = (request, response) => {
     }
 
   }).then((updatedFollow) => {
-    return UserModel.findOne({ _id: userId }).populate(populateTargets, populateFields)
-  }).then((updatedUser) => {
-    return response.json(updatedUser)
+    return ContractModel.findOne({ _id: targetId })
+  }).then((contract) => {
+    return response.json(contract)
   }).catch((error) => {
 
     // client error
@@ -161,16 +236,12 @@ exports.buyTokens = (request, response) => {
 
 exports.sellTokens = (request, response) => {
 
-  const userId = '56a3e4661f46c422ef8bad42'
-  const targetId = '59f8b84b86a4e6853976ef60'
-  const tokensToSell = 10
-
   // // TODO: data from auth
   // const userId =  request.body.user || ''
-  //
-  // // data from request
-  // const targetId = request.body.target || ''
-  // const tokensToSell = parseInt(request.body.tokensToSell, 10) || null
+  const userId = '56a3e4661f46c422ef8bad42'
+
+  const targetId = request.body.targetId
+  const tokensToSell = request.body.tokensToSell
 
   // validate inputs
   if(!userId || !targetId || !utils.isNumeric(tokensToSell)){
@@ -266,18 +337,13 @@ exports.sellTokens = (request, response) => {
 
 exports.burnTokens = (request, response) => {
 
-  const userId = '56a3e4661f46c422ef8bad42'
-
-  const targetContractId = '59f8b84b86a4e6853976ef60'
-  const targetUserId = '56a3e4661f46c422ef8bad42'
-  const tokensToBurn = 5
-
   // // TODO: data from auth
   // const userId =  request.body.user || ''
-  //
-  // // data from request
-  // const targetId = request.body.target || ''
-  // const tokensToSell = parseInt(request.body.tokensToSell, 10) || null
+  const userId = '56a3e4661f46c422ef8bad42'
+  const targetUserId = '56a3e4661f46c422ef8bad42'
+
+  const targetContractId = request.body.targetId
+  const tokensToBurn = request.body.tokensToBurn
 
   // validate inputs
   if(!userId || !targetContractId || !utils.isNumeric(tokensToBurn)){
@@ -364,16 +430,13 @@ exports.burnTokens = (request, response) => {
 // Drain Escrow
 exports.drainEscrow = (request, response) => {
 
-  const userId = '56a3e4661f46c422ef8bad42'
-  const targetId = '59f8b84b86a4e6853976ef60'
-  const drainAmount = 50
 
   // // TODO: data from auth
   // const userId =  request.body.user || ''
-  //
-  // // data from request
-  // const targetId = request.body.target || ''
-  // const drainAmount = parseInt(request.body.drainAmount, 10) || null
+  const userId = '56a3e4661f46c422ef8bad42'
+
+  const targetId = request.body.targetId || ''
+  const drainAmount = parseInt(request.body.drainAmount, 10) || null
 
   // validate inputs
   if(!userId || !targetId || !utils.isNumeric(drainAmount)){

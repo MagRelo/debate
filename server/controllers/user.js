@@ -7,8 +7,8 @@ var bluebird = require('bluebird')
 
 // Models
 const UserModel = require('../models/user')
-const populateTargets = 'walletArray.user tokenLedger.user'
-const populateFields= 'name avatarUrl tokenLedgerCount tokenLedgerEscrowBalance tokenBuyPrice tokenSellPrice tokenHistory'
+const populateTargets = 'walletArray.contract contracts'
+const populateFields= 'contractOptions tokenHistory'
 const FollowModel = require('../models/follow')
 
 const pricingFunctions = require('../config/pricing')

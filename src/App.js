@@ -53,6 +53,9 @@ class App extends Component {
           <ul className="pure-menu-list navbar-right">
             <OnlyGuestLinks />
             <OnlyAuthLinks />
+            <li className="pure-menu-item">
+              <Link to="/contracts" activeStyle={{ color: '#FF5934' }} className="pure-menu-link">Contracts</Link>
+            </li>
           </ul>
         </nav>
 
