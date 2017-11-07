@@ -6,54 +6,56 @@ class FormComponent extends Component {
     super(props)
     authData = this.props
     this.state = {
-      tokenCount: 0
+      spendAmount: 0
     }
   }
 
-  handleChange(event) {
-    this.setState({
-      tokenCount: event.target.value
-    })
-  }
-
-
   handleSubmit(event){
     event.preventDefault()
-    return this.props.burnTokenFunction(this.state.tokenCount)
+    return this.props.spendEscrowFunction(this.state.spendAmount)
   }
 
+
+  handleChange(event) {
+    this.setState({
+      spendAmount: event.target.value
+    })
+  }
 
   render() {
     return(
       <form className="pure-form pure-form-stacked" onSubmit={this.handleSubmit.bind(this)}>
 
         <fieldset>
-          <p>Tokens Owned:
+          <p>Contract Escrow Balance:
             <span className="currency-box">
-              {this.props.ownedTokenCount}
+              ∯ {this.props.contractEscrowBalance}
             </span>
           </p>
-          <p>Quantity to burn:
+          <p>Amount to spend:
             <span className="currency-box">
-              {this.state.tokenCount}
+              {this.state.spendAmount}
             </span>
           </p>
-        </fieldset>
-
-        <fieldset>
           <input
             id="id"
-            type="range"
-            value={this.state.tokenCount}
+            type="number"
+            value={this.state.spendAmount}
             min="0"
-            max={this.props.tokenLedgerCount}
+            max={this.props.contractEscrowBalance}
             onChange={this.handleChange.bind(this)}
           ></input>
         </fieldset>
 
+        <p className="purchase-total">Total Spend Amount:
+          <span className="currency-box">
+            ∯ {this.state.spendAmount}
+          </span>
+        </p>
+
         <button
           className="pure-button pure-button-primary"
-          type="submit"> Burn
+          type="submit"> Spend
         </button>
 
 

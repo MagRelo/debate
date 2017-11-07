@@ -9,6 +9,7 @@ import TokenPriceChart from './tokenPriceChart'
 import BuyForm from './buyForm'
 import SellForm from './sellForm'
 import BurnForm from './burnForm'
+import SpendForm from './spendForm'
 
 
 class FormComponent extends Component {
@@ -32,6 +33,11 @@ class FormComponent extends Component {
 
   burnTokens(tokenCount){
     this.props.burnTokens(this.props.contractData._id, tokenCount)
+    if(this.props.closeModalFunction) return this.props.closeModalFunction()
+  }
+
+  spendEscrow(tokenCount){
+    this.props.spendEscrow(this.props.contractData._id, tokenCount)
     if(this.props.closeModalFunction) return this.props.closeModalFunction()
   }
 
@@ -103,9 +109,12 @@ class FormComponent extends Component {
                 <TabList>
                   <Tab>History</Tab>
                   <Tab>Pledge</Tab>
-                  <Tab disabled={!this.props.tokensOwned || this.props.tokensOwned < 1}> Withdraw </Tab>
-                  <Tab disabled={!this.props.tokenHolderList}> Collect </Tab>
-                  <Tab disabled={!this.props.tokenHolderList}> Spend </Tab>
+                  <Tab disabled={false}> Withdraw </Tab>
+                  <Tab style={this.props.contractData.contractOptions.ownerCanBurn ? {}: {textDecoration: 'line-through'}}
+                    disabled={true}> Collect {false ? '&#x1f512;': ''}</Tab>
+                  <Tab style={this.props.contractData.contractOptions.ownerCanDrain ? {}: {textDecoration: 'line-through'}}
+                    disabled={true}> Spend {false ? '&#x1f512;': ''}
+                  </Tab>
                 </TabList>
 
                 <TabPanel>
@@ -131,8 +140,16 @@ class FormComponent extends Component {
                 </TabPanel>
                 <TabPanel>
 
+                  <BurnForm
+                    tokenLedgerCount={this.props.contractData.tokenLedgerCount}
+                    burnTokenFunction={this.burnTokens.bind(this)}/>
+
                 </TabPanel>
                 <TabPanel>
+
+                  <SpendForm
+                    contractEscrowBalance={this.props.contractData.contractEscrowBalance}
+                    spendEscrowFunction={this.spendEscrow.bind(this)}/>
 
                 </TabPanel>
               </Tabs>

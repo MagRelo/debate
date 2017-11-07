@@ -50,21 +50,11 @@ h2, h3 {
   color: #12ca01;
 }
 
-.red-text{
-  color: red;
-}
-
-.follow-name{
-  font-family: 'Oswald', 'Arial Narrow', sans-serif;
-  margin-left: 1em;
-}
-
-
 /*LEGIT*/
 .icon-holder{
   width: 55px;
   float: left;
-  margin: 0.74em;
+  margin-right: 1em;
 }
 .icon-holder .icon{
   width: 55px;
@@ -95,13 +85,13 @@ h2, h3 {
 
 .feed-title{
   font-size: 1.5em;
-  line-height: 75px;
+  height: 75px;
 }
 .feed-title small{
   text-transform: uppercase;
-  float: right;
   color: #949494;
   font-size: small;
+  display: block;
 }
 
 .time-block{
@@ -471,7 +461,7 @@ nav.navbar.pure-menu.pure-menu-horizontal{
 }
 
 .contract-list-item-container{
-  padding: 0.5em 1em 1em;
+  padding: 1em;
   background: #eceeef;
   color: #222222;
 }
@@ -494,10 +484,9 @@ nav.navbar.pure-menu.pure-menu-horizontal{
   text-transform: uppercase;
   font-size: smaller;
 
-  padding: 0.5em 1em;
 }
 .contractOptions div {
-  flex-grow: 1;
+  flex: 1 1 auto;
 }
 .contractOptions div {
   margin-top: .3em;

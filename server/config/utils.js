@@ -1,5 +1,10 @@
 
 exports.round = (value, places) => {
+
+  if(!places) {
+    places = 4
+  }
+
   return +(Math.round(value + "e+" + places)  + "e-" + places);
 }
 

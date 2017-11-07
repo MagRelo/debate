@@ -64,13 +64,13 @@ ContractSchema.methods.buy = function(userAddress, numberOfTokens, payment) {
     // update
     const ledgerObj = this.tokenLedger[ownerLedgerEntryIndex]
     ledgerObj.tokenCount = ledgerObj.tokenCount + parseInt(numberOfTokens, 10)
-    ledgerObj.totalPurchasePrice = ledgerObj.totalPurchasePrice + payment
+    ledgerObj.totalPurchasePrice = utils.round(ledgerObj.totalPurchasePrice + payment)
     this.tokenLedger[ownerLedgerEntryIndex] = ledgerObj
 
   }
 
   // update token ledger escrow balance
-  this.contractEscrowBalance = this.contractEscrowBalance + payment
+  this.contractEscrowBalance = utils.round(this.contractEscrowBalance + payment)
 
   // update token count and prices
   this.tokenLedgerCount = this.tokenLedgerCount + numberOfTokens
@@ -125,7 +125,7 @@ ContractSchema.methods.sell = function(userAddress, numberOfTokens) {
   if((this.tokenLedgerCount - numberOfTokens) === 0 ){
     this.contractEscrowBalance = 0
   } else {
-    this.contractEscrowBalance = this.contractEscrowBalance - utils.round(_sellPrice.call(this) * numberOfTokens, 4)
+    this.contractEscrowBalance = utils.round(this.contractEscrowBalance - _sellPrice.call(this) * numberOfTokens, 4)
   }
 
 
@@ -211,7 +211,7 @@ ContractSchema.methods.drain = function(amount) {
   }
 
   // update token ledger escrow balance
-  this.contractEscrowBalance = this.contractEscrowBalance - amount
+  this.contractEscrowBalance = utils.round(this.contractEscrowBalance - amount)
 
   // Calc new prices
   this.tokenBuyPrice = _nextBuyPrice.call(this, this.tokenLedgerCount)
@@ -272,8 +272,9 @@ function _saleTotal(numberOfTokens){
 function _nextBuyPrice(tokenSupply){
   if(this.contractOptions.exponent > 0){
     return utils.round(
-      this.contractOptions.tokenBasePrice +
-      (Math.pow(tokenSupply + 1, this.contractOptions.exponent) / this.contractOptions.exponentDivisor), 4)
+        this.contractOptions.tokenBasePrice +
+        (Math.pow(tokenSupply + 1, this.contractOptions.exponent) / this.contractOptions.exponentDivisor)
+      , 4)
   } else {
     return this.contractOptions.tokenBasePrice
   }
@@ -285,7 +286,7 @@ function _purchaseTotal(numberOfTokens){
   for(let i = 0; i < numberOfTokens; i++){
 
     // y = 10 + (x^2 / 10,000)
-    total = total + _nextBuyPrice.call(this, this.tokenLedgerCount + i)
+    total = utils.round(total + _nextBuyPrice.call(this, this.tokenLedgerCount + i))
   }
 
   return total

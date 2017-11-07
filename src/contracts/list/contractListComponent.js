@@ -20,15 +20,11 @@ const customStyles = {
 };
 
 const insertIntoArray = (arr, value) => {
-
     return arr.reduce((result, element, index, array) => {
-
         result.push(element);
-
         if (index < array.length - 1) {
             result.push(value);
         }
-
         return result;
     }, []);
 };
@@ -104,11 +100,29 @@ class FormComponent extends Component {
                         </div>
 
                         <div className="feed-title">{contractData.contractOptions.name}
-                          <small>{insertIntoArray(contractData.words, ' • ')}</small>                        
+                          <small>{insertIntoArray(contractData.words, ' • ')}</small>
                         </div>
 
-                        <p>Token Count: {contractData.tokenLedgerCount}</p>
-                        <p>Escrow: {contractData.contractEscrowBalance}</p>
+
+                        <div className="contractOptions">
+                          <div>
+                            <div>Pledged</div>
+                            <div>{contractData.contractEscrowBalance}</div>
+                          </div>
+                          <div>
+                            <div>Tokens</div>
+                            <div>{contractData.tokenLedgerCount}</div>
+                          </div>
+                          <div>
+                            <div>Collect</div>
+                            <div>{contractData.contractOptions.ownerCanBurn ? '✔' : '✘'}</div>
+                          </div>
+                          <div>
+                            <div>Spend</div>
+                            <div>{contractData.contractOptions.ownerCanDrain ? '✔' : '✘'}</div>
+                          </div>
+                        </div>
+
 
                       </div>
 
