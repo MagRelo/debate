@@ -143,9 +143,6 @@ export function sellTokens(targetId, tokensToSell) {
     // "loading"
     dispatch(requestSent())
 
-    const targetId = '59f8b84b86a4e6853976ef60'
-    const tokensToSell = 10
-
     return fetch('/api/contract/sell',
       {
         method: "PUT",
@@ -178,9 +175,6 @@ export function burnTokens(targetContractId, tokensToBurn ) {
     // "loading"
     dispatch(requestSent())
 
-    const targetContractId = '59f8b84b86a4e6853976ef60'
-    const tokensToBurn = 5
-
     return fetch('/api/contract/burn',
       {
         method: "PUT",
@@ -212,9 +206,6 @@ export function drainEscrow(targetId, drainAmount) {
 
     // "loading"
     dispatch(requestSent())
-
-    const targetId = '59f8b84b86a4e6853976ef60'
-    const drainAmount = 50
 
     return fetch('/api/contract/drain',
       {

@@ -56,6 +56,7 @@ class FormComponent extends Component {
         </p>
 
         <button
+          disabled={this.state.tokenCount > 0}
           className="pure-button pure-button-primary"
           type="submit"> Sell
         </button>

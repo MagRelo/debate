@@ -271,9 +271,6 @@ exports.sellTokens = (request, response) => {
     user = reponseArray[0]
     target = reponseArray[1]
 
-    // get target info
-    targetTokenSellValue = pricingFunctions.salePrice(target.tokenLedgerCount, target.contractEscrowBalance, tokensToSell)
-
     // validate inputs
     if(!user || !target || target.getTokenCountByUser(userId) < tokensToSell){
       throw {
@@ -288,6 +285,9 @@ exports.sellTokens = (request, response) => {
         }
       }
     }
+
+    // get target info
+    targetTokenSellValue = pricingFunctions.salePrice(target.tokenLedgerCount, target.contractEscrowBalance, tokensToSell)
 
     // Step #1 - remove tokens from user wallet
     user.removeFromWallet(target._id.toHexString(), tokensToSell, target.getSaleTotal(tokensToSell))
@@ -316,9 +316,9 @@ exports.sellTokens = (request, response) => {
     return {}
 
   }).then((response) => {
-    return UserModel.findOne({ _id: userId }).populate(populateTargets, populateFields)
-  }).then((user) => {
-    return response.json(user)
+    return ContractModel.findOne({ _id: targetId })
+  }).then((contract) => {
+    return response.json(contract)
   }).catch((error) => {
 
     // client error
@@ -408,9 +408,9 @@ exports.burnTokens = (request, response) => {
     return
 
   }).then((response) => {
-    return UserModel.findOne({ _id: userId }).populate(populateTargets, populateFields)
-  }).then((user) => {
-    return response.json(user)
+    return ContractModel.findOne({ _id: targetId })
+  }).then((contract) => {
+    return response.json(contract)
   }).catch((error) => {
 
     // client error
@@ -488,9 +488,9 @@ exports.drainEscrow = (request, response) => {
     return user.save()
 
   }).then((responseArray) => {
-    return UserModel.findOne({ _id: userId }).populate(populateTargets, populateFields)
-  }).then((user) => {
-    return response.json(user)
+    return ContractModel.findOne({ _id: targetId })
+  }).then((contract) => {
+    return response.json(contract)
   }).catch((error) => {
 
     // client error

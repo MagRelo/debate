@@ -54,6 +54,7 @@ class FormComponent extends Component {
         </p>
 
         <button
+          disabled={this.state.spendAmount > 0}
           className="pure-button pure-button-primary"
           type="submit"> Spend
         </button>
