@@ -121,7 +121,7 @@ class ComposeMessage extends Component {
 
             <div className="compose-container">
 
-              <div className="compose-title-container">
+              <div className="modal-title-container">
                 <span className="title">Create Contract</span>
               </div>
 
@@ -138,23 +138,24 @@ class ComposeMessage extends Component {
                   <form className="pure-form" onSubmit={this.handleSubmit.bind(this)}>
 
                     <fieldset>
-                      <p>aksjdhfakjdshf asdkjf asdkjfhsdkfjhasdlfkjh askdjhf lsdjfhaslkjf.</p>
+                      <p>A simple escrow contract: what you put in you can take out.</p>
                       <button className="pure-button pure-button-primary" name="se" onClick={this.handleSubmit.bind(this)}>Simple escrow</button>
                     </fieldset>
                     <fieldset>
-                      <p>aksjdhfakjdshf asdkjf asdkjfhsdkfjhasdlfkjh askdjhf lsdjfhaslkjf.</p>
+                      <p>Curation markets introduce an accelerating pricing curve to incentivize early adoptors.</p>
                       <button className="pure-button pure-button-primary" name="cm" onClick={this.handleSubmit.bind(this)}>Curation Market</button>
                     </fieldset>
                     <fieldset>
-                      <p>aksjdhfakjdshf asdkjf asdkjfhsdkfjhasdlfkjh askdjhf lsdjfhaslkjf.</p>
+                      <p>Hive Commons markets are a curation market that allow the contract owner to withdraw funds from escrow.
+                        This can be used to fund a charitable cause or provide on-going support for a project.</p>
                       <button className="pure-button pure-button-primary" name="hm" onClick={this.handleSubmit.bind(this)}>Hive Market</button>
                     </fieldset>
                     <fieldset>
-                      <p>aksjdhfakjdshf asdkjf asdkjfhsdkfjhasdlfkjh askdjhf lsdjfhaslkjf.</p>
+                      <p>Trust is risk allows the contract owner to delete your tokens. This can be used to prove that you trust the owner.</p>
                       <button className="pure-button pure-button-primary" name="tr" onClick={this.handleSubmit.bind(this)}>Trust is Risk</button>
                     </fieldset>
                     <fieldset>
-                      <p>aksjdhfakjdshf asdkjf asdkjfhsdkfjhasdlfkjh askdjhf lsdjfhaslkjf.</p>
+                      <p>Curated trust combines a curation market with Trust is Risk: the earlier you trust someone the less it costs.</p>
                       <button className="pure-button pure-button-primary" name="cr" onClick={this.handleSubmit.bind(this)}>Curated Risk</button>
                     </fieldset>
 

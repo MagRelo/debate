@@ -11,6 +11,15 @@ import SellForm from './sellForm'
 import BurnForm from './burnForm'
 import SpendForm from './spendForm'
 
+const insertIntoArray = (arr, value) => {
+    return arr.reduce((result, element, index, array) => {
+        result.push(element);
+        if (index < array.length - 1) {
+            result.push(value);
+        }
+        return result;
+    }, []);
+};
 
 class FormComponent extends Component {
   constructor(props, { authData }) {
@@ -36,130 +45,100 @@ class FormComponent extends Component {
     if(this.props.closeModalFunction) return this.props.closeModalFunction()
   }
 
-  spendEscrow(tokenCount){
-    this.props.spendEscrow(this.props.contractData._id, tokenCount)
+  spendEscrow(spendAmount){
+    this.props.spendEscrow(this.props.contractData._id, spendAmount)
     if(this.props.closeModalFunction) return this.props.closeModalFunction()
   }
 
-
   render() {
     return(
-      <main className="token-detail">
+      <main className="contract-item-container">
 
-        <div className="pure-g">
-          <div className="pure-u-1-1">
-
-            <div className="compose-title-container">
-              <div className="icon-holder">
-                <div
-                  className="icon"
-                  style={{'backgroundImage': 'url(\'' + this.props.contractData.contractOptions.avatarUrl + '\')'}}>
-                </div>
-              </div>
-
-              <div className="text-holder">
-                <div className="feed-title">{this.props.contractData.contractOptions.name}</div>
-              </div>
+        <div className="">
+          <div className="icon-holder">
+            <div
+              className="icon"
+              style={{'backgroundImage': 'url(\'' + this.props.contractData.contractOptions.avatarUrl + '\')'}}>
             </div>
+          </div>
 
-            <div className="contractOptions">
-              <div>
-                <div>{this.props.contractData.contractOptions.exponent}</div>
-                <div>buy</div>
-              </div>
-              <div>
-                <div>{this.props.contractData.contractOptions.exponent}</div>
-                <div>sell</div>
-              </div>
-              <div>
-                <div>{this.props.contractData.contractOptions.ownerCanBurn ? '✔' : '✘'}</div>
-                <div>burn</div>
-              </div>
-              <div>
-                <div>{this.props.contractData.contractOptions.ownerCanDrain ? '✔' : '✘'}</div>
-                <div>drain</div>
-              </div>
-            </div>
-
-            <div className="account-details">
-
-              <p>Token Supply
-                <span className="currency-box">
-                  {this.props.contractData.tokenLedgerCount}
-                </span>
-              </p>
-              <p>Escrow Balance
-                <span className="currency-box">
-                  ∯ {this.props.contractData.contractEscrowBalance}
-                </span>
-              </p>
-              <p>Current Buy / Sell
-                <span className="currency-box">
-                  ∯ {this.props.contractData.tokenBuyPrice}
-                  &nbsp; / &nbsp;
-                  ∯ {this.props.contractData.tokenSellPrice}
-                </span>
-              </p>
-
-            </div>
-
-            <section style={{height: '320px'}}>
-              <Tabs>
-
-                <TabList>
-                  <Tab>History</Tab>
-                  <Tab>Pledge</Tab>
-                  <Tab disabled={false}> Withdraw </Tab>
-                  <Tab style={this.props.contractData.contractOptions.ownerCanBurn ? {}: {textDecoration: 'line-through'}}
-                    disabled={true}> Collect {false ? '&#x1f512;': ''}</Tab>
-                  <Tab style={this.props.contractData.contractOptions.ownerCanDrain ? {}: {textDecoration: 'line-through'}}
-                    disabled={true}> Spend {false ? '&#x1f512;': ''}
-                  </Tab>
-                </TabList>
-
-                <TabPanel>
-                  <TokenPriceChart data={this.props.contractData.tokenHistory}/>
-                </TabPanel>
-
-
-                <TabPanel>
-
-                  <BuyForm
-                    buyTokenFunction={this.buyTokens.bind(this)}
-                    tokenBuyPrice={this.props.contractData.tokenBuyPrice}
-                    availableBalance={this.props.availableBalance}/>
-
-                </TabPanel>
-                <TabPanel>
-
-                  <SellForm
-                    sellTokenFunction={this.sellTokens.bind(this)}
-                    tokenSellPrice={this.props.contractData.tokenSellPrice}
-                    ownedTokenCount={this.props.tokensOwned}/>
-
-                </TabPanel>
-                <TabPanel>
-
-                  <BurnForm
-                    tokenLedgerCount={this.props.contractData.tokenLedgerCount}
-                    burnTokenFunction={this.burnTokens.bind(this)}/>
-
-                </TabPanel>
-                <TabPanel>
-
-                  <SpendForm
-                    contractEscrowBalance={this.props.contractData.contractEscrowBalance}
-                    spendEscrowFunction={this.spendEscrow.bind(this)}/>
-
-                </TabPanel>
-              </Tabs>
-
-            </section>
-
-
-
+          <div className="feed-title">{this.props.contractData.contractOptions.name}
+            <small>{insertIntoArray(this.props.contractData.words || [], ' • ')}</small>
           </div>
         </div>
+
+        <div className="contractOptions">
+          <div>
+            <div>Pledged</div>
+            <div>{this.props.contractData.contractEscrowBalance}</div>
+          </div>
+          <div>
+            <div>Tokens</div>
+            <div>{this.props.contractData.tokenLedgerCount}</div>
+          </div>
+          <div>
+            <div>Collect</div>
+            <div style={{color: this.props.contractData.contractOptions.ownerCanBurn ? '#129c17' : '#d61717'}}>
+              {this.props.contractData.contractOptions.ownerCanBurn ? '✔' : '✘'}
+            </div>
+          </div>
+          <div>
+            <div>Spend</div>
+            <div style={{color: this.props.contractData.contractOptions.ownerCanDrain ? '#129c17' : '#d61717'}}>
+              {this.props.contractData.contractOptions.ownerCanDrain ? '✔' : '✘'}
+            </div>
+          </div>
+        </div>
+
+        <TokenPriceChart data={this.props.contractData.tokenHistory}/>
+
+        <section style={{height: '320px'}}>
+          <Tabs>
+
+            <TabList>
+              <Tab>Pledge</Tab>
+              <Tab disabled={false}> Withdraw </Tab>
+              <Tab style={this.props.contractData.contractOptions.ownerCanBurn ? {}: {textDecoration: 'line-through'}}
+                disabled={true}> Collect {false ? '&#x1f512;': ''}</Tab>
+              <Tab style={this.props.contractData.contractOptions.ownerCanDrain ? {}: {textDecoration: 'line-through'}}
+                disabled={true}> Spend {false ? '&#x1f512;': ''}
+              </Tab>
+            </TabList>
+
+            <TabPanel>
+
+              <BuyForm
+                buyTokenFunction={this.buyTokens.bind(this)}
+                tokenBuyPrice={this.props.contractData.tokenBuyPrice}
+                availableBalance={this.props.availableBalance}/>
+
+            </TabPanel>
+            <TabPanel>
+
+              <SellForm
+                sellTokenFunction={this.sellTokens.bind(this)}
+                tokenSellPrice={this.props.contractData.tokenSellPrice}
+                ownedTokenCount={this.props.tokensOwned}/>
+
+            </TabPanel>
+            <TabPanel>
+
+              <BurnForm
+                tokenLedgerCount={this.props.contractData.tokenLedgerCount}
+                burnTokenFunction={this.burnTokens.bind(this)}/>
+
+            </TabPanel>
+            <TabPanel>
+
+              <SpendForm
+                contractEscrowBalance={this.props.contractData.contractEscrowBalance}
+                spendEscrowFunction={this.spendEscrow.bind(this)}/>
+
+            </TabPanel>
+          </Tabs>
+
+        </section>
+
       </main>
     )
   }

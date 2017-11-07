@@ -30,7 +30,7 @@ const tokenPriceChart = ({data}) => {
             <Tooltip />
 
             <Area type="monotone" dataKey="buyPrice" stroke="#12ca01" fillOpacity={1} fill="url(#colorBuy)" />
-            <Area type="monotone" dataKey="sellPrice" stroke="#fcd036" fillOpacity={1} fill="url(#colorSell)" />
+            <Area type="monotone" dataKey="sellPrice" stroke="#fcd036" fillOpacity={0} fill="url(#colorSell)" />
 
           </AreaChart>
         </ResponsiveContainer>

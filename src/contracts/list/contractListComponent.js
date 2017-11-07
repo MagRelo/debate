@@ -90,7 +90,8 @@ class FormComponent extends Component {
                   <li key={contractData._id}>
                     <Link to={"/contract/" + contractData._id}>
 
-                      <div className="contract-list-item-container">
+
+                      <div className="contract-item-container">
 
                         <div className="icon-holder">
                           <div
@@ -99,10 +100,9 @@ class FormComponent extends Component {
                           </div>
                         </div>
 
-                        <div className="feed-title">{contractData.contractOptions.name}
+                        <div className="feed-title"> {contractData.contractOptions.name}
                           <small>{insertIntoArray(contractData.words, ' • ')}</small>
                         </div>
-
 
                         <div className="contractOptions">
                           <div>
@@ -122,7 +122,6 @@ class FormComponent extends Component {
                             <div>{contractData.contractOptions.ownerCanDrain ? '✔' : '✘'}</div>
                           </div>
                         </div>
-
 
                       </div>
 

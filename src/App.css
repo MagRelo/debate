@@ -85,7 +85,7 @@ h2, h3 {
 
 .feed-title{
   font-size: 1.5em;
-  height: 75px;
+  height: 65px;
 }
 .feed-title small{
   text-transform: uppercase;
@@ -107,6 +107,11 @@ h2, h3 {
 }
 /*LEGIT*/
 
+
+.modal-title-container{
+  padding: 1em;
+  background-color: #103A52;
+}
 
 /*COMPOSE*/
 .compose-container {
@@ -193,7 +198,6 @@ h2, h3 {
 }
 
 .pure-form{
-  background-color: #177B9F;
   padding: 0 1em 1em 1em;
 
 }
@@ -386,8 +390,8 @@ a.pure-menu-link{
 
 .react-tabs__tab--selected {
 
-  background-color: #0f3b52;
-  border-color: #0f3b52;
+  background-color: #bdbdbd;
+  border-color: #959696;
   border-radius: 2px 2px 0 0;
 }
 
@@ -460,7 +464,7 @@ nav.navbar.pure-menu.pure-menu-horizontal{
   padding: 0;
 }
 
-.contract-list-item-container{
+.contract-item-container{
   padding: 1em;
   background: #eceeef;
   color: #222222;

@@ -15,10 +15,10 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(sellTokens(targetId, tokens))
     },
     burnTokens: (targetId, tokens) => {
-      console.warn("burn TBD!")
+      dispatch(burnTokens(targetId, tokens))
     },
-    drainEscrow: (targetId, tokens) => {
-      console.warn("drain TBD!")
+    drainEscrow: (targetId, spendAmount) => {
+      dispatch(spendEscrow(targetId, spendAmount))
     }
 
   }

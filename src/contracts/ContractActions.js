@@ -74,7 +74,6 @@ export function getContract(contractId) {
   }
 }
 
-
 export function createContract(contractOptions) {
   return function(dispatch) {
 

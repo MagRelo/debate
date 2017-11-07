@@ -55,7 +55,7 @@ User.find({}).remove()
         name: 'Matt Lovan',
         email: '2@a.com',
         avatarUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/94/Haltern_am_See%2C_Seebucht_Hohe_Niemen_--_2014_--_1152.jpg/320px-Haltern_am_See%2C_Seebucht_Hohe_Niemen_--_2014_--_1152.jpg',
-        balance: 1000,
+        balance: 10000000,
         tokenLedgerEscrowBalance: 0,
         tokenLedgerCount: 0,
         tokenLedger: {},
