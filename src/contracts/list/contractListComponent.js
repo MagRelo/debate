@@ -48,11 +48,8 @@ class FormComponent extends Component {
 
 
   componentDidMount(){
-    console.log('list mounted')
     this.props.loadList()
   }
-
-
 
   // Modal functions
   openModal(data) {
@@ -63,8 +60,6 @@ class FormComponent extends Component {
   }
   afterOpenModal() { }
   closeModal() { this.setState({modalIsOpen: false}); }
-
-
 
   render() {
     return(
@@ -104,10 +99,12 @@ class FormComponent extends Component {
                           <small>{insertIntoArray(contractData.words, ' • ')}</small>
                         </div>
 
+
                         <div className="contractOptions">
                           <div>
                             <div>Pledged</div>
-                            <div>{contractData.contractEscrowBalance}</div>
+                            <div style={{color: '#129c17'}}>
+                              ∯ {contractData.contractEscrowBalance}</div>
                           </div>
                           <div>
                             <div>Tokens</div>
@@ -115,13 +112,18 @@ class FormComponent extends Component {
                           </div>
                           <div>
                             <div>Collect</div>
-                            <div>{contractData.contractOptions.ownerCanBurn ? '✔' : '✘'}</div>
+                            <div style={{color: contractData.contractOptions.ownerCanBurn ? '#129c17' : '#d61717'}}>
+                              {contractData.contractOptions.ownerCanBurn ? '✔' : '✘'}
+                            </div>
                           </div>
                           <div>
                             <div>Spend</div>
-                            <div>{contractData.contractOptions.ownerCanDrain ? '✔' : '✘'}</div>
+                            <div style={{color: contractData.contractOptions.ownerCanDrain ? '#129c17' : '#d61717'}}>
+                              {contractData.contractOptions.ownerCanDrain ? '✔' : '✘'}
+                            </div>
                           </div>
                         </div>
+
 
                       </div>
 

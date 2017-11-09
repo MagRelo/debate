@@ -1,17 +1,17 @@
 
 // set 'messages.loading' to true
+export const REQUEST_SENT = 'REQUEST_SENT'
+function requestSent() {
+  return {
+    type: REQUEST_SENT
+  }
+}
+
 export const CONTRACT_UPDATE = 'CONTRACT_UPDATE'
 function contractUpdated(contract) {
   return {
     type: CONTRACT_UPDATE,
     payload: contract
-  }
-}
-
-export const REQUEST_SENT = 'REQUEST_SENT'
-function requestSent() {
-  return {
-    type: REQUEST_SENT
   }
 }
 

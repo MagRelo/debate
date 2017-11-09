@@ -47,7 +47,7 @@ h2, h3 {
 
 .currency-box{
   float: right;
-  color: #12ca01;
+  color: #129c17;
 }
 
 /*LEGIT*/
@@ -112,6 +112,9 @@ h2, h3 {
   padding: 1em;
   background-color: #103A52;
 }
+.modal-body-container{
+  background-color: #17799c;
+}
 
 /*COMPOSE*/
 .compose-container {
@@ -128,6 +131,7 @@ h2, h3 {
 .compose-editor-container > input{
   color: #222222;
 }
+
 
 
 .editor-input{
@@ -492,6 +496,6 @@ nav.navbar.pure-menu.pure-menu-horizontal{
 .contractOptions div {
   flex: 1 1 auto;
 }
-.contractOptions div {
+.contractOptions div div{
   margin-top: .3em;
 }

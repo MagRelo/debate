@@ -6,17 +6,17 @@ const initialState = {
 
 const contractReducer = (state = initialState, action) => {
 
+  if (action.type === 'REQUEST_SENT')
+  {
+    return Object.assign({}, state, {
+      loading: true
+    })
+  }
   if (action.type === 'LIST_UPDATE')
   {
     return Object.assign({}, state, {
       loading: false,
       list: action.payload
-    })
-  }
-  if (action.type === 'REQUEST_SENT')
-  {
-    return Object.assign({}, state, {
-      loading: true
     })
   }
   if (action.type === 'CONTRACT_UPDATE')

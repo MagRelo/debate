@@ -70,7 +70,8 @@ class FormComponent extends Component {
         <div className="contractOptions">
           <div>
             <div>Pledged</div>
-            <div>{this.props.contractData.contractEscrowBalance}</div>
+            <div style={{color: '#129c17'}}>
+              ∯ {this.props.contractData.contractEscrowBalance}</div>
           </div>
           <div>
             <div>Tokens</div>

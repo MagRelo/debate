@@ -125,7 +125,7 @@ class ComposeMessage extends Component {
                 <span className="title">Create Contract</span>
               </div>
 
-              <div className="compose-editor-container">
+              <div className="modal-body-container">
 
                 {this.props.loading ?
 
