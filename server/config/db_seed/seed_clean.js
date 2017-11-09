@@ -2,11 +2,13 @@
  * Populate DB with sample data on server start
  * to disable, edit config/environment/index.js, and set `seedDB: false`
  */
+'use strict';
 
 const moment = require('moment')
-
-'use strict';
 const mongoose = require('mongoose');
+const fetch = require('request')
+
+const config = require('../environment')
 
 // Models
 const User = require('../../models/user') ;
@@ -14,7 +16,12 @@ const Follow = require('../../models/follow') ;
 const Message = require('../../models/message') ;
 const Contract = require('../../models/contract') ;
 
-const pricingFunctions = require('../pricing')
+fetch.delete({
+  url: 'http://' + config.elasticSearch_HOST + ':' + config.elasticSearch_PORT + '/contracts/'
+}, function (err, r, body) {
+  console.log('elastic emptied:', r.statusCode)
+});
+
 
 Message.find({}).remove()
   .then(() => {

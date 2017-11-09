@@ -3,24 +3,26 @@
 var utils = require('../config/utils')
 
 const crypto = require('crypto');
+const mongoosastic = require('mongoosastic')
+const config = require('../config/environment/');
 
 var mongoose = require('mongoose'),
     Schema = mongoose.Schema;
 
 var ContractSchema = new Schema({
-  owner: { type: Schema.Types.ObjectId, required: true, ref: 'User' },
+  owner: { type: Schema.Types.ObjectId, required: true, ref: 'User', es_indexed:true },
   contractOptions: {
-    name: {type: String, required: true},
-    avatarUrl: {type: String, default: 'https://cdn0.iconfinder.com/data/icons/iconico-3/1024/48.png'},
+    name: {type: String, required: true, es_indexed:true},
+    avatarUrl: {type: String, default: 'https://cdn0.iconfinder.com/data/icons/iconico-3/1024/48.png', es_indexed:true},
     tokenBasePrice: {type: Number, required: true},
     exponent: {type: Number, required: true},
     exponentDivisor: {type: Number, required: true},
-    ownerCanBurn: {type: Boolean, required: true},
-    ownerCanDrain: {type: Boolean, required: true}
+    ownerCanBurn: {type: Boolean, required: true, es_indexed:true},
+    ownerCanDrain: {type: Boolean, required: true, es_indexed:true}
   },
-  words: {type: Array, unique: true},
+  words: {type: Array, unique: true, es_indexed:true},
   key: {type: Buffer, required: true, default: crypto.randomBytes(32)},
-  contractEscrowBalance: {type: Number, default: 0},
+  contractEscrowBalance: {type: Number, default: 0, es_indexed:true},
   tokenLedger: [
     {
       user: { type: Schema.Types.ObjectId, required: true, ref: 'User' },
@@ -28,9 +30,9 @@ var ContractSchema = new Schema({
       totalPurchasePrice: Number
     }
   ],
-  tokenBuyPrice: {type: Number, default: 10},
-  tokenSellPrice: {type: Number, default: 0},
-  tokenLedgerCount: {type: Number, default: 0},
+  tokenBuyPrice: {type: Number, default: 10, es_indexed:true},
+  tokenSellPrice: {type: Number, default: 0, es_indexed:true},
+  tokenLedgerCount: {type: Number, default: 0, es_indexed:true},
   tokenHistory: Array,
   timestamp: Date
 });
@@ -292,5 +294,13 @@ function _purchaseTotal(numberOfTokens){
   return total
 }
 
+
+// add elastic connection
+ContractSchema.plugin(mongoosastic, {
+  host: config.elasticSearch_HOST,
+  port: config.elasticSearch_PORT,
+  index: 'contracts',
+  type: 'mongo'
+})
 
 module.exports = mongoose.model('Contract', ContractSchema);

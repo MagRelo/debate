@@ -98,6 +98,7 @@ module.exports = function(app) {
   ]);
 
   // CONTRACTS
+  app.post('/api/contract/search', contractController.searchContracts);
   app.get('/api/contract/list', contractController.listContracts);
   app.get('/api/contract/:contractId', contractController.getContract);
   app.post('/api/contract/create', contractController.createContract);

@@ -17,7 +17,31 @@ const pricingFunctions = require('../config/pricing')
 const utils = require('../config/utils')
 const randomWords = require('random-words');
 
-// List
+
+exports.searchContracts = (request, response) => {
+
+  const searchTerm = request.body.term || 'general'
+
+  // get: user, target, and any existing follows
+  return ContractModel.search(
+    {
+      query_string: {
+        query: searchTerm
+      }
+    }, (err, results) => {
+
+      if(err) {
+        console.error(err)
+        return response.status(404).json(err)
+      }
+
+      return response.json(results)
+    }
+  )
+
+}
+
+
 exports.listContracts = (request, response) => {
 
   // get: user, target, and any existing follows
@@ -427,7 +451,6 @@ exports.burnTokens = (request, response) => {
 
 }
 
-// Drain Escrow
 exports.drainEscrow = (request, response) => {
 
 

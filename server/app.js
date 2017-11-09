@@ -12,6 +12,8 @@ var morgan = require('morgan');
 var cors = require('cors');
 
 
+var config = require('./config/environment');
+
 // Connect to database
 var mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
@@ -61,8 +63,11 @@ app.use(morgan('dev', {
   }
 }));
 
+
+// BUILT REACT APP
 app.use(express.static('build_webpack'))
 
+// API ROUTING
 require('./api')(app);
 
 app.listen(8080, function () {

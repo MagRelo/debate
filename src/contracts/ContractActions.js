@@ -23,6 +23,33 @@ function listUpdated(list) {
   }
 }
 
+export function searchContracts(term) {
+  return function(dispatch) {
+
+    // "loading"
+    dispatch(requestSent())
+
+    return fetch('/api/contract/search',
+      {
+        method: "POST",
+        body: {
+          term: term
+        }
+      }
+    ).then(rawResponse => {
+        if(rawResponse.status !== 200){ throw new Error(rawResponse.text) }
+        return rawResponse.json()
+      }
+    ).then(searchResults => {
+        dispatch(listUpdated(searchResults))
+      }
+    ).catch(error => {
+      console.error('action error', error)
+      return
+    })
+
+  }
+}
 
 export function listContracts() {
   return function(dispatch) {
