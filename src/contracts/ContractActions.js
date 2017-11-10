@@ -1,3 +1,5 @@
+import {sendEvent} from '../analytics/AnalyticsActions'
+
 
 // set 'messages.loading' to true
 export const REQUEST_SENT = 'REQUEST_SENT'
@@ -28,6 +30,10 @@ export function searchContracts(term) {
 
     // "loading"
     dispatch(requestSent())
+
+    dispatch(sendEvent('search', {
+      term: term
+    }))
 
     return fetch('/api/contract/search',
       {
@@ -106,6 +112,12 @@ export function createContract(contractOptions) {
 
     // "loading"
     dispatch(requestSent())
+    dispatch(sendEvent('create',
+      {
+        'contractOptions': contractOptions
+      }
+    ))
+
 
     return fetch('/api/contract/create',
       {
@@ -136,6 +148,16 @@ export function buyTokens(targetId, tokensToPurchase, payment) {
 
     // "loading"
     dispatch(requestSent())
+
+    // analytics
+    dispatch(sendEvent('buy',
+      {
+        'targetId': targetId,
+        'tokensToPurchase': tokensToPurchase,
+        'payment': payment
+      }
+    ))
+
 
     return fetch('/api/contract/buy',
       {
@@ -170,6 +192,15 @@ export function sellTokens(targetId, tokensToSell) {
     // "loading"
     dispatch(requestSent())
 
+    // analytics
+    dispatch(sendEvent('sell',
+      {
+        'targetId': targetId,
+        'tokensToSell': tokensToSell
+      }
+    ))
+
+
     return fetch('/api/contract/sell',
       {
         method: "PUT",
@@ -202,6 +233,15 @@ export function burnTokens(targetContractId, tokensToBurn ) {
     // "loading"
     dispatch(requestSent())
 
+    // analytics
+    dispatch(sendEvent('burn',
+      {
+        'targetId': targetContractId,
+        'tokensToBurn': tokensToBurn
+      }
+    ))
+
+
     return fetch('/api/contract/burn',
       {
         method: "PUT",
@@ -233,6 +273,15 @@ export function drainEscrow(targetId, drainAmount) {
 
     // "loading"
     dispatch(requestSent())
+
+    // analytics
+    dispatch(sendEvent('drain',
+      {
+        'targetId': targetId,
+        'drainAmount': drainAmount
+      }
+    ))
+
 
     return fetch('/api/contract/drain',
       {

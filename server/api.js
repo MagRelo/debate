@@ -8,6 +8,7 @@ const authController = require('./controllers/auth')
 const userController = require('./controllers/user')
 const messageController = require('./controllers/message')
 const contractController = require('./controllers/contract')
+const analyticsController = require('./controllers/analytics')
 
 const passport = require('passport')
 const jwt = require('jsonwebtoken')
@@ -116,6 +117,9 @@ module.exports = function(app) {
   app.get('/api/timeline/:userId', messageController.getTimelineByUser);
   app.post('/api/messages', messageController.saveMessage);
 
+
+  // *ANALYTICS*
+  app.post('/api/analytics/send', analyticsController.sendEvent);
 
   // All undefined asset or api routes should return a 404
   app.route('/:url(api|auth|components|app|bower_components|assets)/*')

@@ -84,6 +84,7 @@
     "redux-auth-wrapper": "^1.0.0",
     "redux-thunk": "^2.2.0",
     "request": "^2.83.0",
+    "request-promise": "^4.2.2",
     "uport-connect": "^0.6.1"
   },
   "scripts": {

@@ -19,24 +19,17 @@ const Contract = require('../../models/contract') ;
 fetch.delete({
   url: 'http://' + config.elasticSearch_HOST + ':' + config.elasticSearch_PORT + '/contracts/'
 }, function (err, r, body) {
-  console.log('elastic emptied:', r.statusCode)
+  console.log('elastic contracts emptied:', r.statusCode)
+});
+fetch.delete({
+  url: 'http://' + config.elasticSearch_HOST + ':' + config.elasticSearch_PORT + '/analytics/'
+}, function (err, r, body) {
+  console.log('elastic analytics emptied:', r.statusCode)
 });
 
-
-Message.find({}).remove()
-  .then(() => {
-    console.log('messages deleted')
-  });
-
-Contract.find({}).remove()
-  .then(() => {
-    console.log('contract deleted')
-  });
-
-Follow.find({}).remove()
-  .then(() => {
-    console.log('follows deleted')
-  });
+Contract.find({}).remove().then(() => { console.log('contract deleted') });
+Follow.find({}).remove().then(() => { console.log('follows deleted') });
+Message.find({}).remove().then(() => { console.log('messages deleted') });
 
 User.find({}).remove()
   .then(() => {
