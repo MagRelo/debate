@@ -2,9 +2,9 @@ const express = require('express')
 const app = express()
 const assert = require('assert')
 
-
-const twitterConsumerKey = 'a9nNKuouyFRamZSZyUtvRbkGl'
-const twitterSecret = 'Ep9QTjcv5R4ry5py34Q4FjPlytahPMPABnGmGA293V4omVNVYE'
+//
+// const twitterConsumerKey = 'a9nNKuouyFRamZSZyUtvRbkGl'
+// const twitterSecret = 'Ep9QTjcv5R4ry5py34Q4FjPlytahPMPABnGmGA293V4omVNVYE'
 const TwitterTokenStrategy = require('passport-twitter-token')
 
 // Express middleware
@@ -101,8 +101,8 @@ app.use(session(sessionOptions));
 app.use(passport.initialize());
 app.use(passport.session());
 passport.use(new TwitterTokenStrategy({
-    consumerKey: twitterConsumerKey,
-    consumerSecret: twitterSecret,
+    consumerKey: config.twitterConsumerKey,
+    consumerSecret: config.twitterSecret,
     includeEmail: true,
     includeStatus: true,
     includeEntities: true

@@ -15,5 +15,11 @@ module.exports = {
 
 
   elasticSearch_HOST : '198.211.105.115',
-  elasticSearch_PORT : '9200'
+  elasticSearch_PORT : '9200',
+
+
+  twitterConsumerKey: process.env.TWITTER_CONSUMER_KEY || 'a9nNKuouyFRamZSZyUtvRbkGl',
+  twitterSecret: process.env.TWITTER_SECRET || 'Ep9QTjcv5R4ry5py34Q4FjPlytahPMPABnGmGA293V4omVNVYE'
+
+
 };

@@ -3,7 +3,7 @@
 // Staging specific configuration
 // =================================
 module.exports = {
-  
+
   // Server IP
   ip:       process.env.IP || undefined,
 
@@ -16,6 +16,9 @@ module.exports = {
   },
 
   elasticSearch_HOST : process.env.ELASTICSEARCH_ADDRESS_INT,
-  elasticSearch_PORT : process.env.ELASTICSEARCH_PORT
+  elasticSearch_PORT : process.env.ELASTICSEARCH_PORT,
+
+  twitterConsumerKey: process.env.TWITTER_CONSUMER_KEY,
+  twitterSecret: process.env.TWITTER_SECRET
 
 };
