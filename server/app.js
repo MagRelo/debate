@@ -1,5 +1,6 @@
 const express = require('express')
 const app = express()
+const assert = require('assert')
 
 
 const twitterConsumerKey = 'a9nNKuouyFRamZSZyUtvRbkGl'
@@ -75,7 +76,7 @@ app.use(morgan('dev', {
 // Express session management
 var store = new MongoDBStore(
   {
-    uri: 'mongodb://localhost:27017/connect_mongodb_session_test',
+    uri: process.env.MONGODB_URL_INT || 'mongodb://127.0.0.1:27017/session_store',
     collection: 'mySessions'
   }
 );
