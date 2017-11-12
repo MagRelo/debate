@@ -35,18 +35,7 @@ module.exports = function(app) {
 
   // TWITTER LOGIN
   app.post('/api/v1/auth/twitter/reverse', authController.getTwitterRequestToken)
-  app.get('/auth/twitter', [
-    authController.twitterLogin,
-    passport.authenticate('twitter-token', {session: false}),
-    function(req, res, next) {
-        if (!req.user) { return res.send(401, 'User Not Authenticated'); }
-        req.auth = { id: req.user.id }
-        return next();
-      },
-    authController.generateToken,
-    authController.sendToken
-  ])
-  // app.post('/auth/twitter', [
+  // app.get('/auth/twitter', [
   //   authController.twitterLogin,
   //   passport.authenticate('twitter-token', {session: false}),
   //   function(req, res, next) {
@@ -57,6 +46,18 @@ module.exports = function(app) {
   //   authController.generateToken,
   //   authController.sendToken
   // ])
+  //
+  app.post('/auth/twitter', [
+    authController.twitterLogin,
+    passport.authenticate('twitter-token', {session: false}),
+    function(req, res, next) {
+        if (!req.user) { return res.send(401, 'User Not Authenticated'); }
+        req.auth = { id: req.user.id }
+        return next();
+      },
+    authController.generateToken,
+    authController.sendToken
+  ])
 
 
   // USERS

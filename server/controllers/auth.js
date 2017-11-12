@@ -11,6 +11,9 @@ const twitterSecret = 'Ep9QTjcv5R4ry5py34Q4FjPlytahPMPABnGmGA293V4omVNVYE'
 
 exports.getTwitterRequestToken = (request, response) => {
 
+    // test
+    console.log('getToken hit:', new Date())
+
     fetch.post({
       url: 'https://api.twitter.com/oauth/request_token',
       oauth: {
@@ -30,6 +33,9 @@ exports.getTwitterRequestToken = (request, response) => {
 }
 
 exports.twitterLogin = (request, response, next) => {
+
+  // test
+  console.log('twitterLogin hit:', new Date())
 
   fetch.post({
      url: 'https://api.twitter.com/oauth/access_token?oauth_verifier',
