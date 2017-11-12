@@ -3,13 +3,15 @@ import CreateForm from './CreateForm'
 import { createContract } from '../ContractActions'
 
 const mapStateToProps = (state, ownProps) => {
-  return {}
+  return {
+    currentUser: state.user.data
+  }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    submitContract: (options) => {
-      dispatch(createContract(options))
+    submitContract: (currentUser, options) => {
+      dispatch(createContract(currentUser, options))
     }
   }
 }

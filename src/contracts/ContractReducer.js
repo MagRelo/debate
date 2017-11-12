@@ -16,7 +16,8 @@ const contractReducer = (state = initialState, action) => {
   {
     return Object.assign({}, state, {
       loading: false,
-      list: action.payload
+      list: action.payload,
+      contract: null
     })
   }
   if (action.type === 'CONTRACT_UPDATE')

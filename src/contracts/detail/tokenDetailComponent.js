@@ -30,23 +30,37 @@ class FormComponent extends Component {
     }
   }
 
+
+  drainDisabled(){
+    return (!this.props.currentUser || !this.props.contractData.owner ||
+      this.props.currentUser._id !== this.props.contractData.owner._id ||
+      !this.props.contractData.contractOptions.ownerCanDrain)
+  }
+
+
+  burnDisabled(){
+    return (!this.props.currentUser || !this.props.contractData.owner ||
+      this.props.currentUser._id !== this.props.contractData.owner._id ||
+      !this.props.contractData.contractOptions.ownerCanBurn)
+  }
+
   buyTokens(tokenCount, purchasePrice){
-    this.props.buyTokens(this.props.contractData._id, tokenCount, purchasePrice)
+    this.props.buyTokens(this.props.currentUser, this.props.contractData._id, tokenCount, purchasePrice)
     if(this.props.closeModalFunction) return this.props.closeModalFunction()
   }
 
   sellTokens(tokenCount){
-    this.props.sellTokens(this.props.contractData._id, tokenCount)
+    this.props.sellTokens(this.props.currentUser, this.props.contractData._id, tokenCount)
     if(this.props.closeModalFunction) return this.props.closeModalFunction()
   }
 
   burnTokens(tokenCount){
-    this.props.burnTokens(this.props.contractData._id, tokenCount)
+    this.props.burnTokens(this.props.currentUser, this.props.contractData._id, tokenCount)
     if(this.props.closeModalFunction) return this.props.closeModalFunction()
   }
 
   spendEscrow(spendAmount){
-    this.props.spendEscrow(this.props.contractData._id, spendAmount)
+    this.props.spendEscrow(this.props.currentUser, this.props.contractData._id, spendAmount)
     if(this.props.closeModalFunction) return this.props.closeModalFunction()
   }
 
@@ -93,53 +107,66 @@ class FormComponent extends Component {
 
         <TokenPriceChart data={this.props.contractData.tokenHistory}/>
 
-        <section style={{height: '320px'}}>
-          <Tabs>
+        {!this.props.currentUser ? null
+          :
 
-            <TabList>
-              <Tab>Pledge</Tab>
-              <Tab disabled={false}> Withdraw </Tab>
-              <Tab style={this.props.contractData.contractOptions.ownerCanBurn ? {}: {textDecoration: 'line-through'}}
-                disabled={true}> Collect {false ? '&#x1f512;': ''}</Tab>
-              <Tab style={this.props.contractData.contractOptions.ownerCanDrain ? {}: {textDecoration: 'line-through'}}
-                disabled={true}> Spend {false ? '&#x1f512;': ''}
-              </Tab>
-            </TabList>
+          <section style={{height: '320px'}}>
+            <Tabs>
 
-            <TabPanel>
+              <TabList>
+                <Tab>Pledge</Tab>
+                <Tab disabled={false}> Withdraw </Tab>
+                <Tab
+                  style={this.props.contractData.contractOptions.ownerCanBurn ? {}: {textDecoration: 'line-through'}}
+                  disabled={this.burnDisabled()}>
+                    Collect {false ? '&#x1f512;': ''}
+                </Tab>
+                <Tab
+                  style={this.props.contractData.contractOptions.ownerCanDrain ? {}: {textDecoration: 'line-through'}}
+                  disabled={this.drainDisabled()}>
+                    Spend {false ? '&#x1f512;': ''}
+                </Tab>
+              </TabList>
 
-              <BuyForm
-                buyTokenFunction={this.buyTokens.bind(this)}
-                tokenBuyPrice={this.props.contractData.tokenBuyPrice}
-                availableBalance={this.props.availableBalance}/>
+              <TabPanel>
 
-            </TabPanel>
-            <TabPanel>
+                <BuyForm
+                  buyTokenFunction={this.buyTokens.bind(this)}
+                  tokenBuyPrice={this.props.contractData.tokenBuyPrice}
+                  loggedIn={!!this.props.currentUser}
+                  availableBalance={this.props.currentUser.balance}/>
 
-              <SellForm
-                sellTokenFunction={this.sellTokens.bind(this)}
-                tokenSellPrice={this.props.contractData.tokenSellPrice}
-                ownedTokenCount={this.props.tokensOwned}/>
+              </TabPanel>
+              <TabPanel>
 
-            </TabPanel>
-            <TabPanel>
+                <SellForm
+                  sellTokenFunction={this.sellTokens.bind(this)}
+                  tokenSellPrice={this.props.contractData.tokenSellPrice}
+                  loggedIn={!!this.props.currentUser}
+                  ownedTokenCount={this.props.tokensOwned}/>
 
-              <BurnForm
-                tokenLedgerCount={this.props.contractData.tokenLedgerCount}
-                burnTokenFunction={this.burnTokens.bind(this)}/>
+              </TabPanel>
+              <TabPanel>
 
-            </TabPanel>
-            <TabPanel>
+                <BurnForm
+                  loggedIn={!!this.props.currentUser}
+                  tokenLedgerCount={this.props.contractData.tokenLedgerCount}
+                  burnTokenFunction={this.burnTokens.bind(this)}/>
 
-              <SpendForm
-                contractEscrowBalance={this.props.contractData.contractEscrowBalance}
-                spendEscrowFunction={this.spendEscrow.bind(this)}/>
+              </TabPanel>
+              <TabPanel>
 
-            </TabPanel>
-          </Tabs>
+                <SpendForm
+                  loggedIn={!!this.props.currentUser}
+                  contractEscrowBalance={this.props.contractData.contractEscrowBalance}
+                  spendEscrowFunction={this.spendEscrow.bind(this)}/>
 
-        </section>
+              </TabPanel>
+            </Tabs>
 
+          </section>
+
+        }
       </main>
     )
   }

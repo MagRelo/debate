@@ -20,28 +20,6 @@ var path = require('path');
 var passportConfig = require('./config/passport');
 passportConfig();
 
-//token handling middleware
-var authenticate = expressJwt({
-  secret: 'my-secret',
-  requestProperty: 'auth',
-  getToken: function(req) {
-    if (req.headers['x-auth-token']) {
-      return req.headers['x-auth-token'];
-    }
-    return null;
-  }
-});
-
-var getCurrentUser = function(req, res, next) {
-  User.findById(req.auth.id, function(err, user) {
-    if (err) {
-      next(err);
-    } else {
-      req.user = user;
-      next();
-    }
-  });
-};
 
 var getOne = function (req, res) {
   var user = req.user.toObject();
@@ -51,26 +29,6 @@ var getOne = function (req, res) {
 
   res.json(user);
 };
-
-var createToken = function(auth) {
-  return jwt.sign({
-    id: auth.id
-  }, 'servesa-secret',
-  {
-    expiresIn: 60 * 120
-  });
-};
-
-var generateToken = function (req, res, next) {
-  req.token = createToken(req.auth);
-  return next();
-};
-
-var sendToken = function (req, res) {
-  res.setHeader('x-auth-token', req.token);
-  return res.status(200).send(JSON.stringify(req.user));
-};
-
 
 
 module.exports = function(app) {
@@ -82,31 +40,43 @@ module.exports = function(app) {
     passport.authenticate('twitter-token', {session: false}),
     function(req, res, next) {
         if (!req.user) { return res.send(401, 'User Not Authenticated'); }
-        // prepare token for API
         req.auth = { id: req.user.id }
         return next();
       },
-    generateToken,
-    sendToken
+    authController.generateToken,
+    authController.sendToken
   ])
 
   // USERS
   app.post('/api/user/list', userController.listUsers);
   app.post('/api/user/create', userController.saveUser);
-  app.get('/api/user/:userId', [
-    // authenticate,
-    userController.getUser
-  ]);
 
-  // CONTRACTS
+  // CONTRACTS PUBLIC
   app.post('/api/contract/search', contractController.searchContracts);
   app.get('/api/contract/list', contractController.listContracts);
   app.get('/api/contract/:contractId', contractController.getContract);
-  app.post('/api/contract/create', contractController.createContract);
-  app.put('/api/contract/buy', contractController.buyTokens);
-  app.put('/api/contract/sell', contractController.sellTokens);
-  app.put('/api/contract/burn', contractController.burnTokens);
-  app.put('/api/contract/drain', contractController.drainEscrow);
+
+// CONTRACTS AUTH
+  app.post('/api/contract/create', [
+    authController.authenticate,
+    contractController.createContract
+  ]);
+  app.put('/api/contract/buy', [
+    authController.authenticate,
+    contractController.buyTokens
+  ]);
+  app.put('/api/contract/sell', [
+    authController.authenticate,
+    contractController.sellTokens
+  ]);
+  app.put('/api/contract/burn', [
+    authController.authenticate,
+    contractController.burnTokens
+  ]);
+  app.put('/api/contract/drain', [
+    authController.authenticate,
+    contractController.drainEscrow
+  ]);
 
   // *FOLLOW*
   // app.post('/api/follow', userController.purchaseTokens);

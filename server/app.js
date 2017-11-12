@@ -2,14 +2,22 @@ const express = require('express')
 const app = express()
 
 
+const twitterConsumerKey = 'a9nNKuouyFRamZSZyUtvRbkGl'
+const twitterSecret = 'Ep9QTjcv5R4ry5py34Q4FjPlytahPMPABnGmGA293V4omVNVYE'
+
+const TwitterTokenStrategy = require('passport-twitter-token')
+
 // Express middleware
-var compression = require('compression');
-var bodyParser = require('body-parser');
-var methodOverride = require('method-override');
-var helmet = require('helmet');
-var cookieParser = require('cookie-parser');
-var morgan = require('morgan');
-var cors = require('cors');
+const session = require('express-session');
+const MongoDBStore = require('connect-mongodb-session')(session);
+const compression = require('compression');
+const bodyParser = require('body-parser');
+const methodOverride = require('method-override');
+const helmet = require('helmet');
+const cookieParser = require('cookie-parser');
+const morgan = require('morgan');
+const cors = require('cors');
+const passport = require('passport');
 
 
 var config = require('./config/environment');
@@ -40,16 +48,16 @@ if(process.env.SEED_DB_CLEAN === 'true'){
   require('./config/db_seed/seed_clean')
 }
 
-// enable cors
-var corsOption = {
+
+// Static built react app
+app.use(express.static('build_webpack'))
+
+app.use(cors({
   origin: true,
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
   credentials: true,
   exposedHeaders: ['x-auth-token']
-};
-app.use(cors(corsOption));
-
-// routing config
+}));
 app.use(compression());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json({limit: '1mb'}));
@@ -64,8 +72,58 @@ app.use(morgan('dev', {
 }));
 
 
-// BUILT REACT APP
-app.use(express.static('build_webpack'))
+// Express session management
+var store = new MongoDBStore(
+  {
+    uri: 'mongodb://localhost:27017/connect_mongodb_session_test',
+    collection: 'mySessions'
+  }
+);
+store.on('error', function(error) {
+  assert.ifError(error);
+  assert.ok(false);
+});
+
+const sessionOptions = {
+  secret: 'keyboard cat',
+  cookie: {},
+  store: store,
+  resave: true,
+  saveUninitialized: true
+}
+if (app.get('env') === 'production') {
+  app.set('trust proxy', 1) // trust first proxy
+  sess.cookie.secure = true // serve secure cookies
+}
+app.use(session(sessionOptions));
+
+// Passport session management
+const UserModel = require('mongoose').model('User')
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new TwitterTokenStrategy({
+    consumerKey: twitterConsumerKey,
+    consumerSecret: twitterSecret,
+    includeEmail: true,
+    includeStatus: true,
+    includeEntities: true
+  },
+  function (token, tokenSecret, profile, done) {
+    User.upsertTwitterUser(token, tokenSecret, profile, function(err, user) {
+      return done(err, user);
+    });
+  }));
+passport.serializeUser(function(user, done) {
+  console.log('serializing user: ');
+  console.log(user);
+  done(null, user._id);
+});
+passport.deserializeUser(function(id, done) {
+  user.findById(id, function(err, user) {
+    console.log('no im not serial');
+    done(err, user);
+  });
+});
 
 // API ROUTING
 require('./api')(app);

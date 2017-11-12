@@ -12,7 +12,7 @@ var UserSchema = new Schema({
   avatarUrl: String,
   email: { type: String, trim: true, match: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/ },
   twitterProvider: { type: { id: String, token: String }, select: false },
-  balance: {type: Number, default: 0},
+  balance: {type: Number, default: 10000},
   walletArray: [
     {
       contract: { type: Schema.Types.ObjectId, required: true, ref: 'Contract' },
@@ -59,6 +59,8 @@ UserSchema.methods.removeFromWallet = function(contractAddress, numberOfTokens, 
 
 }
 
+// schema ----
+
 UserSchema.statics.upsertTwitterUser = function(token, tokenSecret, profile, cb) {
   var that = this;
 
@@ -80,10 +82,12 @@ UserSchema.statics.upsertTwitterUser = function(token, tokenSecret, profile, cb)
 
       newUser.save(function(error, savedUser) {
         if (error) { console.log(error); }
+
         return cb(error, savedUser);
       });
 
     } else {
+
       return cb(err, user);
     }
   });

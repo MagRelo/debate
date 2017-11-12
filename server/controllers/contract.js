@@ -7,11 +7,12 @@ var bluebird = require('bluebird')
 
 // Models
 const UserModel = require('../models/user')
-const populateTargets = 'walletArray.user tokenLedger.user'
-const populateFields= 'name avatarUrl tokenLedgerCount tokenLedgerEscrowBalance tokenBuyPrice tokenSellPrice tokenHistory'
-
 const FollowModel = require('../models/follow')
 const ContractModel = require('../models/contract')
+
+// const populateTargets = 'walletArray.user tokenLedger.user'
+// const populateFields= 'name avatarUrl tokenLedgerCount tokenLedgerEscrowBalance tokenBuyPrice tokenSellPrice tokenHistory'
+
 
 const pricingFunctions = require('../config/pricing')
 const utils = require('../config/utils')
@@ -69,10 +70,10 @@ exports.getContract = (request, response) => {
   const contractId = request.params.contractId
 
   // get: user, target, and any existing follows
-  ContractModel.findOne({_id: contractId})
+  ContractModel.findOne({_id: contractId}).populate('owner')
     .then((contract) => {
-    return response.json(contract)
-  }).catch((error) => {
+      return response.json(contract)
+    }).catch((error) => {
 
     // client error
     if(error.clientError){
@@ -88,13 +89,12 @@ exports.getContract = (request, response) => {
 
 }
 
+
+// auth
 exports.createContract = (request, response) => {
 
-  // get from req.user
-  const userId = '59fb427172ffe62800d6d400'
-
+  const userId = request.auth.id
   const contractOptions = request.body.contractOptions
-
 
   // validate params
   if(!contractOptions || !userId){
@@ -123,7 +123,7 @@ exports.createContract = (request, response) => {
         {new: true}
       )
     })
-    .then(result => response.json(result))
+    .then(result => response.json(newContract))
     .catch((error) => {
 
       // client error
@@ -142,10 +142,7 @@ exports.createContract = (request, response) => {
 
 exports.buyTokens = (request, response) => {
 
-
-  // TODO: data from auth
-  // const userId =  request.user || ''
-  const userId = '56a3e4661f46c422ef8bad42'
+  const userId = request.auth.id
 
   const targetId = request.body.targetId
   const tokensToPurchase = request.body.tokensToPurchase
@@ -260,9 +257,7 @@ exports.buyTokens = (request, response) => {
 
 exports.sellTokens = (request, response) => {
 
-  // // TODO: data from auth
-  // const userId =  request.body.user || ''
-  const userId = '56a3e4661f46c422ef8bad42'
+  const userId = request.auth.id
 
   const targetId = request.body.targetId
   const tokensToSell = request.body.tokensToSell
@@ -361,11 +356,7 @@ exports.sellTokens = (request, response) => {
 
 exports.burnTokens = (request, response) => {
 
-  // // TODO: data from auth
-  // const userId =  request.body.user || ''
-  const userId = '56a3e4661f46c422ef8bad42'
-  const targetUserId = '56a3e4661f46c422ef8bad42'
-
+  const userId = request.auth.id
   const targetContractId = request.body.targetId
   const tokensToBurn = request.body.tokensToBurn
 
@@ -454,9 +445,7 @@ exports.burnTokens = (request, response) => {
 exports.drainEscrow = (request, response) => {
 
 
-  // // TODO: data from auth
-  // const userId =  request.body.user || ''
-  const userId = '56a3e4661f46c422ef8bad42'
+  const userId = request.auth.id
 
   const targetId = request.body.targetId || ''
   const drainAmount = parseInt(request.body.drainAmount, 10) || null

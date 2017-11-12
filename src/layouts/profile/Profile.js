@@ -34,9 +34,8 @@ class Profile extends Component {
               <Tabs>
 
                 <TabList>
-                  <Tab>Contracts</Tab>
+                  <Tab>My Contracts</Tab>
                   <Tab>Wallet</Tab>
-                  <Tab>Search</Tab>
                 </TabList>
 
                 <TabPanel>
@@ -45,14 +44,7 @@ class Profile extends Component {
                 </TabPanel>
 
                 <TabPanel>
-                  <ContractList contractList={this.props.userList} />
-                </TabPanel>
-
-                <TabPanel>
-                  <h2>Tokens in my wallet</h2>
-                  <WalletListContainer contractList={this.props.authData.walletArray} />
-                  <hr></hr>
-                  <LogoutButtonContainer/>
+                  <ContractList contractList={this.props.currentUser.walletArray} />
                 </TabPanel>
 
               </Tabs>

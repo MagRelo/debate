@@ -7,7 +7,8 @@ const LoginButton = ({ loginSuccess }) => {
 
   function onSuccess(response) {
     response.json().then(body => {
-      loginSuccess(body)
+      body.user.token = body.token
+      loginSuccess(body.user)
     });
   }
 
@@ -17,8 +18,10 @@ const LoginButton = ({ loginSuccess }) => {
 
   return(
     <TwitterLogin
-      requestTokenUrl="http://cbc7ab00.ngrok.io/api/v1/auth/twitter/reverse"
-      loginUrl="http://cbc7ab00.ngrok.io/auth/twitter"
+      text="Login"
+      style={{backgroundColor: 'inherit', border: 'none'}}
+      requestTokenUrl="/api/v1/auth/twitter/reverse"
+      loginUrl="/auth/twitter"
       onFailure={onFailed}
       onSuccess={onSuccess}
     />

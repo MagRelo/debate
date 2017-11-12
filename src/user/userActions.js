@@ -83,26 +83,13 @@ export function submitUser(name, avatarUrl) {
   }
 }
 
-export function selectUser(userId) {
+export function selectUser(user) {
   return function(dispatch) {
 
-    return fetch('/api/user/' + userId,{
-        method: "GET",
-    }).then(rawResponse => {
-        if(rawResponse.status !== 200){ throw new Error(rawResponse.text) }
-        return rawResponse.json()
-    }).then(userObject => {
-        dispatch(getTimelineByUser(userObject._id))
-        dispatch(getMessagesByUser(userObject._id))
-        dispatch(getUsers(userObject._id))
-        dispatch(userLoggedIn(userObject))
-        return browserHistory.push('/profile')
-      }
-    ).catch(error => {
-      console.error('action error', error)
-      return
-    })
+    dispatch(userLoggedIn(user))
 
+    // send to profile
+    return browserHistory.push('/profile')
   }
 }
 

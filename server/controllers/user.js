@@ -39,9 +39,11 @@ function getMarkedUserList (userId){
 
 exports.listUsers = (request, response) => {
 
-  return getMarkedUserList(request.body.userId)
-    .then((enrichedUserList)=>{
-      return response.json(enrichedUserList)
+  // return getMarkedUserList(request.body.userId)
+  
+  return UserModel.find({}).lean()
+    .then((userList)=>{
+      return response.json(userList)
     }).catch((error)=>{
       console.error(error.message)
       return response.status(500).json({error: error.message});
@@ -73,17 +75,13 @@ exports.saveUser = (request, response) => {
 
 }
 
-exports.getUser = (request, response) => {
-
-  const userId = request.params.userId || 'default name'
-
-  UserModel.findOne({_id: userId})
-    .populate(populateTargets, populateFields)
-    .then(user => {
-      return response.json(user)
-    })
-    .catch((error)=>{
-      return response.json(error)
-    })
-
-}
+exports.getCurrentUser = function(req, res, next) {
+  UserModel.findById(req.auth.id, function(err, user) {
+    if (err) {
+      next(err);
+    } else {
+      req.user = user;
+      next();
+    }
+  });
+};

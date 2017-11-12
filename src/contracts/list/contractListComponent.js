@@ -46,11 +46,6 @@ class FormComponent extends Component {
     this.closeModal = this.closeModal.bind(this);
   }
 
-
-  componentDidMount(){
-    this.props.loadList()
-  }
-
   // Modal functions
   openModal(data) {
     this.setState({

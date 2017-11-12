@@ -52,7 +52,7 @@ class FormComponent extends Component {
         </fieldset>
 
         <button
-          disabled={this.state.tokenCount > 0}
+          disabled={!this.props.loggedIn || this.state.tokenCount > 0}
           className="pure-button pure-button-primary"
           type="submit"> Burn
         </button>

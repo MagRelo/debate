@@ -1,4 +1,5 @@
 import {sendEvent} from '../analytics/AnalyticsActions'
+import { browserHistory } from 'react-router'
 
 
 // set 'messages.loading' to true
@@ -107,7 +108,7 @@ export function getContract(contractId) {
   }
 }
 
-export function createContract(contractOptions) {
+export function createContract(currentUser, contractOptions) {
   return function(dispatch) {
 
     // "loading"
@@ -118,11 +119,13 @@ export function createContract(contractOptions) {
       }
     ))
 
-
     return fetch('/api/contract/create',
       {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          "x-auth-token": currentUser.token
+        },
         body: JSON.stringify({
           contractOptions: contractOptions
         })
@@ -133,7 +136,9 @@ export function createContract(contractOptions) {
       }
     ).then(contract => {
         dispatch(contractUpdated(contract))
-        dispatch(listContracts())
+
+        // send to profile
+        return browserHistory.push('/contract/' + contract._id)
       }
     ).catch(error => {
       console.error('action error', error)
@@ -143,7 +148,7 @@ export function createContract(contractOptions) {
   }
 }
 
-export function buyTokens(targetId, tokensToPurchase, payment) {
+export function buyTokens(currentUser, targetId, tokensToPurchase, payment) {
   return function(dispatch) {
 
     // "loading"
@@ -162,7 +167,10 @@ export function buyTokens(targetId, tokensToPurchase, payment) {
     return fetch('/api/contract/buy',
       {
         method: "PUT",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          "x-auth-token": currentUser.token
+        },
         body: JSON.stringify({
           targetId: targetId,
           tokensToPurchase: tokensToPurchase,
@@ -186,7 +194,7 @@ export function buyTokens(targetId, tokensToPurchase, payment) {
   }
 }
 
-export function sellTokens(targetId, tokensToSell) {
+export function sellTokens(currentUser, targetId, tokensToSell) {
   return function(dispatch) {
 
     // "loading"
@@ -204,7 +212,10 @@ export function sellTokens(targetId, tokensToSell) {
     return fetch('/api/contract/sell',
       {
         method: "PUT",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          "x-auth-token": currentUser.token
+        },
         body: JSON.stringify({
           targetId: targetId,
           tokensToSell: tokensToSell
@@ -227,7 +238,7 @@ export function sellTokens(targetId, tokensToSell) {
   }
 }
 
-export function burnTokens(targetContractId, tokensToBurn ) {
+export function burnTokens(currentUser, targetContractId, tokensToBurn ) {
   return function(dispatch) {
 
     // "loading"
@@ -245,7 +256,10 @@ export function burnTokens(targetContractId, tokensToBurn ) {
     return fetch('/api/contract/burn',
       {
         method: "PUT",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          "x-auth-token": currentUser.token
+        },
         body: JSON.stringify({
           targetContractId: targetContractId,
           tokensToBurn: tokensToBurn
@@ -268,7 +282,7 @@ export function burnTokens(targetContractId, tokensToBurn ) {
   }
 }
 
-export function drainEscrow(targetId, drainAmount) {
+export function drainEscrow(currentUser, targetId, drainAmount) {
   return function(dispatch) {
 
     // "loading"
@@ -286,7 +300,10 @@ export function drainEscrow(targetId, drainAmount) {
     return fetch('/api/contract/drain',
       {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          "x-auth-token": currentUser.token
+        },
         body: JSON.stringify({
           targetId: targetId,
           drainAmount: drainAmount

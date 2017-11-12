@@ -21,9 +21,9 @@ class SelectForm extends Component {
     this.props.selectUser(name)
   }
 
-  handleSubmit(event, userId) {
+  handleSubmit(event, user) {
     event.preventDefault()
-    this.props.selectUser(userId)
+    this.props.selectUser(user)
   }
   //
   // <Typeahead
@@ -46,7 +46,7 @@ class SelectForm extends Component {
               return <fieldset key={user._id}>
                  <button
                   className="pure-button pure-button-primary"
-                  onClick={(event) => this.handleSubmit(event, user._id)}>{user.name}
+                  onClick={(event) => this.handleSubmit(event, user)}>{user.name}
                 </button>
               </fieldset>
             })}

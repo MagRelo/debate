@@ -287,6 +287,10 @@ a.pure-menu-link{
   float: right;
 }
 
+.twitter-menu-link{
+  margin-right: 1em;
+}
+
 /* HOME */
 .logo{
   max-width: 100%;

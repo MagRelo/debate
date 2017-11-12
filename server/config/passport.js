@@ -16,7 +16,7 @@ module.exports = function () {
       includeEntities: true
     },
     function (token, tokenSecret, profile, done) {
-      User.upsertTwitterUser(token, tokenSecret, profile, function(err, user) {
+      User.upsertTwitterUser(token, tokenSecret, profile, function(err, user) {        
         return done(err, user);
       });
     }));

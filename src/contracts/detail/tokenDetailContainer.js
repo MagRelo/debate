@@ -3,22 +3,24 @@ import tokenDetailComponent from './tokenDetailComponent'
 import { buyTokens, sellTokens, burnTokens, drainEscrow } from '../ContractActions'
 
 const mapStateToProps = (state, ownProps) => {
-  return {}
+  return {
+    currentUser: state.user.data
+  }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    buyTokens: (targetId, tokensToPurchase, payment) => {
-      dispatch(buyTokens(targetId, tokensToPurchase, payment))
+    buyTokens: (currentUser, targetId, tokensToPurchase, payment) => {
+      dispatch(buyTokens(currentUser, targetId, tokensToPurchase, payment))
     },
-    sellTokens: (targetId, tokens) => {
-      dispatch(sellTokens(targetId, tokens))
+    sellTokens: (currentUser, targetId, tokens) => {
+      dispatch(sellTokens(currentUser, targetId, tokens))
     },
-    burnTokens: (targetId, tokens) => {
-      dispatch(burnTokens(targetId, tokens))
+    burnTokens: (currentUser, targetId, tokens) => {
+      dispatch(burnTokens(currentUser, targetId, tokens))
     },
-    drainEscrow: (targetId, spendAmount) => {
-      dispatch(spendEscrow(targetId, spendAmount))
+    drainEscrow: (currentUser, targetId, spendAmount) => {
+      dispatch(spendEscrow(currentUser, targetId, spendAmount))
     }
 
   }

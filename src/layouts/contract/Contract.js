@@ -20,7 +20,12 @@ class Profile extends Component {
           <div className="pure-u-1 pure-u-md-1-6"></div>
           <div className="pure-u-1 pure-u-md-2-3">
             <div style={{marginTop: '1em'}}>
+              {this.props.selectedContract ?                
                 <ContractDetail contractData={this.props.selectedContract}/>
+                :
+                null
+              }
+
             </div>
 
           </div>

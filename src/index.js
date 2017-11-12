@@ -10,7 +10,9 @@ import App from './App'
 
 // Routes
 import Home from './layouts/home/Home'
+
 import Feed from './layouts/network/NetworkContainer'
+// <Route path="feed" component={UserIsAuthenticated(Feed)} />
 
 import Profile from './layouts/profile/ProfileContainer'
 
@@ -28,12 +30,11 @@ ReactDOM.render((
     <Provider store={store}>
       <Router history={history}>
         <Route path="/" component={App}>
-          <IndexRoute component={ContractList} />
+          <IndexRoute component={Home} />
 
           <Route path="contract/:contractId" component={ContractDetail} />
           <Route path="contracts" component={ContractList} />
 
-          <Route path="feed" component={UserIsAuthenticated(Feed)} />
           <Route path="profile" component={UserIsAuthenticated(Profile)} />
 
           <Route path='*' exact={true} component={Page404} />

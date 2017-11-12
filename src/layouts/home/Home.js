@@ -4,10 +4,12 @@ import { Link } from 'react-router'
 import Logo from '../../img/circle.svg'
 
 import LoginButtonContainer from '../../user/ui/loginbutton/LoginButtonContainer'
-import SignUpFormContainer from '../../user/ui/signup/SignUpFormContainer'
-import SelectUserContainer from '../../user/ui/selectUser/SelectUserContainer'
 
+import ContractList from '../../contracts/list/contractListContainer'
+
+import SelectUser from '../../user/ui/selectUser/SelectUserContainer'
 // <SignUpFormContainer/>
+// <SelectUser/>
 
 class Home extends Component {
   render() {
@@ -17,12 +19,8 @@ class Home extends Component {
           <div className="pure-u-1 pure-u-md-1-3"></div>
           <div className="pure-u-1 pure-u-md-1-3">
 
-            <h1>Servésa</h1>
+            <ContractList/>
 
-            <LoginButtonContainer/>
-            <hr></hr>
-
-            <SelectUserContainer/>
 
           </div>
         </div>

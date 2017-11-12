@@ -96,7 +96,7 @@ class ComposeMessage extends Component {
 
     console.log('sending', marketOptions[event.target.name].name)
 
-    this.props.submitContract(marketOptions[event.target.name])
+    this.props.submitContract(this.props.currentUser, marketOptions[event.target.name])
   }
 
   render() {
@@ -107,7 +107,9 @@ class ComposeMessage extends Component {
         <div className="open-compose-button-container">
           <button
             className="pure-button pure-button-primary"
+            disabled={!this.props.currentUser}
             onClick={this.openModal}> + Add contract
+
           </button>
         </div>
 

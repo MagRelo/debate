@@ -9,6 +9,9 @@ const UserModel = require('../models/user')
 const twitterConsumerKey = 'a9nNKuouyFRamZSZyUtvRbkGl'
 const twitterSecret = 'Ep9QTjcv5R4ry5py34Q4FjPlytahPMPABnGmGA293V4omVNVYE'
 
+const devToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVhMDYwMjc4MjQ4NGM2MDBhM2VjNjE2OCIsImlhdCI6MTUxMDM0MzMyNywiZXhwIjoxNTEwMzUwNTI3fQ.araFu4UrhzGODZcFHAbgZmff1iSpms74d1mc28nRiJg'
+
+
 
 exports.getTwitterRequestToken = (request, response) => {
 
@@ -42,9 +45,7 @@ exports.twitterLogin = (request, response, next) => {
      },
      form: { oauth_verifier: request.query.oauth_verifier }
    }, function (err, r, body) {
-     if (err) {
-       return response.send(500, { message: err.message });
-     }
+     if (err) { return response.send(500, { message: err.message }); }
 
      const bodyString = '{ "' + body.replace(/&/g, '", "').replace(/=/g, '": "') + '"}';
      const parsedBody = JSON.parse(bodyString);
@@ -57,3 +58,29 @@ exports.twitterLogin = (request, response, next) => {
    });
 
 }
+
+
+
+// Create token and send to user
+exports.generateToken = function (req, res, next) {
+  req.token = jwt.sign({ id: req.auth.id }, 'servesa-secret', { expiresIn: 60 * 120 });
+  return next();
+};
+exports.sendToken = function (req, res) {
+  res.setHeader('x-auth-token', req.token);
+  req.user.token = req.token;
+  return res.status(200).send(JSON.stringify({token: req.token, user: req.user}));
+};
+
+//token handling middleware
+exports.authenticate = expressJwt({
+  secret: 'servesa-secret',
+  requestProperty: 'auth',
+  getToken: function(req) {
+
+    if (req.headers['x-auth-token']) {
+      return req.headers['x-auth-token'];
+    }
+    return null;
+  }
+});
