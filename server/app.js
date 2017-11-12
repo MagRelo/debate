@@ -5,7 +5,6 @@ const assert = require('assert')
 
 const twitterConsumerKey = 'a9nNKuouyFRamZSZyUtvRbkGl'
 const twitterSecret = 'Ep9QTjcv5R4ry5py34Q4FjPlytahPMPABnGmGA293V4omVNVYE'
-
 const TwitterTokenStrategy = require('passport-twitter-token')
 
 // Express middleware
@@ -19,7 +18,7 @@ const cookieParser = require('cookie-parser');
 const morgan = require('morgan');
 const cors = require('cors');
 const passport = require('passport');
-
+const UserModel = require('./models/user')
 
 var config = require('./config/environment');
 
@@ -99,7 +98,6 @@ if (app.get('env') === 'production') {
 app.use(session(sessionOptions));
 
 // Passport session management
-const UserModel = require('mongoose').model('User')
 app.use(passport.initialize());
 app.use(passport.session());
 passport.use(new TwitterTokenStrategy({
