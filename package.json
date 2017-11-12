@@ -93,7 +93,7 @@
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
     "test": "node scripts/test.js --env=jsdom",
-    "server": "SEED_DB_CLEAN=true NODE_ENV=development node --inspect server/app.js"
+    "server": "NODE_ENV=development node server/app.js"
   },
   "jest": {
     "collectCoverageFrom": [
