@@ -1,6 +1,8 @@
 /* PAGE */
 
-/*colour pallate: http://www.colourlovers.com/palette/3205166/Firestarter
+/*
+
+colour pallate: http://www.colourlovers.com/palette/3205166/Firestarter
 
 light blue - 177B9F
 medium blue - 175772
@@ -23,18 +25,17 @@ html{
 
 body,
 .pure-g [class*=pure-u] {
-  font-family: 'Open Sans', sans-serif;
+  font-family: 'Barlow', sans-serif;
   color: #eceeef;
 }
 
 h1{
-  font-family: 'Oswald', 'Arial Narrow', sans-serif;
   color: #eceeef;
   border-bottom: solid 2px;
 }
 
 h2, h3 {
-  font-family: 'Oswald', 'Arial Narrow', sans-serif;
+  font-family: 'Michroma', 'Arial Narrow', sans-serif;
   color: #e7edf1;
   border-bottom: solid 1px;
   margin-bottom: 0;
@@ -219,6 +220,7 @@ h2, h3 {
 }
 
 .pure-form label{
+  font-family: 'Barlow', 'Arial Narrow', sans-serif;
   text-transform: uppercase;
   font-size: smaller;
 }
@@ -254,7 +256,7 @@ h2, h3 {
   position: fixed;
   padding: 5px;
   background: #103A52;
-  font-family: 'Oswald', 'Arial Narrow', sans-serif;
+  font-family: 'Michroma', 'Arial Narrow', sans-serif;
 }
 
 .navbar a {
@@ -270,8 +272,13 @@ h2, h3 {
 nav.navbar.pure-menu.pure-menu-horizontal{
   padding: 0
 }
+
 a.pure-menu-link{
-    padding: 0.75em 1em;
+  padding: 0.75em 1em;
+}
+
+ul.pure-menu-list.navbar-right {
+    margin-right: 1em;
 }
 
 .pure-menu-active>.pure-menu-link, .pure-menu-link:focus, .pure-menu-link:hover{
@@ -394,6 +401,7 @@ a.pure-menu-link{
   padding: 6px 12px;
   cursor: pointer;
   text-transform: uppercase;
+  font-family: 'Barlow', 'Arial Narrow', sans-serif;
 }
 
 .react-tabs__tab--selected {
@@ -453,9 +461,9 @@ a.pure-menu-link{
   max-height: 600px;
 }
 
-
-nav.navbar.pure-menu.pure-menu-horizontal{
-  z-index: 1000;
+.profile-menu-link{
+  height: 17px;
+  margin-top: 5px;
 }
 
 .purchase-total{
@@ -492,6 +500,7 @@ nav.navbar.pure-menu.pure-menu-horizontal{
 .contractOptions {
   display: flex;
 
+  font-family: 'Barlow', 'Arial Narrow', sans-serif;
   text-align: center;
   text-transform: uppercase;
   font-size: smaller;

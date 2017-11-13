@@ -2,20 +2,24 @@ import React, { Component } from 'react'
 import { Link } from 'react-router'
 import { HiddenOnlyAuth, VisibleOnlyAuth } from './util/wrappers.js'
 
-// UI Components
-import LoginButtonContainer from './user/ui/loginbutton/LoginButtonContainer'
-import LogoutButtonContainer from './user/ui/logoutbutton/LogoutButtonContainer'
-
-// Styles
-import './css/oswald.css'
+// Fonts
 import './css/open-sans.css'
+import './css/michroma.css'
+import './css/barlow.css'
+
 import './css/pure-min.css'
 import './css/grids-responsive-min.css'
-
 import 'medium-editor/dist/css/medium-editor.css'
 import 'medium-editor/dist/css/themes/default.css'
 
 import './App.css'
+
+import userIcon from './img/User_font_awesome.svg'
+
+
+// UI Components
+import LoginButtonContainer from './user/ui/loginbutton/LoginButtonContainer'
+import LogoutButtonContainer from './user/ui/logoutbutton/LogoutButtonContainer'
 
 
 class App extends Component {
@@ -23,7 +27,9 @@ class App extends Component {
     const OnlyAuthLinks = VisibleOnlyAuth(() =>
       <span>
         <li className="pure-menu-item">
-          <Link to="/profile" activeStyle={{ color: '#FF5934' }} className="pure-menu-link">Profile</Link>
+          <Link to="/profile" activeStyle={{ color: '#FF5934' }} className="pure-menu-link">
+            <img className="profile-menu-link" src={userIcon}></img>
+          </Link>
         </li>
       </span>
     )

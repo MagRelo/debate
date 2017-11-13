@@ -18,7 +18,7 @@ const LoginButton = ({ loginSuccess }) => {
 
   return(
     <TwitterLogin
-      text="Login"
+      text=""
       style={{backgroundColor: 'inherit', border: 'none'}}
       requestTokenUrl="/api/v1/auth/twitter/reverse"
       loginUrl="/auth/twitter"
