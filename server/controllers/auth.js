@@ -5,8 +5,11 @@ const expressJwt = require('express-jwt')
 
 const UserModel = require('../models/user')
 
-const twitterConsumerKey = 'a9nNKuouyFRamZSZyUtvRbkGl'
-const twitterSecret = 'Ep9QTjcv5R4ry5py34Q4FjPlytahPMPABnGmGA293V4omVNVYE'
+// const config.twitterConsumerKey = 'a9nNKuouyFRamZSZyUtvRbkGl'
+// const config.twitterSecret = 'Ep9QTjcv5R4ry5py34Q4FjPlytahPMPABnGmGA293V4omVNVYE'
+
+const config = require('../config/environment')
+
 
 
 exports.getTwitterRequestToken = (request, response) => {
@@ -18,8 +21,8 @@ exports.getTwitterRequestToken = (request, response) => {
       url: 'https://api.twitter.com/oauth/request_token',
       oauth: {
         oauth_callback: "http%3A%2F%2Fstake.servesa.io%2Ftwitter-callback",
-        consumer_key: twitterConsumerKey,
-        consumer_secret: twitterSecret
+        consumer_key: config.twitterConsumerKey,
+        consumer_secret: config.twitterSecret
       }
     }).then((result) => {
 
@@ -40,8 +43,8 @@ exports.twitterLogin = (request, response, next) => {
   fetch.post({
      url: 'https://api.twitter.com/oauth/access_token?oauth_verifier',
      oauth: {
-       consumer_key: twitterConsumerKey,
-       consumer_secret: twitterSecret,
+       consumer_key: config.twitterConsumerKey,
+       consumer_secret: config.twitterSecret,
        token: request.query.oauth_token
      },
      form: { oauth_verifier: request.query.oauth_verifier }
