@@ -18,9 +18,6 @@ class Home extends Component {
         <div className="pure-g">
           <div className="pure-u-1 pure-u-md-1-3"></div>
           <div className="pure-u-1 pure-u-md-1-3">
-
-            <SelectUser/>
-
           </div>
         </div>
       </main>
