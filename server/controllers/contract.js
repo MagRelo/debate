@@ -89,6 +89,39 @@ exports.getContract = (request, response) => {
 
 }
 
+exports.generateWords = (request, response) => {
+
+  const recursiveSearch = (testArray)=>{
+
+    return ContractModel.findOne({words: testArray})
+      .then((result)=>{
+        if(result){
+          console.log('key collision!!!') 
+          return recursiveSearch(randomWords(3))
+        } else {
+          return testArray
+        }
+      })
+  }
+
+  // get: user, target, and any existing follows
+  recursiveSearch(randomWords(3))
+    .then((wordArray) => {
+      return response.json(wordArray)
+    }).catch((error) => {
+
+      // client error
+      if(error.clientError){
+        console.error(error.message)
+        return response.status(error.status).json(error);
+      }
+
+      // server error
+      console.error(error.message)
+      return response.status(500).json({error: error.message});
+
+    })
+}
 
 // auth
 exports.createContract = (request, response) => {
@@ -111,7 +144,7 @@ exports.createContract = (request, response) => {
   newContract = new ContractModel({
     owner: userId,
     contractOptions: contractOptions,
-    words: randomWords(3),
+    words: contractOptions.wordArray,
     timestamp: new Date()
   })
 

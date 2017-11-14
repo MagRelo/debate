@@ -21,7 +21,6 @@ class Profile extends Component {
           <div className="pure-u-1 pure-u-lg-1-6"></div>
           <div className="pure-u-1 pure-u-lg-2-3">
             <div style={{marginTop: '1em'}}>
-              <CreateContractButton/>
               <ContractList/>
             </div>
           </div>

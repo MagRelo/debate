@@ -1,7 +1,8 @@
 const initialState = {
   loading: false,
   contract: {contractOptions: {}},
-  list: []
+  list: [],
+  searchWords: ['test1', 'test2', 'test3']
 }
 
 const contractReducer = (state = initialState, action) => {
@@ -25,6 +26,13 @@ const contractReducer = (state = initialState, action) => {
     return Object.assign({}, state, {
       loading: false,
       contract: action.payload
+    })
+  }
+  if (action.type === 'WORD_UPDATE')
+  {
+    return Object.assign({}, state, {
+      loading: false,
+      searchWords: action.payload
     })
   }
 

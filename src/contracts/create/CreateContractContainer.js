@@ -1,10 +1,11 @@
 import { connect } from 'react-redux'
 import CreateForm from './CreateForm'
-import { createContract } from '../ContractActions'
+import { createContract, generateWords } from '../ContractActions'
 
 const mapStateToProps = (state, ownProps) => {
   return {
-    currentUser: state.user.data
+    currentUser: state.user.data,
+    searchWords: state.contracts.searchWords
   }
 }
 
@@ -12,6 +13,9 @@ const mapDispatchToProps = (dispatch) => {
   return {
     submitContract: (currentUser, options) => {
       dispatch(createContract(currentUser, options))
+    },
+    getSearchWords: () => {
+      dispatch(generateWords())
     }
   }
 }

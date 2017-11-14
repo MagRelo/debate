@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import {Link} from 'react-router'
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 
 import LogoutButtonContainer from '../../user/ui/logoutbutton/LogoutButtonContainer'
@@ -39,7 +40,7 @@ class Profile extends Component {
                 </TabList>
 
                 <TabPanel>
-                  <CreateContractButton/>
+                  <Link className="pure-button pure-button-primary" to="/contract/add"> New Contract </Link>
                   <ContractList contractList={this.props.authData.contracts} />
                 </TabPanel>
 

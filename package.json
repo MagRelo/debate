@@ -93,7 +93,8 @@
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
     "test": "node scripts/test.js --env=jsdom",
-    "server": "NODE_ENV=development node server/app.js"
+    "server": "node server/app.js",
+    "dev": "NODE_ENV=development node --inspect server/app.js"
   },
   "jest": {
     "collectCoverageFrom": [

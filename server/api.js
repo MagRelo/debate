@@ -64,12 +64,8 @@ module.exports = function(app) {
   app.post('/api/user/list', userController.listUsers);
   app.post('/api/user/create', userController.saveUser);
 
-  // CONTRACTS PUBLIC
-  app.post('/api/contract/search', contractController.searchContracts);
-  app.get('/api/contract/list', contractController.listContracts);
-  app.get('/api/contract/:contractId', contractController.getContract);
 
-// CONTRACTS AUTH
+  // CONTRACTS AUTH
   app.post('/api/contract/create', [
     authController.authenticate,
     contractController.createContract
@@ -90,6 +86,13 @@ module.exports = function(app) {
     authController.authenticate,
     contractController.drainEscrow
   ]);
+
+  // CONTRACTS PUBLIC
+  app.post('/api/contract/search', contractController.searchContracts);
+  app.get('/api/contract/list', contractController.listContracts);
+  app.get('/api/contract/words', contractController.generateWords);
+  app.get('/api/contract/:contractId', contractController.getContract);
+
 
   // *FOLLOW*
   // app.post('/api/follow', userController.purchaseTokens);

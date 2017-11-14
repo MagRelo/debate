@@ -162,20 +162,15 @@ h2, h3 {
 }
 
 /*Buttons*/
+a.pure-button-primary,
 .pure-button-primary {
   background-color: #FF5934;
 }
+a.pure-button-primary:hover,
 .pure-button-primary:hover {
   background-color: #FF5934;
 }
 
-.pure-button-danger {
-  /*color: white;*/
-  /*background-color: #103A52;*/
-}
-.pure-button-danger:hover {
-  background-color: #f3d6db;
-}
 .pure-button-success {
   color: white;
   background-color: #FF5934;
@@ -207,6 +202,12 @@ h2, h3 {
 
 }
 
+form > p {
+  margin-top: 0.5em;
+  margin-bottom: 0.2em;
+}
+
+
 .pure-form input[type="text"]:focus {
   border-color: #0c1a2b;
 }
@@ -223,6 +224,9 @@ h2, h3 {
   font-family: 'Barlow', 'Arial Narrow', sans-serif;
   text-transform: uppercase;
   font-size: smaller;
+  margin-top: 0.8em;
+  margin-bottom: 0.4em;
+  display: block;
 }
 
 /*Copied from w3schools: https://www.w3schools.com/howto/howto_css_loader.asp*/

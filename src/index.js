@@ -18,6 +18,7 @@ import Profile from './layouts/profile/ProfileContainer'
 
 import ContractDetail from './layouts/contract/ContractContainer'
 import ContractList from './layouts/contractList/ContractListContainer'
+import ContractCreate from './layouts/contractCreate/ContractContainer'
 
 import Page404 from  './layouts/errors/404'
 
@@ -32,6 +33,7 @@ ReactDOM.render((
         <Route path="/" component={App}>
           <IndexRoute component={Home} />
 
+          <Route path="contract/add" component={ContractCreate} />
           <Route path="contract/:contractId" component={ContractDetail} />
           <Route path="contracts" component={ContractList} />
 

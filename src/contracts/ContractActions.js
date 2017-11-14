@@ -26,6 +26,14 @@ function listUpdated(list) {
   }
 }
 
+export const WORD_UPDATE = 'WORD_UPDATE'
+function wordsUpdated(wordArray) {
+  return {
+    type: WORD_UPDATE,
+    payload: wordArray
+  }
+}
+
 export function searchContracts(term) {
   return function(dispatch) {
 
@@ -107,6 +115,31 @@ export function getContract(contractId) {
 
   }
 }
+
+export function generateWords(){
+  return function(dispatch) {
+
+    dispatch(requestSent())
+
+    return fetch('/api/contract/words',
+      {
+        method: "GET"
+      }
+    ).then(rawResponse => {
+        if(rawResponse.status !== 200){ throw new Error(rawResponse.text) }
+        return rawResponse.json()
+      }
+    ).then(wordArray => {
+        dispatch(wordsUpdated(wordArray))
+      }
+    ).catch(error => {
+      console.error('action error', error)
+      return
+    })
+
+  }
+}
+
 
 export function createContract(currentUser, contractOptions) {
   return function(dispatch) {
