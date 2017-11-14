@@ -279,6 +279,7 @@ nav.navbar.pure-menu.pure-menu-horizontal{
 
 a.pure-menu-link{
   padding: 0.75em 1em;
+  font-size: 14px;
 }
 
 ul.pure-menu-list.navbar-right {
