@@ -25,7 +25,7 @@ export function sendEvent(type, eventData) {
         return rawResponse.json()
       }
     ).then(searchResults => {
-        console.log('event sent')
+        // console.log('event sent')
       }
     ).catch(error => {
       console.error('action error', error)

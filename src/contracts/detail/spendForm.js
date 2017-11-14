@@ -38,7 +38,7 @@ class FormComponent extends Component {
             </span>
           </p>
           <input
-            id="id"
+            className
             type="number"
             value={this.state.spendAmount}
             min="0"
@@ -54,7 +54,7 @@ class FormComponent extends Component {
         </p>
 
         <button
-          disabled={!this.props.loggedIn || this.state.spendAmount > 0}
+          disabled={!this.props.loggedIn || this.state.spendAmount <= 0}
           className="pure-button pure-button-primary"
           type="submit"> Spend
         </button>

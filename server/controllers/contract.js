@@ -70,7 +70,7 @@ exports.getContract = (request, response) => {
   const contractId = request.params.contractId
 
   // get: user, target, and any existing follows
-  ContractModel.findOne({_id: contractId}).populate('owner')
+  ContractModel.findOne({_id: contractId}).populate('owner tokenLedger.user')
     .then((contract) => {
       return response.json(contract)
     }).catch((error) => {
@@ -96,7 +96,7 @@ exports.generateWords = (request, response) => {
     return ContractModel.findOne({words: testArray})
       .then((result)=>{
         if(result){
-          console.log('key collision!!!') 
+          console.log('key collision!!!')
           return recursiveSearch(randomWords(3))
         } else {
           return testArray
@@ -269,7 +269,7 @@ exports.buyTokens = (request, response) => {
     }
 
   }).then((updatedFollow) => {
-    return ContractModel.findOne({ _id: targetId })
+    return ContractModel.findOne({ _id: targetId }).populate('owner tokenLedger.user')
   }).then((contract) => {
     return response.json(contract)
   }).catch((error) => {
@@ -368,7 +368,7 @@ exports.sellTokens = (request, response) => {
     return {}
 
   }).then((response) => {
-    return ContractModel.findOne({ _id: targetId })
+    return ContractModel.findOne({ _id: targetId }).populate('owner tokenLedger.user')
   }).then((contract) => {
     return response.json(contract)
   }).catch((error) => {
@@ -390,11 +390,13 @@ exports.sellTokens = (request, response) => {
 exports.burnTokens = (request, response) => {
 
   const userId = request.auth.id
-  const targetContractId = request.body.targetId
+
+  const targetContractId = request.body.targetContractId
+  const targetUserId = request.body.targetUserId
   const tokensToBurn = request.body.tokensToBurn
 
   // validate inputs
-  if(!userId || !targetContractId || !utils.isNumeric(tokensToBurn)){
+  if(!userId || !targetContractId || !targetUserId || !utils.isNumeric(tokensToBurn)){
     return response.status(400).json({
       clientError: true,
       status: 400,
@@ -402,6 +404,7 @@ exports.burnTokens = (request, response) => {
       data: {
         userId: userId,
         targetContractId: targetContractId,
+        targetUserId: targetUserId,
         tokensToBurn: tokensToBurn,
         tokensToSellNumeric: utils.isNumeric(tokensToBurn),
       }
@@ -456,7 +459,7 @@ exports.burnTokens = (request, response) => {
     return
 
   }).then((response) => {
-    return ContractModel.findOne({ _id: targetId })
+    return ContractModel.findOne({ _id: targetContractId }).populate('owner tokenLedger.user')
   }).then((contract) => {
     return response.json(contract)
   }).catch((error) => {
@@ -533,7 +536,7 @@ exports.drainEscrow = (request, response) => {
     return user.save()
 
   }).then((responseArray) => {
-    return ContractModel.findOne({ _id: targetId })
+    return ContractModel.findOne({ _id: targetId }).populate('owner tokenLedger.user')
   }).then((contract) => {
     return response.json(contract)
   }).catch((error) => {

@@ -271,7 +271,7 @@ export function sellTokens(currentUser, targetId, tokensToSell) {
   }
 }
 
-export function burnTokens(currentUser, targetContractId, tokensToBurn ) {
+export function burnTokens(currentUser, targetContractId, targetUserId, tokensToBurn ) {
   return function(dispatch) {
 
     // "loading"
@@ -281,6 +281,7 @@ export function burnTokens(currentUser, targetContractId, tokensToBurn ) {
     dispatch(sendEvent('burn',
       {
         'targetId': targetContractId,
+        'targetUserId': targetUserId,
         'tokensToBurn': tokensToBurn
       }
     ))
@@ -295,6 +296,7 @@ export function burnTokens(currentUser, targetContractId, tokensToBurn ) {
         },
         body: JSON.stringify({
           targetContractId: targetContractId,
+          targetUserId: targetUserId,
           tokensToBurn: tokensToBurn
         })
       }
@@ -332,7 +334,7 @@ export function drainEscrow(currentUser, targetId, drainAmount) {
 
     return fetch('/api/contract/drain',
       {
-        method: "POST",
+        method: "PUT",
         headers: {
           "Content-Type": "application/json",
           "x-auth-token": currentUser.token

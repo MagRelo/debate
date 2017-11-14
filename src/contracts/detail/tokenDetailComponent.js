@@ -54,13 +54,20 @@ class FormComponent extends Component {
     if(this.props.closeModalFunction) return this.props.closeModalFunction()
   }
 
-  burnTokens(tokenCount){
-    this.props.burnTokens(this.props.currentUser, this.props.contractData._id, tokenCount)
+  burnTokens(targetUserId, tokenCount){
+
+    this.props.burnTokens(
+      this.props.currentUser,
+      this.props.contractData._id,
+      targetUserId,
+      tokenCount
+    )
+
     if(this.props.closeModalFunction) return this.props.closeModalFunction()
   }
 
   spendEscrow(spendAmount){
-    this.props.spendEscrow(this.props.currentUser, this.props.contractData._id, spendAmount)
+    this.props.drainEscrow(this.props.currentUser, this.props.contractData._id, spendAmount)
     if(this.props.closeModalFunction) return this.props.closeModalFunction()
   }
 
@@ -150,7 +157,7 @@ class FormComponent extends Component {
 
                 <BurnForm
                   loggedIn={!!this.props.currentUser}
-                  tokenLedgerCount={this.props.contractData.tokenLedgerCount}
+                  tokenLedger={this.props.contractData.tokenLedger}
                   burnTokenFunction={this.burnTokens.bind(this)}/>
 
               </TabPanel>

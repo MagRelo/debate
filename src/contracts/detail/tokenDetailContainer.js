@@ -16,11 +16,11 @@ const mapDispatchToProps = (dispatch) => {
     sellTokens: (currentUser, targetId, tokens) => {
       dispatch(sellTokens(currentUser, targetId, tokens))
     },
-    burnTokens: (currentUser, targetId, tokens) => {
-      dispatch(burnTokens(currentUser, targetId, tokens))
+    burnTokens: (currentUser, targetId, targetUserId, tokens) => {
+      dispatch(burnTokens(currentUser, targetId, targetUserId, tokens))
     },
     drainEscrow: (currentUser, targetId, spendAmount) => {
-      dispatch(spendEscrow(currentUser, targetId, spendAmount))
+      dispatch(drainEscrow(currentUser, targetId, spendAmount))
     }
 
   }
