@@ -8,7 +8,7 @@ import LoginButtonContainer from '../../user/ui/loginbutton/LoginButtonContainer
 // import ContractList from '../../contracts/list/contractListContainer'
 
 import SelectUser from '../../user/ui/selectUser/SelectUserContainer'
-// <SignUpFormContainer/>
+import circleImage from "../../img/circle.png"
 
 
 class Home extends Component {
