@@ -35,12 +35,12 @@ class Profile extends Component {
               <Tabs>
 
                 <TabList>
-                  <Tab>My Contracts</Tab>
+                  <Tab>My Groups</Tab>
                   <Tab>Wallet</Tab>
                 </TabList>
 
                 <TabPanel>
-                  <Link className="pure-button pure-button-primary" to="/contract/add"> New Contract </Link>
+                  <Link className="pure-button pure-button-primary" to="/contract/add"> New Group </Link>
                   <ContractList contractList={this.props.authData.contracts} />
                 </TabPanel>
 

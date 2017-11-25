@@ -1,6 +1,6 @@
 const initialState = {
   loading: false,
-  contract: {contractOptions: {}},
+  contract: {contractOptions: {}, owner: {}},
   list: [],
   searchWords: ['test1', 'test2', 'test3']
 }

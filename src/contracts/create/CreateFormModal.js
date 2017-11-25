@@ -108,7 +108,7 @@ class ComposeMessage extends Component {
           <button
             className="pure-button pure-button-primary"
             disabled={!this.props.currentUser}
-            onClick={this.openModal}> + Add contract
+            onClick={this.openModal}> + Add group
 
           </button>
         </div>
@@ -124,7 +124,7 @@ class ComposeMessage extends Component {
             <div className="compose-container">
 
               <div className="modal-title-container">
-                <span className="title">Create Contract</span>
+                <span className="title">Create Group</span>
               </div>
 
               <div className="modal-body-container">

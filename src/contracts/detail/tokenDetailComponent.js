@@ -114,6 +114,23 @@ class FormComponent extends Component {
 
         <TokenPriceChart data={this.props.contractData.tokenHistory}/>
 
+        <h2>Contract Information</h2>
+        <div className="">
+
+          <div className="icon-holder">
+            <div
+              className="icon"
+              style={{'backgroundImage': 'url(\'' + this.props.contractData.owner.avatarUrl + '\')'}}>
+            </div>
+          </div>
+
+          <div className="feed-title">{this.props.contractData.owner.name}
+            <small>@{this.props.contractData.owner.username}</small>
+          </div>
+
+        </div>
+
+
         {!this.props.currentUser ? null
           :
 

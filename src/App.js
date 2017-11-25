@@ -58,7 +58,7 @@ class App extends Component {
             Servésa</Link>
           <ul className="pure-menu-list navbar-right">
             <li className="pure-menu-item">
-              <Link to="/contracts" activeStyle={{ color: '#FF5934' }} className="pure-menu-link">Contracts</Link>
+              <Link to="/contracts" activeStyle={{ color: '#FF5934' }} className="pure-menu-link">Groups</Link>
             </li>
             <OnlyGuestLinks />
             <OnlyAuthLinks />
