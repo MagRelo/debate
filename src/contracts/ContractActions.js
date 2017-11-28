@@ -1,6 +1,8 @@
 import {sendEvent} from '../analytics/AnalyticsActions'
 import { browserHistory } from 'react-router'
 
+import store from '../store'
+
 
 // set 'messages.loading' to true
 export const REQUEST_SENT = 'REQUEST_SENT'
@@ -142,15 +144,22 @@ export function generateWords(){
 
 
 export function createContract(currentUser, contractOptions) {
+
+  let web3 = store.getState().web3.web3Instance
+  console.log('create - web3 init:', !!web3)
+
   return function(dispatch) {
 
-    // "loading"
+    // "loading" display
     dispatch(requestSent())
-    dispatch(sendEvent('create',
-      {
-        'contractOptions': contractOptions
-      }
-    ))
+
+    // send analytics
+    dispatch(sendEvent('create', { 'contractOptions': contractOptions } ))
+
+    if(web3){
+      
+    }
+
 
     return fetch('/api/contract/create',
       {
@@ -162,21 +171,21 @@ export function createContract(currentUser, contractOptions) {
         body: JSON.stringify({
           contractOptions: contractOptions
         })
-      }
-    ).then(rawResponse => {
+      })
+      .then(rawResponse => {
         if(rawResponse.status !== 200){ throw new Error(rawResponse.text) }
         return rawResponse.json()
-      }
-    ).then(contract => {
+      })
+      .then(contract => {
         dispatch(contractUpdated(contract))
 
         // send to profile
         return browserHistory.push('/contract/' + contract._id)
-      }
-    ).catch(error => {
-      console.error('action error', error)
-      return
-    })
+      })
+      .catch(error => {
+        console.error('action error', error)
+        return
+      })
 
   }
 }
