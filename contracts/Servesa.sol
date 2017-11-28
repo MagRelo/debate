@@ -1,6 +1,5 @@
 pragma solidity 0.4.18;
 import './SafeMath.sol';
-import './minime/MiniMeToken.sol';
 
 contract Servesa {
   using SafeMath for uint256;
@@ -16,18 +15,16 @@ contract Servesa {
   mapping(address => Funder) public funders;
 
   bool public live = true; // For sunsetting contract
+  uint public totalCurrentTokens = 0; // Keeps track of total tokens
   uint public totalCurrentFunders = 0; // Keeps track of total funders
   uint public withdrawalCounter = 0; // Keeps track of how many withdrawals have taken place
   uint public sunsetWithdrawDate;
   uint public sunsetWithdrawalPeriod;
 
-  MiniMeToken public tokenContract;
-  MiniMeTokenFactory public tokenFactory;
-
   address owner;
-  bool ownerCanBurn;
-  bool ownerCanSpend;
-  uint tokenBasePrice;
+  bool public ownerCanBurn = false;
+  bool public ownerCanSpend = false;
+  uint public tokenBasePrice = 100000000000000;
   uint tokenPriceExponent;
   uint tokenPriceExponentDivisor;
 
@@ -57,10 +54,6 @@ contract Servesa {
     tokenBasePrice = tokenBasePriceInit;
     tokenPriceExponent = tokenPriceExponentInit;
     tokenPriceExponentDivisor = tokenPriceExponentDivisorInit;
-
-    uint8 tokenDecimals = 10;
-    tokenFactory = new MiniMeTokenFactory();
-    tokenContract = tokenFactory.createCloneToken(0x0, 0, "test", 18, "tst", true );
 
     contractStartTime = now;
 
@@ -113,7 +106,7 @@ contract Servesa {
   function buy() public payable onlyWhenLive {
 
     /* value must be greater than buy price*/
-    require(msg.value >= calculateNextBuyPrice(tokenBasePrice));
+    require(msg.value >= calculateNextBuyPrice());
 
     // Only increase total funders when we have a new funder
     if(!isFunder(msg.sender)) {
@@ -130,9 +123,9 @@ contract Servesa {
       funders[msg.sender].totalPurchasePrice = funders[msg.sender].totalPurchasePrice + msg.value;
     }
 
-    // update token ledger escrow balance
-    // update token count and prices
-    // record transaction
+    // increment token count
+    totalCurrentTokens = totalCurrentTokens + 1;
+
     Buy(msg.sender, funders[msg.sender].tokenCount);
   }
 
@@ -142,26 +135,26 @@ contract Servesa {
 
   function sell() public onlyWhenLive onlyByFunder {
 
-    /* Must be greater than buy price*/
-    /*require(msg.value <= funders[msg.sender].tokenCount);*/
+    uint amount = calculateNextSellPrice();
 
-    // Only increase total funders when we have a new funder
-    if(!isFunder(msg.sender)) {
+    // decrease seller's token count
+    funders[msg.sender].tokenCount = funders[msg.sender].tokenCount.sub(1);
 
-      // get sender token count
-      // update ledger
+    // decrement token count
+    totalCurrentTokens = totalCurrentTokens.sub(1);
 
-      // remove founder if count == 0
-      totalCurrentFunders = totalCurrentFunders.sub(1); // Decrease total funder count
-
-      // update total token count
-      // record transaction
-      Sell(msg.sender, funders[msg.sender].tokenCount);
-
+    // remove founder if count == 0
+    if(funders[msg.sender].tokenCount == 0){
+        delete funders[msg.sender];
+        totalCurrentFunders = totalCurrentFunders.sub(1);
     }
-    else {
-      /* Throw Error*/
-    }
+
+    // Interaction
+    msg.sender.transfer(amount);
+
+
+    // record transaction
+    Sell(msg.sender, funders[msg.sender].tokenCount);
 
   }
 
@@ -169,51 +162,75 @@ contract Servesa {
   * Burn: delete tokens without affecting escrow balance
   */
 
-  function burn() public onlyWhenLive onlyByOwner canBurn {
+  function burn(address addr) public onlyWhenLive onlyByOwner canBurn {
 
+    // addr must be funder
+    require(isFunder(addr));
 
-    Burn(msg.sender, 10);
+    // decrease targets's token count
+    funders[addr].tokenCount = funders[addr].tokenCount.sub(1);
+
+    // remove target if count == 0
+    if(funders[addr].tokenCount == 0){
+        delete funders[addr];
+        totalCurrentFunders = totalCurrentFunders.sub(1);
+    }
+
+    // decrement token count
+    totalCurrentTokens = totalCurrentTokens.sub(1);
+
+    Burn(addr, 1);
   }
 
   /*
-  * Burn: delete tokens without affecting escrow balance
+  * Spend: remove balance
   */
 
-  function spend() public onlyWhenLive onlyByOwner canSpend {
+  function spend(uint amount) public onlyWhenLive onlyByOwner canSpend {
 
+    // send amount from contract to owner
+    msg.sender.transfer(amount);
 
     Drain(10);
   }
 
   // Pure functions
-
-  /*
-  * use pricing function to determine next token's 'buy' price
-  */
-  function calculateNextBuyPrice(uint tokenPrice) public  returns (uint){
-
-    // do more math here
-    return tokenPrice;
+  function fracExp(uint k, uint q, uint n, uint p) internal returns (uint) {
+    uint s = 0;
+    uint N = 1;
+    uint B = 1;
+    for (uint i = 0; i < p; ++i){
+      s += k * N / B / (q**i);
+      N  = N * (n-i);
+      B  = B * (i+1);
+    }
+    return s;
   }
 
   /*
-  * use pricing function to determine the current token 'sell' price
+  * use pricing function to determine next share's 'buy' price
   */
-  function calculateNextSellPrice(uint total, uint supply) public returns (uint){
+  function calculateNextBuyPrice() public returns (uint){
+
+    if(tokenPriceExponent == 1){
+        return tokenBasePrice;
+    } else {
+        return tokenBasePrice + fracExp(tokenBasePrice, 618046, totalCurrentTokens, 2) +
+            tokenBasePrice * totalCurrentTokens/1000;
+    }
+  }
+
+  /*
+  * use pricing function to determine the current share 'sell' price
+  */
+  function calculateNextSellPrice() public view returns (uint){
 
     // escrow balance / token supply
-    return total.div(supply).mul(10).div(100);
+    return SafeMath.div(this.balance, totalCurrentTokens);
   }
 
   // Getter functions
-
-  /*
-  * To calculate the refund amount we look at how many times the owner
-  * has withdrawn since the funder added their funds.
-  * We use that deduct 10% for each withdrawal.
-  */
-
-  function getOwner() public returns (address) {
+  function getOwner() public view returns (address) {
     return owner;
   }
 
@@ -229,44 +246,12 @@ contract Servesa {
     return funders[addr].exists;
   }
 
-  // State changing functions
-  function setTokenBasePrice(uint amount) external onlyByOwner {
-    require(amount > 0);
-    tokenBasePrice = amount;
+  function isFunderTokens(address addr) public constant returns (uint256) {
+    return funders[addr].tokenCount;
   }
 
-  /* --- Sunsetting --- */
-  /*
-  * The owner can decide to stop using this contract.
-  * They use this sunset function to put it into sunset mode.
-  * The owner can then swipe rest of the funds after a set time
-  * if funders have not withdrawn their funds.
-  */
-
-  function sunset() external onlyByOwner onlyWhenLive {
-    sunsetWithdrawDate = now.add(sunsetWithdrawalPeriod);
-    live = false;
-
-    Sunset(true);
+  function isFunderPurchase(address addr) public constant returns (uint256) {
+    return funders[addr].totalPurchasePrice;
   }
 
-  function swipe(address recipient) external onlyWhenSunset onlyByOwner {
-    require(now >= sunsetWithdrawDate);
-
-    recipient.transfer(this.balance);
-  }
-
-  /* --- Token Contract Forwarding Controller Functions --- */
-  /*
-  * Allows owner to call two additional functions on the token contract:
-  * claimTokens
-  * enabledTransfers
-  *
-  */
-  function tokenContractClaimTokens(address _token) onlyByOwner public {
-    tokenContract.claimTokens(_token);
-  }
-  function tokenContractEnableTransfers(bool _transfersEnabled) onlyByOwner public {
-    tokenContract.enableTransfers(_transfersEnabled);
-  }
 }
