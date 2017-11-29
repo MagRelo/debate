@@ -20,7 +20,6 @@ contract ServesaFactory {
     bool ownerCanSpend,
     uint tokenBasePrice,
     uint tokenPriceExponent,
-    uint tokenPriceExponentDivisor,
     uint sunsetWithdrawPeriod) public returns (address newAddress) {
 
     Servesa contractId = new Servesa(
@@ -29,7 +28,6 @@ contract ServesaFactory {
       ownerCanSpend,
       tokenBasePrice,
       tokenPriceExponent,
-      tokenPriceExponentDivisor,
       sunsetWithdrawPeriod
     );
 

@@ -9,7 +9,6 @@ const config = {
   ownerCanSpend: true,
   tokenBasePrice: 10000000000000000, // 0.01 ether
   tokenPriceExponent: 2,
-  tokenPriceExponentDivisor: 10000,
   sunsetWithdrawalPeriod: 5184000 // 2 months
 };
 
@@ -30,7 +29,6 @@ module.exports = function(deployer, network, accounts) {
         config.ownerCanSpend,
         config.tokenBasePrice,
         config.tokenPriceExponent,
-        config.tokenPriceExponentDivisor,
         config.sunsetWithdrawalPeriod,
         {from: accounts[0]}
       )

@@ -15,20 +15,19 @@ contract Servesa {
   mapping(address => Funder) public funders;
 
   bool public live = true; // For sunsetting contract
-  uint public totalCurrentTokens = 0; // Keeps track of total tokens
-  uint public totalCurrentFunders = 0; // Keeps track of total funders
-  uint public withdrawalCounter = 0; // Keeps track of how many withdrawals have taken place
   uint public sunsetWithdrawDate;
   uint public sunsetWithdrawalPeriod;
+  uint public contractStartTime; // For accounting purposes
+
+  uint public totalCurrentTokens = 0; // Keeps track of total tokens
+  uint public totalCurrentFunders = 0; // Keeps track of total funders
 
   address owner;
   bool public ownerCanBurn = false;
   bool public ownerCanSpend = false;
   uint public tokenBasePrice = 100000000000000;
-  uint tokenPriceExponent;
-  uint tokenPriceExponentDivisor;
-
-  uint public contractStartTime; // For accounting purposes
+  uint public tokenPriceExponent = 1;
+  uint public tokenPriceExponentDivisor = 10000;
 
   event NewContract(uint testOne, string testString);
   event Buy(address indexed funder, uint tokenCount);
@@ -43,18 +42,15 @@ contract Servesa {
     bool ownerCanSpendInit,
     uint tokenBasePriceInit,
     uint tokenPriceExponentInit,
-    uint tokenPriceExponentDivisorInit,
     uint sunsetWithdrawPeriodInit) public {
-
-    sunsetWithdrawalPeriod = sunsetWithdrawPeriodInit;
 
     owner = ownerAddress;
     ownerCanBurn = ownerCanBurnInit;
     ownerCanSpend = ownerCanSpendInit;
     tokenBasePrice = tokenBasePriceInit;
     tokenPriceExponent = tokenPriceExponentInit;
-    tokenPriceExponentDivisor = tokenPriceExponentDivisorInit;
 
+    sunsetWithdrawalPeriod = sunsetWithdrawPeriodInit;
     contractStartTime = now;
 
     NewContract(12900, 'test message ground control');
@@ -72,16 +68,6 @@ contract Servesa {
     _;
   }
 
-  // Contract options
-  modifier canBurn() {
-    require(ownerCanBurn);
-    _;
-  }
-  modifier canSpend() {
-    require(ownerCanSpend);
-    _;
-  }
-
   // Auth
   modifier onlyByOwner() {
     require(msg.sender == owner);
@@ -89,6 +75,16 @@ contract Servesa {
   }
   modifier onlyByFunder() {
     require(isFunder(msg.sender));
+    _;
+  }
+
+  // Contract options
+  modifier canBurn() {
+    require(ownerCanBurn);
+    _;
+  }
+  modifier canSpend() {
+    require(ownerCanSpend);
     _;
   }
 
@@ -102,13 +98,13 @@ contract Servesa {
   /*
   * Buy: exchange ETH for tokens
   */
-
   function buy() public payable onlyWhenLive {
 
-    /* value must be greater than buy price*/
-    require(msg.value >= calculateNextBuyPrice());
+    // msg.value must be greater than buy price
+    uint price = calculateNextBuyPrice();
+    require(msg.value >= price);
 
-    // Only increase total funders when we have a new funder
+    // Update funders array
     if(!isFunder(msg.sender)) {
       totalCurrentFunders = totalCurrentFunders.add(1); // Increase total funder count
 
@@ -119,20 +115,23 @@ contract Servesa {
       });
     }
     else {
-      funders[msg.sender].tokenCount = funders[msg.sender].tokenCount + 1;
-      funders[msg.sender].totalPurchasePrice = funders[msg.sender].totalPurchasePrice + msg.value;
+      funders[msg.sender].tokenCount = funders[msg.sender].tokenCount.add(1);
+      funders[msg.sender].totalPurchasePrice = funders[msg.sender].totalPurchasePrice.add(price);
     }
 
     // increment token count
-    totalCurrentTokens = totalCurrentTokens + 1;
+    totalCurrentTokens = totalCurrentTokens.add(1);
 
+    // refund overage
+    msg.sender.transfer(msg.value.sub(price));
+
+    // event
     Buy(msg.sender, funders[msg.sender].tokenCount);
   }
 
   /*
   * Sell: exchange tokens for ETH
   */
-
   function sell() public onlyWhenLive onlyByFunder {
 
     uint amount = calculateNextSellPrice();
@@ -152,16 +151,13 @@ contract Servesa {
     // Interaction
     msg.sender.transfer(amount);
 
-
-    // record transaction
+    // event
     Sell(msg.sender, funders[msg.sender].tokenCount);
-
   }
 
   /*
   * Burn: delete tokens without affecting escrow balance
   */
-
   function burn(address addr) public onlyWhenLive onlyByOwner canBurn {
 
     // addr must be funder
@@ -179,23 +175,26 @@ contract Servesa {
     // decrement token count
     totalCurrentTokens = totalCurrentTokens.sub(1);
 
+    // event
     Burn(addr, 1);
   }
 
   /*
   * Spend: remove balance
   */
-
   function spend(uint amount) public onlyWhenLive onlyByOwner canSpend {
 
     // send amount from contract to owner
     msg.sender.transfer(amount);
 
-    Drain(10);
+    // event
+    Drain(amount);
   }
 
+
+
   // Pure functions
-  function fracExp(uint k, uint q, uint n, uint p) internal returns (uint) {
+  function fracExp(uint k, uint q, uint n, uint p) internal pure returns (uint) {
     uint s = 0;
     uint N = 1;
     uint B = 1;
@@ -210,13 +209,12 @@ contract Servesa {
   /*
   * use pricing function to determine next share's 'buy' price
   */
-  function calculateNextBuyPrice() public returns (uint){
+  function calculateNextBuyPrice() public view returns (uint){
 
     if(tokenPriceExponent == 1){
         return tokenBasePrice;
     } else {
-        return tokenBasePrice + fracExp(tokenBasePrice, 618046, totalCurrentTokens, 2) +
-            tokenBasePrice * totalCurrentTokens/1000;
+        return fracExp(tokenBasePrice, 618046, totalCurrentTokens, 2);
     }
   }
 
