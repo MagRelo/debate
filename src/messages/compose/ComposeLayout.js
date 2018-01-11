@@ -68,84 +68,50 @@ class ComposeMessage extends Component {
     this.props.onMessageSubmit(this.state.text, this.props.user)
   }
 
-
-
-  userList(){
-    return this.props.user.userList.map(user => {return user.name})
-  }
-
   render() {
     return(
 
       <div>
 
-        <div className="open-compose-button-container">
-          <button
-            className="pure-button pure-button-primary"
-            onClick={this.openModal}> + Add post
-          </button>
+        <div className="compose-container">
+
+          <div className="compose-title-container">
+            <span className="title">Add Post</span>
+          </div>
+
+          <div className="compose-editor-container">
+
+            {this.props.messages.loading ?
+
+              <div>
+                <div className="loader"></div>
+              </div>
+
+            :
+
+              <form className="pure-form pure-form-stacked " onSubmit={this.handleSubmit.bind(this)}>
+                <fieldset>
+                  <label>Comment:</label>
+                  <Editor
+                    className="editor-input"
+                    text=""
+                    onChange={this.handleChange.bind(this)}
+                  />
+                </fieldset>
+
+                <button
+                  type="submit"
+                  className="pure-button pure-button-primary"> Submit
+                </button>
+
+              </form>
+
+            }
+
+          </div>
+
         </div>
 
-
-        <Modal
-          isOpen={this.state.modalIsOpen}
-          onAfterOpen={this.afterOpenModal}
-          onRequestClose={this.closeModal}
-          style={customStyles}
-          contentLabel="Example Modal">
-
-            <div className="compose-container">
-
-              <div className="compose-title-container">
-                <span className="title">Add Post</span>
-              </div>
-
-              <div className="compose-editor-container">
-
-                {this.props.messages.loading ?
-
-                  <div>
-                    <div className="loader"></div>
-                  </div>
-
-                :
-
-                  <form className="pure-form pure-form-stacked " onSubmit={this.handleSubmit.bind(this)}>
-
-                    <fieldset>
-                        <p>This message will only be visible to people with whom you have an existing relationship.</p>
-                        <p>This includes:</p>
-                        <ul>
-                          <li>People whose tokens you own</li>
-                          <li>People that own your tokens</li>
-                          <li>Friends of people that own your tokens</li>
-                        </ul>
-                    </fieldset>
-
-
-                    <fieldset>
-                      <label>Message:</label>
-                      <Editor
-                        className="editor-input"
-                        text=""
-                        onChange={this.handleChange.bind(this)}
-                      />
-                    </fieldset>
-
-                    <button
-                      type="submit"
-                      className="pure-button pure-button-primary"> Submit
-                    </button>
-
-                  </form>
-
-                }
-
-              </div>
-
-            </div>
-
-          </Modal>
       </div>
 
 

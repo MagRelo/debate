@@ -7,20 +7,22 @@ import { UserIsAuthenticated } from './util/wrappers.js'
 
 
 // Initialize web3 and set in Redux.
-import getWeb3 from './util/web3/getWeb3'
-getWeb3
-  .then(() => { console.log('Web3 initialized!') })
-  .catch(() => { console.log('Error in web3 initialization.') })
+// import getWeb3 from './util/web3/getWeb3'
+// getWeb3
+//   .then(() => { console.log('Web3 initialized!') })
+//   .catch(() => { console.log('Error in web3 initialization.') })
 
 // Layouts
 import App from './App'
 import Home from './layouts/home/Home'
 import Feed from './layouts/network/NetworkContainer'
 import Profile from './layouts/profile/ProfileContainer'
-import ContractDetail from './layouts/contract/ContractContainer'
-import ContractList from './layouts/contractList/ContractListContainer'
-import ContractCreate from './layouts/contractCreate/ContractContainer'
 import Page404 from  './layouts/errors/404'
+
+import QuestionCreate from './question/add/Container'
+import QuestionList from './question/list/Container'
+import QuestionDetail from './question/detail/Container'
+
 
 // Redux Store
 import store from './store'
@@ -32,9 +34,9 @@ ReactDOM.render((
         <Route path="/" component={App}>
           <IndexRoute component={Home} />
 
-          <Route path="contract/add" component={ContractCreate} />
-          <Route path="contract/:contractId" component={ContractDetail} />
-          <Route path="contracts" component={ContractList} />
+          <Route path="questions/add" component={QuestionCreate} />
+          <Route path="questions/list" component={QuestionList} />
+          <Route path="questions/:slug" component={QuestionDetail} />
 
           <Route path="profile" component={UserIsAuthenticated(Profile)} />
 

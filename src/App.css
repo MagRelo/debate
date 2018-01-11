@@ -29,17 +29,8 @@ body,
   color: #eceeef;
 }
 
-h1{
-  color: #eceeef;
-  border-bottom: solid 2px;
-}
-
 h2, h3 {
-  font-family: 'Michroma', 'Arial Narrow', sans-serif;
-  color: #e7edf1;
   border-bottom: solid 1px;
-  margin-bottom: 0;
-  line-height: 2em;
 }
 
 .table-100{

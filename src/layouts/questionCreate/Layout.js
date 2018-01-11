@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 
-import ContractCreate from '../../contracts/create/CreateContractContainer'
+import QuestionCreate from '../../question/compose/ComposeContainer'
 
 
 class Profile extends Component {
@@ -20,7 +20,7 @@ class Profile extends Component {
           <div className="pure-u-1 pure-u-md-2-3">
             <div style={{marginTop: '1em'}}>
 
-              <ContractCreate/>
+              <QuestionCreate/>
 
             </div>
 
