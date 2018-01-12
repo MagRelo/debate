@@ -14,8 +14,6 @@ import { UserIsAuthenticated } from './util/wrappers.js'
 
 // Layouts
 import App from './App'
-import Home from './layouts/home/Home'
-import Feed from './layouts/network/NetworkContainer'
 import Profile from './layouts/profile/ProfileContainer'
 import Page404 from  './layouts/errors/404'
 
@@ -32,7 +30,7 @@ ReactDOM.render((
     <Provider store={store}>
       <Router history={history}>
         <Route path="/" component={App}>
-          <IndexRoute component={Home} />
+          <IndexRoute component={QuestionList} />
 
           <Route path="questions/add" component={QuestionCreate} />
           <Route path="questions/list" component={QuestionList} />

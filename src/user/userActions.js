@@ -1,6 +1,6 @@
 import { browserHistory } from 'react-router'
 
-import { getTimelineByUser, getMessagesByUser } from '../messages/MessageActions'
+// import { getTimelineByUser, getMessagesByUser } from '../messages/MessageActions'
 
 export const USER_LIST_UPDATE = 'USER_LIST_UPDATE'
 function userListUpdate(userListArray) {
@@ -29,8 +29,8 @@ function userLoggedOut(user) {
 export function loginUser(user) {
   return function(dispatch) {
 
-    dispatch(getTimelineByUser(user._id))
-    dispatch(getMessagesByUser(user._id))
+    // dispatch(getTimelineByUser(user._id))
+    // dispatch(getMessagesByUser(user._id))
     dispatch(getUsers(user._id))
     dispatch(userLoggedIn(user))
 
@@ -109,8 +109,8 @@ export function followUser(userId, targetId, tokensToPurchase) {
         return rawResponse.json()
       }).then(userObject => {
         dispatch(userLoggedIn(userObject))
-        dispatch(getTimelineByUser(userId))
-        dispatch(getMessagesByUser(userId))
+        // dispatch(getTimelineByUser(userId))
+        // dispatch(getMessagesByUser(userId))
         return dispatch(getUsers(userId))
       }).catch(error => {
         console.error('action error', error)

@@ -4,8 +4,7 @@ import { routerReducer } from 'react-router-redux'
 import web3Reducer from './util/web3/web3Reducer'
 
 import userReducer from './user/userReducer'
-import messageReducer from './messages/MessageReducer'
-import contractReducer from './contracts/ContractReducer'
+import questionReducer from './question/questionReducer'
 
 const reducer = combineReducers({
   routing: routerReducer,

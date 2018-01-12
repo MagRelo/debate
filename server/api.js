@@ -1,14 +1,11 @@
 /**
  * Main application routes
  */
-
-
-
 const authController = require('./controllers/auth')
 const userController = require('./controllers/user')
 const messageController = require('./controllers/message')
-const contractController = require('./controllers/contract')
 const analyticsController = require('./controllers/analytics')
+const questionController = require('./controllers/questions')
 
 const passport = require('passport')
 const jwt = require('jsonwebtoken')
@@ -20,33 +17,10 @@ var path = require('path');
 var passportConfig = require('./config/passport');
 passportConfig();
 
-
-var getOne = function (req, res) {
-  var user = req.user.toObject();
-
-  delete user['twitterProvider'];
-  delete user['__v'];
-
-  res.json(user);
-};
-
-
 module.exports = function(app) {
 
   // TWITTER LOGIN
   app.post('/api/v1/auth/twitter/reverse', authController.getTwitterRequestToken)
-  // app.get('/auth/twitter', [
-  //   authController.twitterLogin,
-  //   passport.authenticate('twitter-token', {session: false}),
-  //   function(req, res, next) {
-  //       if (!req.user) { return res.send(401, 'User Not Authenticated'); }
-  //       req.auth = { id: req.user.id }
-  //       return next();
-  //     },
-  //   authController.generateToken,
-  //   authController.sendToken
-  // ])
-  //
   app.post('/auth/twitter', [
     authController.twitterLogin,
     passport.authenticate('twitter-token', {session: false}),
@@ -59,50 +33,37 @@ module.exports = function(app) {
     authController.sendToken
   ])
 
-
   // USERS
   app.post('/api/user/list', userController.listUsers);
   app.post('/api/user/create', userController.saveUser);
 
 
+  // QUESTIONS
+  app.post('/api/question', questionController.saveQuestion);
+  app.get('/api/question/:questionId', questionController.getQuestion);
+
+  // COMMENTS
+  app.post('/api/comment', questionController.saveComment);
+
+
   // CONTRACTS AUTH
-  app.post('/api/contract/create', [
-    authController.authenticate,
-    contractController.createContract
-  ]);
-  app.put('/api/contract/buy', [
-    authController.authenticate,
-    contractController.buyTokens
-  ]);
-  app.put('/api/contract/sell', [
-    authController.authenticate,
-    contractController.sellTokens
-  ]);
-  app.put('/api/contract/burn', [
-    authController.authenticate,
-    contractController.burnTokens
-  ]);
-  app.put('/api/contract/drain', [
-    authController.authenticate,
-    contractController.drainEscrow
-  ]);
-
+  // app.post('/api/contract/create', [ authController.authenticate, contractController.createContract ]);
+  // app.put('/api/contract/buy', [ authController.authenticate, contractController.buyTokens ]);
+  // app.put('/api/contract/sell', [ authController.authenticate, contractController.sellTokens ]);
+  // app.put('/api/contract/burn', [ authController.authenticate, contractController.burnTokens ]);
+  // app.put('/api/contract/drain', [ authController.authenticate, contractController.drainEscrow ]);
   // CONTRACTS PUBLIC
-  app.post('/api/contract/search', contractController.searchContracts);
-  app.get('/api/contract/list', contractController.listContracts);
-  app.get('/api/contract/words', contractController.generateWords);
-  app.get('/api/contract/:contractId', contractController.getContract);
-
-
+  // app.post('/api/contract/search', contractController.searchContracts);
+  // app.get('/api/contract/list', contractController.listContracts);
+  // app.get('/api/contract/words', contractController.generateWords);
+  // app.get('/api/contract/:contractId', contractController.getContract);
   // *FOLLOW*
   // app.post('/api/follow', userController.purchaseTokens);
   // app.delete('/api/follow', userController.sellTokens);
-
   // * MESSAGES*
-  app.get('/api/messages/:userId', messageController.getMessagesByUser);
-  app.get('/api/timeline/:userId', messageController.getTimelineByUser);
-  app.post('/api/messages', messageController.saveMessage);
-
+  // app.get('/api/messages/:userId', messageController.getMessagesByUser);
+  // app.get('/api/timeline/:userId', messageController.getTimelineByUser);
+  // app.post('/api/messages', messageController.saveMessage);
 
   // *ANALYTICS*
   app.post('/api/analytics/send', analyticsController.sendEvent);

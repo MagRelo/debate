@@ -7,11 +7,21 @@ import LogoutButtonContainer from '../../user/ui/logoutbutton/LogoutButtonContai
 import WalletListContainer from '../../user/ui/walletList/walletListContainer'
 
 
-import CreateContractButton from '../../contracts/create/CreateContractContainer'
-import ContractList from '../../contracts/list/contractListContainer'
+// import CreateContractButton from '../../contracts/create/CreateContractContainer'
+// import ContractList from '../../contracts/list/contractListContainer'
+
+//
+// <TabPanel>
+//   <Link className="pure-button pure-button-primary" to="/contract/add"> New Group </Link>
+//   <ContractList contractList={this.props.authData.contracts} />
+// </TabPanel>
+//
+// <TabPanel>
+//   <ContractList contractList={this.props.currentUser.walletArray} />
+// </TabPanel>
 
 
-import FeedContainer from '../../messages/feed/FeedContainer'
+// import FeedContainer from '../../messages/feed/FeedContainer'
 
 class Profile extends Component {
   constructor(props, { authData }) {
@@ -38,15 +48,6 @@ class Profile extends Component {
                   <Tab>My Groups</Tab>
                   <Tab>Wallet</Tab>
                 </TabList>
-
-                <TabPanel>
-                  <Link className="pure-button pure-button-primary" to="/contract/add"> New Group </Link>
-                  <ContractList contractList={this.props.authData.contracts} />
-                </TabPanel>
-
-                <TabPanel>
-                  <ContractList contractList={this.props.currentUser.walletArray} />
-                </TabPanel>
 
               </Tabs>
 
