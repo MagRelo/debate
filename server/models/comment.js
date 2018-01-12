@@ -7,11 +7,11 @@ var StreamMongoose = stream.mongoose;
 
 var CommentSchema = new Schema({
   created_at: Date,
-  text: String,
-  user: {type: Schema.Types.ObjectId, ref: 'User'}
+  text: String
+  // , user: {type: Schema.Types.ObjectId, ref: 'User'}
 });
 
 // GetStream integration
-CommentSchema.plugin(stream.mongoose.activity);
+// CommentSchema.plugin(stream.mongoose.activity);
 
-module.exports = mongoose.model('Message', CommentSchema);
+module.exports = mongoose.model('Comment', CommentSchema);

@@ -37,13 +37,12 @@ module.exports = function(app) {
   app.post('/api/user/list', userController.listUsers);
   app.post('/api/user/create', userController.saveUser);
 
-
   // QUESTIONS
+  app.get('/api/question', questionController.getAllQuestions);
   app.post('/api/question', questionController.saveQuestion);
   app.get('/api/question/:questionId', questionController.getQuestion);
-
-  // COMMENTS
-  app.post('/api/comment', questionController.saveComment);
+  app.post('/api/comment/:questionId', questionController.saveComment);
+  app.post('/api/vote/:questionId', questionController.saveVote);
 
 
   // CONTRACTS AUTH

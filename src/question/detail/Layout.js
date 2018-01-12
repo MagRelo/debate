@@ -9,56 +9,64 @@ class QuestionDetail extends Component {
     super(props)
     authData = this.props
 
-    this.state = {
-      commentOpen: true,
-      comments: []
-    }
+    this.state = {}
 
   }
 
   componentDidMount(){
-    this.setState({
-      link: '3',
-      question: 'is ETH legit or what??',
-      a1: 'Yeah',
-      a2: 'No',
-      comments: [
-        {text: 'pretty cool'},
-        {text: 'link to whitepaper'},
-        {text: 'pasta sauce recipe'},
-      ]
-    })
+    this.props.getQuestion(this.props.params.id)
   }
 
-  handleSubmit(){
+  handleSubmitComment(text){
+    this.props.commentSubmit(text, this.props.params.id, {user: 'test'})
+  }
 
+  answerOne(vote){
+    this.props.voteSubmit(1, this.props.params.id, {user: 'test'})
+  }
+  answerTwo(vote){
+    this.props.voteSubmit(2, this.props.params.id, {user: 'test'})
   }
 
   render() {
     return(
 
       <div>
-        <h1>{this.state.question}</h1>
+        <h1>{this.props.question}</h1>
 
         <h2>Comments, Sources</h2>
-        {this.state.comments.map(comment => {
+        {this.props.comments.map(comment => {
             return <div style={{border: 'solid 1px', padding: '0.5em', marginBottom: '1em'}} key={comment.text}>
               <p>{comment.text}</p>
             </div>
           })
         }
+        <AddCommentBox
+          loading={this.props.commentLoading}
+          submitFunction={this.handleSubmitComment.bind(this)} />
 
-        <AddCommentBox submitFunction={this.props.onCommentSubmit}/>
+        <h2>Predict the consensus</h2>
 
-        <h2>Vote</h2>
-        <div style={{display: 'flex', justifyContent: 'space-evenly'}}>
-          <div>
-            <button className="pure-button pure-button-primary" >{this.state.a1}</button>
+        {this.props.voteLoading ?
+
+          <div className="loader"></div>
+
+        :
+
+          <div style={{display: 'flex', justifyContent: 'space-evenly'}}>
+            <div>
+              <button
+                className="pure-button pure-button-primary"
+                onClick={this.answerOne.bind(this)} >{this.props.answerOne}</button>
+            </div>
+            <div>
+              <button className="pure-button pure-button-primary"
+                onClick={this.answerTwo.bind(this)} >{this.props.answerTwo}</button>
+            </div>
           </div>
-          <div>
-            <button className="pure-button pure-button-primary" >{this.state.a2}</button>
-          </div>
-        </div>
+        
+        }
+
 
       </div>
 

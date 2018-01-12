@@ -20,42 +20,22 @@ class ComposeQuestion extends Component {
     super(props)
     authData = this.props
 
-    this.state = {
-      modalIsOpen: false,
-      text: 'intitial text'
-    };
+    this.state = {};
 
-    this.openModal = this.openModal.bind(this);
-    this.afterOpenModal = this.afterOpenModal.bind(this);
-    this.closeModal = this.closeModal.bind(this);
   }
-
-  // Modal functions
-  openModal() {
-    this.setState({modalIsOpen: true});
-  }
-
-  afterOpenModal() {}
-
-  closeModal() {
-    this.setState({modalIsOpen: false});
-  }
-
 
   // Form functions
-  handleChange(text) {
-    this.setState({text: text})
+  handleChange(event) {
+    this.setState({[event.target.name]: event.target.value})
   }
+
   handleSubmit(event) {
     event.preventDefault()
-    this.setState({modalIsOpen: false});
-    this.props.onMessageSubmit(this.state.text, this.props.user)
-  }
-
-
-
-  userList(){
-    return this.props.user.userList.map(user => {return user.name})
+    this.props.addQuestion({
+      'question': this.state.question,
+      'answerOne': this.state.answerOne,
+      'answerTwo': this.state.answerTwo,
+    })
   }
 
   render() {
@@ -65,21 +45,27 @@ class ComposeQuestion extends Component {
         <fieldset>
           <label>Question</label>
           <input className="pure-input"
-            type="text">
+            type="text"
+            name="question"
+            onChange={this.handleChange.bind(this)}>
           </input>
         </fieldset>
 
         <fieldset>
           <label>Answer #1</label>
           <input className="pure-input"
-            type="text">
+            type="text"
+            name="answerOne"
+            onChange={this.handleChange.bind(this)}>
           </input>
         </fieldset>
 
         <fieldset>
           <label>Answer #2</label>
           <input className="pure-input"
-            type="text">
+            type="text"
+            name="answerTwo"
+            onChange={this.handleChange.bind(this)}>
           </input>
         </fieldset>
 

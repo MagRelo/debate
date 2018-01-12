@@ -1,12 +1,5 @@
 
-// ADD
-export const QUESTION_SUBMITTED = 'QUESTION_SUBMITTED'
-function questionSubmitted(question) {
-  return {
-    type: QUESTION_SUBMITTED,
-    payload: question
-  }
-}
+import { browserHistory } from 'react-router'
 
 // LIST
 export const QUESTION_LIST_UPDATE = 'QUESTION_LIST_UPDATE'
@@ -24,100 +17,157 @@ function requestQuestion() {
     type: REQUEST_QUESTION
   }
 }
+
+// ADD
+export const QUESTION_SUBMITTED = 'QUESTION_SUBMITTED'
+function questionSubmitted(question) {
+  return {
+    type: QUESTION_SUBMITTED,
+    payload: question
+  }
+}
 export const COMMENT_SUBMITTED = 'COMMENT_SUBMITTED'
-function questionSubmitted(comment) {
+function commentSubmitted(comment) {
   return {
     type: COMMENT_SUBMITTED,
     payload: comment
   }
 }
-export const QUESTION_UPDATED = 'QUESTION_UPDATED'
-function questionUpdated() {
+export const VOTE_SUBMITTED = 'VOTE_SUBMITTED'
+function voteSubmitted(vote) {
   return {
-    type: QUESTION_RESPONSE
+    type: VOTE_SUBMITTED,
+    payload: vote
   }
 }
 
-export function questionSubmit(message, user) {
-  return function(dispatch) {
-
-    dispatch(questionSubmitted())
-
-    return fetch('/api/messages',
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          value: message,
-          user: {
-            id: user.data._id
-          }})
-      }
-    ).then(rawResponse => {
-        if(rawResponse.status !== 200){ throw new Error(rawResponse.text) }
-        return rawResponse.json()
-      }
-    ).then(messageList => {
-        dispatch(getMessagesByUser(user.data._id))
-      }
-    ).catch(error => {
-      console.error('action error', error)
-      return
-    })
-
-  }
-}
-
-export function commentSubmit(message, user) {
-  return function(dispatch) {
-
-    dispatch(questionSubmitted())
-
-    return fetch('/api/messages',
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          value: message,
-          user: {
-            id: user.data._id
-          }})
-      }
-    ).then(rawResponse => {
-        if(rawResponse.status !== 200){ throw new Error(rawResponse.text) }
-        return rawResponse.json()
-      }
-    ).then(messageList => {
-        dispatch(getMessagesByUser(user.data._id))
-      }
-    ).catch(error => {
-      console.error('action error', error)
-      return
-    })
-
+export const QUESTION_UPDATED = 'QUESTION_UPDATED'
+function questionUpdated(questionData) {
+  return {
+    type: QUESTION_UPDATED,
+    payload: questionData
   }
 }
 
 
-export function getMessagesByUser(userId) {
+export function listQuestions() {
   return function(dispatch) {
-    return fetch('/api/messages/' + userId,
-      {
-        method: "GET"
-      }
-    ).then(rawResponse => {
-
+    return fetch('/api/question', {method: "GET"})
+      .then(rawResponse => {
         if(rawResponse.status !== 200){
           throw new Error(rawResponse.text)
         }
-
         return rawResponse.json()
       }
-    ).then(userObject => {
-
-        return dispatch(messageListUpdate(userObject.activities))
+    ).then(questions => {
+        return dispatch(questionListUpdate(questions))
       }
     ).catch(error => {
+      console.error('action error', error)
+      return
+    })
+
+  }
+}
+
+export function getQuestion(id) {
+  return function(dispatch) {
+    return fetch('/api/question/' + id, {method: "GET"})
+      .then(rawResponse => {
+        if(rawResponse.status !== 200){
+          throw new Error(rawResponse.text)
+        }
+        return rawResponse.json()
+      }
+    ).then(questionData => {
+        return dispatch(questionUpdated(questionData))
+      }
+    ).catch(error => {
+      console.error('action error', error)
+      return
+    })
+
+  }
+}
+
+export function addQuestion(question, user) {
+  return function(dispatch) {
+
+    dispatch(questionSubmitted())
+
+    return fetch('/api/question',
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(question)
+      })
+      .then(rawResponse => {
+        if(rawResponse.status !== 200){ throw new Error(rawResponse.text) }
+        return rawResponse.json()
+      })
+      .then(questionData => {
+        dispatch(questionUpdated(questionData))
+
+        // send to question
+        return browserHistory.push('/questions/' + questionData._id)
+      })
+      .catch(error => {
+        console.error('action error', error)
+        return
+      })
+
+  }
+}
+export function commentSubmit(comment, questionId, user) {
+  return function(dispatch) {
+
+    dispatch(commentSubmitted())
+
+    return fetch('/api/comment/' + questionId,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          text: comment,
+          user: user
+      })
+    })
+    .then(rawResponse => {
+        if(rawResponse.status !== 200){ throw new Error(rawResponse.text) }
+        return rawResponse.json()
+    })
+    .then(questionData => {
+        dispatch(questionUpdated(questionData))
+    })
+    .catch(error => {
+      console.error('action error', error)
+      return
+    })
+
+  }
+}
+export function voteSubmit(vote, questionId, user) {
+  return function(dispatch) {
+
+    dispatch(voteSubmitted())
+
+    return fetch('/api/vote/' + questionId,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          vote: vote,
+          user: user
+        })
+      }
+    ).then(rawResponse => {
+        if(rawResponse.status !== 200){ throw new Error(rawResponse.text) }
+        return rawResponse.json()
+      })
+      .then(questionData => {
+          dispatch(questionUpdated(questionData))
+      })
+      .catch(error => {
       console.error('action error', error)
       return
     })

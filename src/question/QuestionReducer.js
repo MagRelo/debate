@@ -1,37 +1,51 @@
 const initialState = {
   loading: null,
-  networkFeed: [],
-  userFeed: []
+  questionList: [],
+  question: '',
+  answerOne: 'default',
+  answerTwo: 'default',
+  comments: [],
+  commentLoading: false
 }
 
-const messageReducer = (state = initialState, action) => {
+const questionReducer = (state = initialState, action) => {
 
-  if (action.type === 'MESSAGE_SUBMITTED')
-  {
-    return Object.assign({}, state, {
-      loading: true,
-      networkFeed : [ ...state.networkFeed, {
-        id: 'temp-optimistic-update',
-        actor: {
-          name: 'todd'
-        },
-        object: {
-          text: action.payload
-        }
-      }]
-
-    })
-  }
-
-  if (action.type === 'MESSAGE_LIST_UPDATE')
+  if (action.type === 'QUESTION_LIST_UPDATE')
   {
     return Object.assign({}, state, {
       loading: false,
-      userFeed: action.payload
+      questionList: action.payload
+    })
+  }
+
+  if (action.type === 'QUESTION_UPDATED')
+  {
+    return Object.assign({}, state, {
+      loading: false,
+      commentLoading: false,
+      voteLoading: false,
+      question: action.payload.question,
+      answerOne: action.payload.answerOne,
+      answerTwo: action.payload.answerTwo,
+      comments: action.payload.comments
+    })
+  }
+
+  if (action.type === 'COMMENT_SUBMITTED')
+  {
+    return Object.assign({}, state, {
+      commentLoading: true
+    })
+  }
+
+  if (action.type === 'VOTE_SUBMITTED')
+  {
+    return Object.assign({}, state, {
+      voteLoading: true
     })
   }
 
   return state
 }
 
-export default messageReducer
+export default questionReducer

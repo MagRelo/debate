@@ -7,7 +7,6 @@ class AddComment extends Component {
   constructor(props, { authData }) {
     super(props)
     authData = this.props
-
     this.state = {}
   }
 
@@ -17,18 +16,25 @@ class AddComment extends Component {
 
   handleSubmit(event){
     event.preventDefault()
+    this.setState({commentOpen: false})
     this.props.submitFunction(this.state.text)
   }
 
   render() {
     return(
       <div>
-
-        {this.state.commentOpen ?
+        {this.state.commentOpen || this.props.loading?
 
           <div>
 
-            <form className="pure-form" onSubmit={this.handleSubmit.bind(this)}>
+            {this.props.loading ?
+              <div className="loader"></div>
+            :
+
+            <form
+              className="pure-form"
+              onSubmit={this.handleSubmit.bind(this)}
+              disabled={this.props.loading}>
 
               <fieldset>
                 <label>(Hightlight text to format)</label>
@@ -37,13 +43,15 @@ class AddComment extends Component {
                   text=""
                   onChange={this.handleChange.bind(this)}/>
               </fieldset>
-
               <button type="submit" className="pure-button pure-button-primary">Submit</button>
               <button
                 type="button"
                 className="pure-button"
                 onClick={()=> {this.setState({commentOpen: false})}}> Cancel </button>
             </form>
+
+            }
+
           </div>
 
         :

@@ -1,19 +1,16 @@
 import { connect } from 'react-redux'
 import Add from './Layout'
-// import { messageSubmit } from '../QuestionActions'
+import { addQuestion } from '../QuestionActions'
 
 const mapStateToProps = (state, ownProps) => {
-  return {
-    messages: state.messages,
-    user: state.user
-  }
+  return { }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    // onMessageSubmit: (messageText, user) => {
-    //   dispatch(messageSubmit(messageText, user))
-    // }
+    addQuestion: (question, user) => {
+      dispatch(addQuestion(question, user))
+    }
   }
 }
 

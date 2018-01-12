@@ -1,19 +1,29 @@
 import { connect } from 'react-redux'
 import Detail from './Layout'
-// import { commentSubmit } from '../MessageActions'
+import { getQuestion, commentSubmit, voteSubmit } from '../QuestionActions'
 
 const mapStateToProps = (state, ownProps) => {
   return {
-    messages: state.messages,
-    user: state.user
+    question: state.question.question,
+    answerOne: state.question.answerOne,
+    answerTwo: state.question.answerTwo,
+    voteLoading: state.question.voteLoading,
+    comments: state.question.comments,
+    commentLoading: state.question.commentLoading    
   }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    // onCommentSubmit: (text) => {
-    //   dispatch(commentSubmit(text))
-    // }
+    getQuestion: (text) => {
+      dispatch(getQuestion(text))
+    },
+    commentSubmit: (comment, questionId, user) => {
+      dispatch(commentSubmit(comment, questionId, user))
+    },
+    voteSubmit: (vote, questionId, user) => {
+      dispatch(voteSubmit(vote, questionId, user))
+    },
   }
 }
 

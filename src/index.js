@@ -34,7 +34,7 @@ ReactDOM.render((
 
           <Route path="questions/add" component={QuestionCreate} />
           <Route path="questions/list" component={QuestionList} />
-          <Route path="questions/:slug" component={QuestionDetail} />
+          <Route path="questions/:id" component={QuestionDetail} />
 
           <Route path="profile" component={UserIsAuthenticated(Profile)} />
 

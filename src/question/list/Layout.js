@@ -16,32 +16,12 @@ class ComposeQuestion extends Component {
   constructor(props, { authData }) {
     super(props)
     authData = this.props
-
-    this.state = {
-      modalIsOpen: false,
-      text: 'intitial text',
-      questions: [
-        {link: '1', question: 'is TRON legit or what??', a1: 'Yeah', a2: 'No'},
-        {link: '2', question: 'is XRP legit or what??', a1: 'Yeah', a2: 'No'},
-        {link: '3', question: 'is ETH legit or what??', a1: 'Yeah', a2: 'No'},
-      ]
-    };
-
+    this.state = {};
   }
 
-  onComponentDidLoad(){
-
+  componentDidMount(){
+    this.props.listQuestions()
   }
-
-  // Form functions
-  // handleChange(text) {
-  //   this.setState({text: text})
-  // }
-  // handleSubmit(event) {
-  //   event.preventDefault()
-  //   this.setState({modalIsOpen: false});
-  //   this.props.onMessageSubmit(this.state.text, this.props.user)
-  // }
 
   render() {
     return(
@@ -51,18 +31,17 @@ class ComposeQuestion extends Component {
           className="pure-button pure-button-primary"
           to="/questions/add">+ Add</Link>
         <ul>
-          {this.state.questions.map(question => {
-              return <li key={question.question}>
+          {this.props.questionList.map(question => {
 
-                <div>
-                  <Link to={'/questions/' + question.link}>
-                    <p>{question.question}</p>
-                  </Link>
-                </div>
+            return <li key={question._id}>
+              <div>
+                <Link to={'/questions/' + question._id}>
+                  <p>{question.question}</p>
+                </Link>
+              </div>
+            </li>
 
-              </li>
-            })
-          }
+          })}
         </ul>
       </div>
 
