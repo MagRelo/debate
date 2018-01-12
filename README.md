@@ -20,29 +20,25 @@
   - EV = (expected pot * 94%) * odds of predicting consensus correctly / (strength of consensus)
 
 ## Expected Payouts
-- Table (google doc)
+- [Payout Table](https://docs.google.com/spreadsheets/d/1xvWAPwBt0KwaNUKvZZFjgvx5Wip3DXpfOzQHlWmO9Sw/edit?usp=sharing) (google doc)
 
 ## Knobs and dials
 
-### Game:
+- Game:
+  - Split of pot between games: e.g. [1% / 5% / 94%]
+  - How long a question is active
 
-- Split of pot between games: e.g. [1% / 5% / 94%]
-- How long a question is active
+- pose popular questions
+  - Cost to pose question (might work at $0…)
+  - Engagement needed to receive award (eg, min pot size)
 
-### pose popular questions
+- provide helpful, neutral information
+  - Cost to submit comment (might work at $0…)
+  - [implement algorithm to determine what a “top” + “neutral” comment is, eg, # of upvotes from losing side minus upvotes from winning side… tbd]
 
-- Cost to pose question (might work at $0…)
-- Engagement needed to receive award (eg, min pot size)
-
-### provide helpful, neutral information
-
-- Cost to submit comment (might work at $0…)
-- [implement algorithm to determine what a “top” + “neutral” comment is, eg, # of upvotes from losing side minus upvotes from winning side… tbd]
-
-### predict the consensus
-
-- number of comments to upvote
-- Cost to place vote
+- predict the consensus
+  - number of comments to upvote
+  - Cost to place vote
 
 
 ## Technical Implementation
