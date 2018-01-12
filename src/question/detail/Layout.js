@@ -40,6 +40,10 @@ class QuestionDetail extends Component {
     this.props.voteSubmit(2, this.props.params.id, {user: 'test'})
   }
 
+  createMarkup(content) {
+    return {__html: content};
+  }
+
   render() {
     return(
 
@@ -49,7 +53,7 @@ class QuestionDetail extends Component {
         <h2>Comments, Sources</h2>
         {this.props.comments.map(comment => {
             return <div style={{border: 'solid 1px', padding: '0.5em', marginBottom: '1em'}} key={comment.text}>
-              <p>{comment.text}</p>
+              <p dangerouslySetInnerHTML={this.createMarkup(comment.text)}></p>
 
               {~this.state.selectedComments.indexOf(comment._id) ?
                 <p>Selected!</p>
@@ -79,7 +83,7 @@ class QuestionDetail extends Component {
               .filter(comment => ~this.state.selectedComments.indexOf(comment._id))
               .map(comment => {
                 return <div style={{border: 'solid 1px', padding: '0.5em', marginBottom: '1em'}} key={comment.text}>
-                  <p>{comment.text}</p>
+                  <p dangerouslySetInnerHTML={this.createMarkup(comment.text)}></p>
                 </div>
               })
             }
