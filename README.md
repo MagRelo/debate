@@ -41,7 +41,7 @@
 
 ### predict the consensus
 
-- # of comments to upvote
+- number of comments to upvote
 - Cost to place vote
 
 
