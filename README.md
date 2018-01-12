@@ -1,24 +1,63 @@
-# Welcome!
+# Debate Implementation Proposal
+## Source neutral, high-quality commentary by implementing 3 independent, interlocking mechanisms:
 
-If your new or not sure what Hive Commons is or aims to be, please read our [introductory post on medium](https://medium.com/hive-commons/introducing-hive-commons-95dad77814bb). 
+### 1) pose popular questions
+- Pose a binary question (exactly two mutually-exclusive options).
+  - Cost: [tbd, might work at $0…]
+  - Incentive: will receive 1% of the pot if the question receives [tbd] level of engagement. Disincentive: will lose [Cost] if question does not receive [tbd] level of engagement
+  - EV = P(reaching target engagement) * (expected pot * 1%) - (cost to pose question)
+### 2) provide neutral, high-quality commentary
+- Provide source material, comment, links to sources, etc.
+  - Cost: [tbd, might work at $0…]
+  - Incentive: 5% of the pot is set aside to reward comments. this sum will be split among the comments that are upvoted by *both* sides [implementation tbd]
+  - Disincentive: will lose [Cost] if comment does not receive [tbd] level of upvotes by *both* sides
+  - EV = P(reaching target engagement) * (expected pot * 5%) - (cost to post comment)
+### 3) predict the consensus
+- Select [3] helpful comments and cast vote for an answer (can change vote and comments up until the question’s time limit closes)
+  - Cost: [tbd]
+  - Incentive: 94% of the pot is set aside to reward players that correctly predict the consensus. This sum will be split evenly among the players that voted for the winner.
+  - Disincentive: will lose [Cost] if vote is cast for the losing side.
+  - EV = (expected pot * 94%) * odds of predicting consensus correctly / (strength of consensus)
 
-## Who can help?
-You can. Hive Commons is a grass-roots organization and everyone who believes in the mission can and should participate in the realization of the communities shared goal. Whether that means joining the conversation and spreading the ideas, or getting more active in development and infrastructure. Here are some specific skills that would be extremely helpful to the project at it current stage. 
+## Expected Payouts
+- Table (google doc)
 
-### Solidity Development
-To realize the vision of Hive Commons the community will need to build, audit, and, test several smart contracts. Tokens, Voting and Arbitration, Escrow, Bounties, and Reserve contracts are all core components of the project. 
+## Knobs and dials
 
-### Web3.0 Frontend Development
-The [1Hive community portal](https://github.com/HiveCommons/1Hive) is a web3.0 enabled interface that will enable direct community engagement with Hive Commons. 
+### Game:
 
-### UX and Graphic Design
- Hive Commons goal is to attract a community of users who may not have even heard of cryptocurrency, making the 1Hive portal and community websites and general outward facing elements of the project as friendly as possible will be imperative to the success of the project. 
+- Split of pot between games: e.g. [1% / 5% / 94%]
+- How long a question is active
 
-### Legal Expertise
-Decentralized blockchain governance is an emerging area and there are many uncertainties about how it fits into existing laws and regulatory guidelines its important that the project has a strong understanding of the implications of these things are to ensure the long-term success of the project. In the short-term setting up a legal non-profit entity, drafting and reviewing the proposed Hive Commons License for open source developers is mission critical. 
+### pose popular questions
 
-### Not sure you fit in any of those categories?
-Even if you don’t have any of the above skillsets, if you want help, I can guarantee that you have something to contribute—Sharing ideas, poking holes in existing  plans, and generally discussion the project are all important contributions as well. 
+- Cost to pose question (might work at $0…)
+- Engagement needed to receive award (eg, min pot size)
 
-**So whatever your skillset is, join the community and get involved.** We are on [Github](https://github.com/HiveCommons), [Medium](https://medium.com/hive-commons), [Reddit](https://www.reddit.com/r/HiveCommons/), and [Slack](https://hivecommons.herokuapp.com). 
+### provide helpful, neutral information
 
+- Cost to submit comment (might work at $0…)
+- [implement algorithm to determine what a “top” + “neutral” comment is, eg, # of upvotes from losing side minus upvotes from winning side… tbd]
+
+### predict the consensus
+
+- # of comments to upvote
+- Cost to place vote
+
+
+## Technical Implementation
+1. User creates question
+  1. MetaMask pop-up: “Debate Factory” creates “Debate Contract” for question
+  2. DebateCo. (centralized) creates mongo record with h(“Debate Contract” tx hash + question metadata)
+2. User Adds Comment and/or Votes
+  1. MetaMask pop-up: User deposits eth into “Debate Contract” (and/or just signs a tx)
+  2. DebateCo. takes h(previous mongo record hash + new tx hash + new metadata) and updates mongo record, forming a tx chain (audit trail)
+3. After question has expired, DebateCo. will:
+  1. check for a tie. if so, DebateCo. will cast a random vote.
+  2. send the [player payouts and h(audit trail)] to “Debate Contract” to close the question. 
+  3. notify the players.
+4. Players can pull winnings from Debate Contract.
+Business Model
+- Take flat fee per question
+- Host closed questions and sell access to content + reveal which comments were most upvoted by each side (paywall/adds, etc…)
+- Reputation building/access(?)
