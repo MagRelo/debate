@@ -9,8 +9,9 @@ class QuestionDetail extends Component {
     super(props)
     authData = this.props
 
-    this.state = {}
-
+    this.state = {
+      selectedComments: []
+    }
   }
 
   componentDidMount(){
@@ -19,6 +20,17 @@ class QuestionDetail extends Component {
 
   handleSubmitComment(text){
     this.props.commentSubmit(text, this.props.params.id, {user: 'test'})
+  }
+
+  selectComment(commentId){
+    this.setState(prevState => {
+      if(~prevState.selectedComments.indexOf(commentId)){
+        return {selectedComments: prevState.selectedComments}
+      }
+      const allSelections = [...prevState.selectedComments, commentId]
+      const latestSelections = allSelections.slice(-3)
+      return {selectedComments: latestSelections}
+    })
   }
 
   answerOne(vote){
@@ -38,6 +50,16 @@ class QuestionDetail extends Component {
         {this.props.comments.map(comment => {
             return <div style={{border: 'solid 1px', padding: '0.5em', marginBottom: '1em'}} key={comment.text}>
               <p>{comment.text}</p>
+
+              {~this.state.selectedComments.indexOf(comment._id) ?
+                <p>Selected!</p>
+                :
+                <button className="pure-button pure-button-primary"
+                  onClick={this.selectComment.bind(this, comment._id)}> Select
+                </button>
+              }
+
+
             </div>
           })
         }
@@ -48,23 +70,32 @@ class QuestionDetail extends Component {
         <h2>Predict the consensus</h2>
 
         {this.props.voteLoading ?
-
           <div className="loader"></div>
-
         :
 
-          <div style={{display: 'flex', justifyContent: 'space-evenly'}}>
-            <div>
-              <button
-                className="pure-button pure-button-primary"
-                onClick={this.answerOne.bind(this)} >{this.props.answerOne}</button>
-            </div>
-            <div>
-              <button className="pure-button pure-button-primary"
-                onClick={this.answerTwo.bind(this)} >{this.props.answerTwo}</button>
+          <div>
+            <h3>My top comments:</h3>
+            {this.props.comments
+              .filter(comment => ~this.state.selectedComments.indexOf(comment._id))
+              .map(comment => {
+                return <div style={{border: 'solid 1px', padding: '0.5em', marginBottom: '1em'}} key={comment.text}>
+                  <p>{comment.text}</p>
+                </div>
+              })
+            }
+            <div style={{display: 'flex', justifyContent: 'space-evenly'}}>
+              <div>
+                <button
+                  className="pure-button pure-button-primary"
+                  onClick={this.answerOne.bind(this)} >{this.props.answerOne}</button>
+              </div>
+              <div>
+                <button className="pure-button pure-button-primary"
+                  onClick={this.answerTwo.bind(this)} >{this.props.answerTwo}</button>
+              </div>
             </div>
           </div>
-        
+
         }
 
 
