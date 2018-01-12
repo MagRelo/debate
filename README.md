@@ -53,7 +53,8 @@
   2. send the [player payouts and h(audit trail)] to “Debate Contract” to close the question. 
   3. notify the players.
 4. Players can pull winnings from Debate Contract.
-Business Model
+
+## Business Model
 - Take flat fee per question
 - Host closed questions and sell access to content + reveal which comments were most upvoted by each side (paywall/adds, etc…)
 - Reputation building/access(?)
