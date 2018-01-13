@@ -220,31 +220,36 @@ form > p {
   display: block;
 }
 
-/*Copied from w3schools: https://www.w3schools.com/howto/howto_css_loader.asp*/
+/* from http://tobiasahlin.com/spinkit/ */
 .loader {
-    vertical-align: middle;
-    margin-left: 0.8em;
-    display:inline-block;
-    border: 5px solid #f3f3f3;
-    border-radius: 50%;
-    border-top: 5px solid #FCD036;
-    border-bottom: 5px solid #FCD036;
-    width: 25px;
-    height: 25px;
-    -webkit-animation: spin 1.5s linear infinite;
-    animation: spin 1.5s linear infinite;
+  width: 40px;
+  height: 40px;
+  margin: 40px auto;
+  background-color: #ffffff;
+
+  border-radius: 100%;
+  -webkit-animation: sk-scaleout 1.0s infinite ease-in-out;
+  animation: sk-scaleout 1.0s infinite ease-in-out;
 }
 
-@-webkit-keyframes spin {
-    0% { -webkit-transform: rotate(0deg); }
-    100% { -webkit-transform: rotate(360deg); }
+@-webkit-keyframes sk-scaleout {
+  0% { -webkit-transform: scale(0) }
+  100% {
+    -webkit-transform: scale(1.0);
+    opacity: 0;
+  }
 }
 
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+@keyframes sk-scaleout {
+  0% {
+    -webkit-transform: scale(0);
+    transform: scale(0);
+  } 100% {
+    -webkit-transform: scale(1.0);
+    transform: scale(1.0);
+    opacity: 0;
+  }
 }
-
 /* NAVBAR */
 
 .navbar {

@@ -5,7 +5,9 @@ const initialState = {
   answerOne: 'default',
   answerTwo: 'default',
   comments: [],
-  commentLoading: false
+  questionLoading: false,
+  commentLoading: false,
+  voteLoading: false
 }
 
 const questionReducer = (state = initialState, action) => {
@@ -22,6 +24,7 @@ const questionReducer = (state = initialState, action) => {
   {
     return Object.assign({}, state, {
       loading: false,
+      questionLoading: false,
       commentLoading: false,
       voteLoading: false,
       question: action.payload.question,
@@ -31,6 +34,12 @@ const questionReducer = (state = initialState, action) => {
     })
   }
 
+  if (action.type === 'QUESTION_SUBMITTED')
+  {
+    return Object.assign({}, state, {
+      questionLoading: true
+    })
+  }
   if (action.type === 'COMMENT_SUBMITTED')
   {
     return Object.assign({}, state, {

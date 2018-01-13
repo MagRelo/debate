@@ -10,7 +10,7 @@ class QuestionDetail extends Component {
     authData = this.props
 
     this.state = {
-      selectedComments: []
+      selectedComments: [,,]
     }
   }
 
@@ -34,10 +34,14 @@ class QuestionDetail extends Component {
   }
 
   answerOne(vote){
-    this.props.voteSubmit(1, this.props.params.id, {user: 'test'})
+    this.state({selectedVote: 1})
   }
   answerTwo(vote){
-    this.props.voteSubmit(2, this.props.params.id, {user: 'test'})
+    this.state({selectedVote: 2})
+  }
+
+  submitVote(){
+    this.props.voteSubmit(this.state.selectedVote, this.state.selectedComments, this.props.params.id, {user: 'test'})
   }
 
   createMarkup(content) {
@@ -48,21 +52,23 @@ class QuestionDetail extends Component {
     return(
 
       <div>
+        <Link to="/" className="pure-button pure-button-primary"> &#9668;&nbsp;Questions List</Link>
+
         <h1>{this.props.question}</h1>
 
         <h2>Comments, Sources</h2>
         {this.props.comments.map(comment => {
-            return <div style={{border: 'solid 1px', padding: '0.5em', marginBottom: '1em'}} key={comment.text}>
-              <p dangerouslySetInnerHTML={this.createMarkup(comment.text)}></p>
+            return <div style={{background: '#042644', padding: '0.5em', marginBottom: '1em'}} key={comment.text}>
 
               {~this.state.selectedComments.indexOf(comment._id) ?
-                <p>Selected!</p>
+                <p style={{float: 'right'}}>Selected!</p>
                 :
-                <button className="pure-button pure-button-primary"
+                <button style={{float: 'right'}} className="pure-button pure-button-primary"
                   onClick={this.selectComment.bind(this, comment._id)}> Select
                 </button>
               }
 
+              <p dangerouslySetInnerHTML={this.createMarkup(comment.text)}></p>
 
             </div>
           })
@@ -71,33 +77,46 @@ class QuestionDetail extends Component {
           loading={this.props.commentLoading}
           submitFunction={this.handleSubmitComment.bind(this)} />
 
-        <h2>Predict the consensus</h2>
+        <hr></hr>
 
         {this.props.voteLoading ?
           <div className="loader"></div>
         :
 
           <div>
-            <h3>My top comments:</h3>
+
+            <h3>1: Select three top comments</h3>
             {this.props.comments
               .filter(comment => ~this.state.selectedComments.indexOf(comment._id))
               .map(comment => {
-                return <div style={{border: 'solid 1px', padding: '0.5em', marginBottom: '1em'}} key={comment.text}>
+                return <div style={{background: '#042644', padding: '0.5em', marginBottom: '1em'}} key={comment.text}>
                   <p dangerouslySetInnerHTML={this.createMarkup(comment.text)}></p>
                 </div>
               })
             }
+
+            <h3>2: Select your prediction</h3>
             <div style={{display: 'flex', justifyContent: 'space-evenly'}}>
               <div>
                 <button
                   className="pure-button pure-button-primary"
-                  onClick={this.answerOne.bind(this)} >{this.props.answerOne}</button>
+                  onClick={this.answerOne.bind(this)}>{this.props.answerOne}</button>
               </div>
               <div>
                 <button className="pure-button pure-button-primary"
-                  onClick={this.answerTwo.bind(this)} >{this.props.answerTwo}</button>
+                  onClick={this.answerTwo.bind(this)}>{this.props.answerTwo}</button>
               </div>
             </div>
+
+            <h3>3: Submit Your Vote</h3>
+            <div style={{display: 'flex', justifyContent: 'space-evenly'}}>
+              <div>
+                <button
+                  className="pure-button pure-button-primary"
+                  onClick={this.submitVote.bind(this)}>Submit Vote</button>
+              </div>
+            </div>
+
           </div>
 
         }

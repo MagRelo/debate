@@ -29,20 +29,25 @@ class ComposeQuestion extends Component {
       <div>
         <Link
           className="pure-button pure-button-primary"
-          to="/questions/add">+ Add</Link>
+          to="/questions/add">+ Add Question
+        </Link>
+
         <ul>
           {this.props.questionList.map(question => {
 
-            return <li key={question._id}>
-              <div>
-                <Link to={'/questions/' + question._id}>
-                  <p>{question.question}</p>
+            return <Link style={{textDecoration: 'none'}} to={'/questions/' + question._id}>
+                  <li key={question._id}
+                    style={{listStyle: 'none', border: 'solid 1px white', padding: '1em', marginBottom: '1em'}}>
+                    <div style={{ color: 'white', textDecoration: 'none', fontSize: '20px'}}>
+                      <span style={{float: 'right'}}>comments: {question.comments.length}</span>
+                      <span>{question.question}</span>
+                    </div>
+                  </li>
                 </Link>
-              </div>
-            </li>
 
           })}
         </ul>
+
       </div>
 
 

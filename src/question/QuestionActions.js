@@ -93,7 +93,7 @@ export function getQuestion(id) {
 export function addQuestion(question, user) {
   return function(dispatch) {
 
-    dispatch(questionSubmitted())
+    dispatch(questionSubmitted(question))
 
     return fetch('/api/question',
       {
@@ -146,7 +146,7 @@ export function commentSubmit(comment, questionId, user) {
 
   }
 }
-export function voteSubmit(vote, questionId, user) {
+export function voteSubmit(vote, selectedComments, questionId, user) {
   return function(dispatch) {
 
     dispatch(voteSubmitted())
@@ -157,6 +157,7 @@ export function voteSubmit(vote, questionId, user) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           vote: vote,
+          selectedComments: selectedComments,
           user: user
         })
       }

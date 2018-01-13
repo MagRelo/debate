@@ -41,10 +41,9 @@ class ComposeQuestion extends Component {
   render() {
     return(
       <form className="pure-form pure-form-stacked" onSubmit={this.handleSubmit.bind(this)}>
-
         <fieldset>
           <label>Question</label>
-          <input className="pure-input"
+          <input className="pure-input-1"
             type="text"
             name="question"
             onChange={this.handleChange.bind(this)}>
@@ -53,7 +52,7 @@ class ComposeQuestion extends Component {
 
         <fieldset>
           <label>Answer #1</label>
-          <input className="pure-input"
+          <input className="pure-input-1"
             type="text"
             name="answerOne"
             onChange={this.handleChange.bind(this)}>
@@ -62,14 +61,12 @@ class ComposeQuestion extends Component {
 
         <fieldset>
           <label>Answer #2</label>
-          <input className="pure-input"
+          <input className="pure-input-1"
             type="text"
             name="answerTwo"
             onChange={this.handleChange.bind(this)}>
           </input>
         </fieldset>
-
-
         <button
           type="submit"
           className="pure-button pure-button-primary"> Submit
