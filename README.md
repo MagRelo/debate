@@ -1,4 +1,20 @@
-# Debate Implementation Proposal
+# Development
+### To Do
+- [ ] User Login & Auth
+- [ ] Solidity Contracts
+- [ ] Web3 Integration
+- [ ] Search & Filter
+
+### Install
+`$ npm install`
+### Run
+- Start backend server at http://localhost:8080 `$ npm run dev`
+- Start frontend server at http://localhost:3000 `$ npm start`
+### Build
+`$ npm run build`
+
+
+# Implementation Proposal
 ## Source neutral, high-quality commentary by implementing 3 independent, interlocking mechanisms:
 
 ### 1) pose popular questions
