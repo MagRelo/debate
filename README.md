@@ -17,7 +17,7 @@
 - Test deploy: https://debate.servesa.io
 
 # Implementation Proposal
-## Source neutral, high-quality commentary by implementing 3 independent, interlocking mechanisms:
+## Incentivize neutral, high-quality commentary
 
 ### 1) pose popular questions
 - Pose a binary question (exactly two mutually-exclusive options).
