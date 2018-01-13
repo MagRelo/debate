@@ -12,7 +12,9 @@
 - Start frontend server at http://localhost:3000 `$ npm start`
 ### Build
 `$ npm run build`
-
+### Deploy
+- Push to github (master branch) and kick off deploy in cloud66
+- Test deploy: https://debate.servesa.io
 
 # Implementation Proposal
 ## Source neutral, high-quality commentary by implementing 3 independent, interlocking mechanisms:
