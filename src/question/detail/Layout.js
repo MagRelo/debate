@@ -10,7 +10,7 @@ class QuestionDetail extends Component {
     authData = this.props
 
     this.state = {
-      selectedComments: [,,]
+      selectedComments: []
     }
   }
 
@@ -34,18 +34,29 @@ class QuestionDetail extends Component {
   }
 
   answerOne(vote){
-    this.state({selectedVote: 1})
+    this.setState({selectedVote: 1})
   }
   answerTwo(vote){
-    this.state({selectedVote: 2})
+    this.setState({selectedVote: 2})
   }
 
   submitVote(){
     this.props.voteSubmit(this.state.selectedVote, this.state.selectedComments, this.props.params.id, {user: 'test'})
+    this.setState({selectedVote: 0, selectedComments: []})
   }
 
   createMarkup(content) {
     return {__html: content};
+  }
+
+  setVoteStyle(button){
+
+    if(button === this.state.selectedVote){
+      return {background: '#103A52'}
+    }
+
+    return {}
+
   }
 
   render() {
@@ -58,7 +69,7 @@ class QuestionDetail extends Component {
 
         <h2>Comments, Sources</h2>
         {this.props.comments.map(comment => {
-            return <div style={{background: '#042644', padding: '0.5em', marginBottom: '1em'}} key={comment.text}>
+            return <div style={{background: '#103A52', padding: '0.5em', marginBottom: '1em'}} key={comment._id}>
 
               {~this.state.selectedComments.indexOf(comment._id) ?
                 <p style={{float: 'right'}}>Selected!</p>
@@ -84,12 +95,11 @@ class QuestionDetail extends Component {
         :
 
           <div>
-
             <h3>1: Select three top comments</h3>
             {this.props.comments
               .filter(comment => ~this.state.selectedComments.indexOf(comment._id))
               .map(comment => {
-                return <div style={{background: '#042644', padding: '0.5em', marginBottom: '1em'}} key={comment.text}>
+                return <div style={{background: '#103A52', padding: '0.5em', marginBottom: '1em'}} key={comment.text}>
                   <p dangerouslySetInnerHTML={this.createMarkup(comment.text)}></p>
                 </div>
               })
@@ -100,11 +110,16 @@ class QuestionDetail extends Component {
               <div>
                 <button
                   className="pure-button pure-button-primary"
-                  onClick={this.answerOne.bind(this)}>{this.props.answerOne}</button>
+                  style={this.setVoteStyle(1)}
+                  onClick={this.answerOne.bind(this)}>{this.props.answerOne} {1 === this.state.selectedVote ? '✔' : ''}
+                </button>
               </div>
               <div>
-                <button className="pure-button pure-button-primary"
-                  onClick={this.answerTwo.bind(this)}>{this.props.answerTwo}</button>
+                <button
+                  className="pure-button pure-button-primary"
+                  style={this.setVoteStyle(2)}
+                  onClick={this.answerTwo.bind(this)}>{this.props.answerTwo} {2 === this.state.selectedVote ? '✔' : ''}
+                </button>
               </div>
             </div>
 
@@ -112,8 +127,10 @@ class QuestionDetail extends Component {
             <div style={{display: 'flex', justifyContent: 'space-evenly'}}>
               <div>
                 <button
+                  disabled={!this.state.selectedVote || this.state.selectedComments.length < 3}
                   className="pure-button pure-button-primary"
-                  onClick={this.submitVote.bind(this)}>Submit Vote</button>
+                  onClick={this.submitVote.bind(this)}>Submit Vote
+                </button>
               </div>
             </div>
 

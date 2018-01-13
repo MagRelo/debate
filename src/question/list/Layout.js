@@ -12,7 +12,7 @@ import {Tokenizer}  from 'react-typeahead';
   //   />
   // </fieldset>
 
-class ComposeQuestion extends Component {
+class QuestionList extends Component {
   constructor(props, { authData }) {
     super(props)
     authData = this.props
@@ -35,9 +35,8 @@ class ComposeQuestion extends Component {
         <ul>
           {this.props.questionList.map(question => {
 
-            return <Link style={{textDecoration: 'none'}} to={'/questions/' + question._id}>
-                  <li key={question._id}
-                    style={{listStyle: 'none', border: 'solid 1px white', padding: '1em', marginBottom: '1em'}}>
+            return <Link style={{textDecoration: 'none'}} to={'/questions/' + question._id} key={question._id}>
+                  <li style={{listStyle: 'none', border: 'solid 1px white', padding: '1em', marginBottom: '1em'}}>
                     <div style={{ color: 'white', textDecoration: 'none', fontSize: '20px'}}>
                       <span style={{float: 'right'}}>comments: {question.comments.length}</span>
                       <span>{question.question}</span>
@@ -55,4 +54,4 @@ class ComposeQuestion extends Component {
   }
 }
 
-export default ComposeQuestion
+export default QuestionList

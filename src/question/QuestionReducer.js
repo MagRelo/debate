@@ -46,7 +46,6 @@ const questionReducer = (state = initialState, action) => {
       commentLoading: true
     })
   }
-
   if (action.type === 'VOTE_SUBMITTED')
   {
     return Object.assign({}, state, {
