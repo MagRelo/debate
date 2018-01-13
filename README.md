@@ -1,5 +1,25 @@
-# Debate Implementation Proposal
-## Source neutral, high-quality commentary by implementing 3 independent, interlocking mechanisms:
+# Development
+### To Do
+- [ ] User Login & Auth
+- [ ] Develop algorithm for selecting top comments
+- [ ] Develop centralized/decentralized data strategy
+- [ ] Solidity Contracts
+- [ ] Web3 Integration
+- [ ] Search & Filter
+
+### Install
+`$ npm install`
+### Run
+- Start backend server at http://localhost:8080 `$ npm run dev`
+- Start frontend server at http://localhost:3000 `$ npm start`
+### Build
+`$ npm run build`
+### Deploy
+- Push to github (master branch) and kick off deploy in cloud66
+- Test deploy: https://debate.servesa.io
+
+# Implementation Proposal
+## Incentivize neutral, high-quality commentary
 
 ### 1) pose popular questions
 - Pose a binary question (exactly two mutually-exclusive options).
