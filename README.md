@@ -1,6 +1,8 @@
 # Development
 ### To Do
 - [ ] User Login & Auth
+- [ ] Develop algorithm for selecting top comments
+- [ ] Develop centralized/decentralized data strategy
 - [ ] Solidity Contracts
 - [ ] Web3 Integration
 - [ ] Search & Filter
